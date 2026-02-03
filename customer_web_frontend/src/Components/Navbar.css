@@ -1,0 +1,81 @@
+.navbar{
+    background: linear-gradient(90deg, #FEDC97, #B4D2B1, #28666E);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: center; /*center links*/
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    position: relative; /* for absolute positioning og buttons */
+    margin-bottom: 10px;
+}
+
+.nav-link {
+    position: relative;
+    color: rgb(13, 14, 14);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    transition: color 0.3s, transform 0.3s;
+}
+
+
+.nav-link:hover{
+    color: blue;
+    transform: scale(1.05);
+}
+
+.nav-link::after{
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, #1a4f48, #ffd500);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.nav-link:hover::after{
+    width: 100%;
+}
+
+
+/*keep underline visible*/
+.nav-link.active::after{
+    width: 100%;
+    background: linear-gradient(90deg, #ff7a00, #8800);
+}
+
+.nav-link.active{
+    color: #28666E;
+    border-bottom: 2px solid #f9d342;
+    padding-bottom: 2px;
+}
+
+body{ 
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/*login/logout buttons*/
+.login-btn-navi,
+.logout-btn-navi{
+position: absolute;
+right: 30px;
+background-color: rgb(238, 238, 170);
+color: #065c43;
+padding: 8px 16px;
+border: none;
+border-radius: 20px;
+font-weight: 600;
+text-decoration: none !important; /*remove underline*/
+cursor: pointer;
+transition: 0.3s ease;
+}
+
+.dashboard{
+    text-decoration: none;
+    border-radius: 20pxs;
+}

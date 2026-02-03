@@ -1,0 +1,26 @@
+.story {
+    display: flex;
+    padding: 40px;
+    background-color: white;
+    height: 100vh; /* full screen height */
+  }
+  
+  .story-left {
+    flex: 1;
+    
+  }
+  
+  .story-img {
+    width: 500px;
+    height: 400px;
+    object-fit: cover;
+    margin-left: 30px;
+  }
+
+  .story-left{
+    margin: auto;
+    position: relative;
+    overflow: hidden; 
+  }
+
+  

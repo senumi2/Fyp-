@@ -1,0 +1,64 @@
+
+  
+  /* Box */
+  .contact_information-box {
+    width: 380px;
+    background: #fff;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+    animation: fadeIn 0.6s ease;
+  }
+  
+  /* Title */
+  .contact_information-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  /* Form Inputs */
+  .information-form input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+    transition: 0.2s;
+  }
+  
+  .information-form input:focus {
+    border-color: #2979ff;
+    box-shadow: 0px 0px 6px rgba(41, 121, 255, 0.4);
+  }
+  
+  /* Button */
+  .submit-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #2979ff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .submit-btn:hover {
+    background: #1c54b2;
+  }
+  
+  
+  
+  
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
