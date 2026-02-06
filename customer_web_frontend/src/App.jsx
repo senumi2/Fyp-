@@ -13,7 +13,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Contact_us from "./pages/Contact_us";
 import Shipping_address from "./pages/Shipping_address";
-
+import OrderTracking from "./Pages/orderTracking";
+import PaymentHistory from "./Pages/paymentHistory";
 
 import "./App.css";
 import AddProduct from "./Pages/AddProduct";
@@ -45,6 +46,8 @@ function App() {
         <Route path="/About" element={<About />} />
         <Route path="/contact" element={<Contact_us />} />
         <Route path="/shipping_address" element={<Shipping_address />} />
+        <Route path="/OrderTracking" element={<OrderTracking />} />
+        <Route path="/PaymentHistory" element={<PaymentHistory />} />
         <Route path="/addproduct" element={<AddProduct />} />
         
         <Route path="/profile" element={<Profile />} />

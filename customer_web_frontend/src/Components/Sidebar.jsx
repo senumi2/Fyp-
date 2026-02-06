@@ -14,8 +14,8 @@ function Sidebar() {
     <div className="sidebar">
       <button onClick={() => navigate("/profile")}>Profile</button>
       <button onClick={() => navigate("/shipping_address")}>Shipping Address</button>
-      <button onClick={() => navigate("/Order_Tracking")}>New Order Tracking</button>
-      <button onClick={() => navigate("/Payment_History")}>Payment History</button>
+      <button onClick={() => navigate("/OrderTracking")}>New Order Tracking</button>
+      <button onClick={() => navigate("/PaymentHistory")}>Payment History</button>
      </div>
   );
 }
