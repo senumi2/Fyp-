@@ -1,0 +1,26 @@
+.profile-layout {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .profile-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .profile-content input {
+    width: 300px;
+    padding: 10px;
+    margin: 8px;
+    background: #eee;
+    border: none;
+  }
+  
+  .avatar {
+    font-size: 60px;
+    margin-bottom: 20px;
+  }
+  

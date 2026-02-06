@@ -5,6 +5,8 @@ const cors = require("cors");
 const productRoutes = require("./routes/productRoute");
 const eventRoutes = require("./routes/eventRoute");
 const directorRoutes = require("./routes/directorRoute");
+const authRoutes = require("./routes/authRoute");
+const profileRoutes = require("./routes/profileRoute");
 
 const app = express();
 
@@ -30,6 +32,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/products", productRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/directors", directorRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/profile", profileRoutes);
 
 // ✅ Test route
 app.get("/", (req, res) => {
