@@ -34,6 +34,8 @@ app.use("/api/events", eventRoutes);
 app.use("/api/directors", directorRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/orders", require("./routes/orderRoutes"));
+
 
 // ✅ Test route
 app.get("/", (req, res) => {
