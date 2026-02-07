@@ -1,0 +1,82 @@
+.about-section {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #8faea0, #9fbfb1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    font-family: "Inter", sans-serif;
+  }
+  
+  .about-container {
+    max-width: 1100px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+  }
+  
+  .about-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    padding: 40px 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    transition: all 0.4s ease;
+    position: relative;
+  }
+  
+  .about-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  
+  .about-card:hover::before {
+    opacity: 1;
+  }
+  
+  .about-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+  }
+  
+  .about-card h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #1f3d32;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  
+  .about-card p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    text-align: center;
+  }
+  
+  .about-card.highlight {
+    background: linear-gradient(135deg, #ffffff, #eef7f3);
+    border: 1px solid rgba(31, 61, 50, 0.2);
+  }
+  
+  @media (max-width: 600px) {
+    .about-card {
+      padding: 30px 20px;
+    }
+  
+    .about-card h2 {
+      font-size: 24px;
+    }
+  }
+  

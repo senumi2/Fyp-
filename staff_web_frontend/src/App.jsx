@@ -9,7 +9,7 @@ import Directors from "./Components/Directors";
 import Footer from "./Components/Footer";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
-
+import Reports from "./Pages/Reports";
 
 
 
@@ -27,6 +27,7 @@ function App() {
               <Hero />
               <About />
               <Events />
+              <Reports />
               <Directors />
             </>
           }
