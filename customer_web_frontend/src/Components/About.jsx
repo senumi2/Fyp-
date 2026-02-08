@@ -1,11 +1,30 @@
 import "./About.css";
 import saltImg from "../images/Lanka-Salt.jpg";
+import { useEffect } from "react";
 
 function About() {
+
+  useEffect(() => {
+    const elements = document.querySelectorAll(".animate");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+  }, []);
+
   return (
     <section className="story">
-      <div className="story-left">
-      <h2>OUR STORY</h2>
+      <div className="story-left animate slide-left">
+        <h2>OUR STORY</h2>
         <p>
           National Salt Ltd. has a long history in salt production in Sri Lanka.
           It manufactures common salt, iodine mixed salt, crush salt, and 
@@ -19,7 +38,10 @@ function About() {
           compare to the harvested salt in other part of the country. Currently Mannar 
           Saltern produce 6,000MT of raw salt and the Elephnatpass Saltern produce
           17,000MT per annum. It has been decided to develop Elephantpass Saltern to 
-          produce 20,000 MT/Annum in 2025. The National Salt not only functions as a 
+          produce 20,000 MT/Annum in 2025.
+        </p>
+        <p>
+        The National Salt not only functions as a 
           natural resource extracting center also giving focus on employment opportunities
           to the vulnerable people in the Mannar and Kilinochchi districts. As at today
           there are 64 permanent staff and roughly 250 seasonal staff are employed by the
@@ -38,7 +60,11 @@ function About() {
         </p>
       </div>
 
-      <img src={saltImg} className="story-img"  alt="Salt"/>
+      <img
+        src={saltImg}
+        className="story-img animate slide-right"
+        alt="Salt"
+      />
     </section>
   );
 }

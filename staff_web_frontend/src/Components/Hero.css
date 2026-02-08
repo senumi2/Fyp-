@@ -1,5 +1,6 @@
 /* Hero Section Main Container */
 .hero-container {
+    
     height: 100vh;
     background-size: cover;
     background-position: center;
@@ -9,6 +10,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* very important for clarity */
+  image-rendering: -webkit-optimize-contrast;
   }
   
   .hero-overlay {
