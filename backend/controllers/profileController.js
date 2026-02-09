@@ -8,13 +8,27 @@ exports.getProfile = async (req, res) => {
 
 // UPDATE PROFILE
 exports.updateProfile = async (req, res) => {
-  const { fullName, contact } = req.body;
+  try {
+    const { fullName, contact } = req.body;
 
-  const user = await User.findByIdAndUpdate(
-    req.user.id,
-    { fullName, contact },
-    { new: true }
-  ).select("-password");
+    const updateData = {
+      fullName,
+      contact,
+    };
 
-  res.json(user);
+    // 🔥 image eka thibboth witharai update wenne
+    if (req.file) {
+      updateData.profileImage = `/uploads/${req.file.filename}`;
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      updateData,
+      { new: true }
+    ).select("-password");
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

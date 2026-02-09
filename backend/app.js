@@ -28,6 +28,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // ✅ Static folder (for images/files)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static("uploads"));
+
 
 // ✅ API routes
 app.use("/api/products", productRoutes);
@@ -37,6 +39,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/reports", reportRoutes);
+app.use("/api/shipping-address", require("./routes/shippingAddressRoute"));
+
 
 // ✅ Test route
 app.get("/", (req, res) => {
