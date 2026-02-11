@@ -8,6 +8,10 @@ const directorRoutes = require("./routes/directorRoute");
 const authRoutes = require("./routes/authRoute");
 const profileRoutes = require("./routes/profileRoute");
 const reportRoutes = require("./routes/reportRoutes");
+const inventoryRoutes = require("./routes/inventoryRoutes");
+const issueRoutes = require("./routes/issueRoutes");
+const maintenanceRoutes = require("./routes/maintenanceRoutes");
+
 
 const app = express();
 
@@ -40,7 +44,9 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/reports", reportRoutes);
 app.use("/api/shipping-address", require("./routes/shippingAddressRoute"));
-
+app.use("/api/inventory", inventoryRoutes);
+app.use("/api/issues", issueRoutes);
+app.use("/api/maintenance", maintenanceRoutes);
 
 // ✅ Test route
 app.get("/", (req, res) => {
