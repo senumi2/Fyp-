@@ -1,0 +1,108 @@
+.product-detail {
+    display: flex;
+    gap: 50px;
+    padding: 60px;
+    background: #f9fbfc;
+  }
+  
+  .product-detail img {
+    width: 420px;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  
+  .product-info {
+    max-width: 600px;
+  }
+  
+  .product-info h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+  }
+  
+  .description {
+    margin-bottom: 15px;
+    color: #555;
+  }
+  
+  .price {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .stock {
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  
+  .quantity {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .quantity button {
+    padding: 6px 14px;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #546c75;
+    color: white;
+  }
+  
+  .btn-group {
+    margin-bottom: 30px;
+  }
+  
+  .add-cart,
+  .buy-now {
+    padding: 12px 24px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #546c75;
+    color: white;
+    transition: 0.3s;
+  }
+  
+  .add-cart:hover,
+  .buy-now:hover {
+    opacity: 0.85;
+  }
+  
+  .reviews {
+    margin-top: 30px;
+  }
+  
+  .review-card {
+    background: white;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  }
+  
+  .add-review input,
+  .add-review textarea {
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .add-review button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #546c75;
+    color: white;
+    cursor: pointer;
+  }
+  

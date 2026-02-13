@@ -1,0 +1,60 @@
+.admin-directors {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
+  
+  .admin-directors form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+  
+  .admin-directors input,
+  .admin-directors textarea {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .admin-directors button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #0077ff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .director-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .director-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background: #f7f7f7;
+    padding: 15px;
+    border-radius: 15px;
+  }
+  
+  .director-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .director-item button {
+    margin-right: 10px;
+  }
+  

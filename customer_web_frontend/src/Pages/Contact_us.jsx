@@ -1,8 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import {Link} from "react-router-dom";
 import "./Contact_us.css";
 
 function Contact_us() {
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const res = await fetch("http://localhost:5000/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form)
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Message sent successfully!");
+      setForm({ name: "", email: "", subject: "", message: "" });
+    } else {
+      alert(data.message);
+    }
+  };
+
     return(
         <div className="contact-page">
             <div className="contact-container">
@@ -61,22 +92,23 @@ function Contact_us() {
         {/*Right side form*/}
         <div className="contact-form">
             <h2>Contact Us</h2>
-            <form>
-                <label>Name</label>
-                <input type="text" placeholder="Enter your name" required/>
+           
+            <form onSubmit={handleSubmit}>
+        <label>Name</label>
+        <input name="name" value={form.name} onChange={handleChange} required />
 
-                <label>E-mail</label>
-                <input type="text" placeholder="Enter your E-mail" required/>
+        <label>E-mail</label>
+        <input name="email" value={form.email} onChange={handleChange} required />
 
-                <label>Subject</label>
-                <input type="text" placeholder="Enter subject" required/>
+        <label>Subject</label>
+        <input name="subject" value={form.subject} onChange={handleChange} required />
 
-                <label>Message</label>
-                <textarea placeholder="Write your message..." required></textarea>
+        <label>Message</label>
+        <textarea name="message" value={form.message} onChange={handleChange} required />
 
-                <button type="Submit">Submit</button>
-
-            </form>
+        <button type="submit">Submit</button>
+      </form>
+       
         </div>
 
         

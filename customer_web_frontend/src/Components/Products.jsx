@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Products.css";
+import { Link } from "react-router-dom";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -7,28 +8,25 @@ function Products() {
   useEffect(() => {
     fetch("http://localhost:5000/api/products")
       .then(res => res.json())
-      .then(data => setProducts(data));
-  }, []);
+      .then(data => setProducts(data))
+      .catch(err => console.log("Error fetching products:", err));
+ }, []);
 
+ 
+  
   return (
     <section className="products">
-      <h2 className="products-title">Our Products</h2>
-
+      <h2>Our Products</h2>
+     
       <div className="product-grid">
-        {products.map(item => (
-          <div key={item._id} className="product-card">
-            <div className="img-wrapper">
-              <img
-                src={`http://localhost:5000${item.image}`}
-                alt={item.name}
-                className="product-img"
-              />
-            </div>
-
-            <h4>{item.name}</h4>
-            <p className="price">Rs. {item.price}</p>
-            <p className="stock">Stock: {item.availableStock}</p>
-          </div>
+        {products.map(product => (
+          <Link
+           key={product._id}
+            to={`/product/${product._id}`} 
+            className="product-card">
+            <img src={`http://localhost:5000${product.imageUrl}`} alt={product.name} />
+            <h3>{product.name}</h3>
+           </Link>
         ))}
       </div>
     </section>

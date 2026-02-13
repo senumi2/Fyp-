@@ -5,9 +5,11 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Products from "./components/Products";
+import ProductDetail from "./Components/ProductDetail";
 import Events from "./components/Events";
-import Directors from "./components/Directors";
+import Directors from "./Components/Directors";
 import Footer from "./components/Footer";
+
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -49,8 +51,9 @@ function App() {
         <Route path="/OrderTracking" element={<OrderTracking />} />
         <Route path="/PaymentHistory" element={<PaymentHistory />} />
         <Route path="/addproduct" element={<AddProduct />} />
-        
         <Route path="/profile" element={<Profile />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
 
       <Footer />

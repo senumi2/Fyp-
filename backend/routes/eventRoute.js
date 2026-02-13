@@ -1,22 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
-const path = require("path");
-const { getEvents, createEvent } = require("../controllers/eventController");
+const upload = require("../middleware/upload");
+const auth = require("../middleware/authMiddleware");
+const admin = require("../middleware/adminMiddleware");
 
-// Multer setup for image upload
-const storage = multer.diskStorage({
-  destination: function(req, file, cb){
-    cb(null, "uploads/");
-  },
-  filename: function(req, file, cb){
-    cb(null, Date.now() + path.extname(file.originalname)); // unique filename
-  }
-});
-const upload = multer({ storage: storage });
+const {
+  createEvent,
+  getEvents,
+  deleteEvent
+} = require("../controllers/eventController");
 
-// Routes
+// Public
 router.get("/", getEvents);
-router.post("/", upload.single("image"), createEvent);
+
+// Admin only
+router.post("/", auth, admin, upload.single("image"), createEvent);
+router.delete("/:id", auth, admin, deleteEvent);
 
 module.exports = router;
+

@@ -2,25 +2,31 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 
-const productRoutes = require("./routes/productRoute");
+const productRoutes = require("./routes/productRoutes");
+console.log("✅ Product routes file loaded successfully"); // 👈 STEP 4 DEBUG
+
 const eventRoutes = require("./routes/eventRoute");
-const directorRoutes = require("./routes/directorRoute");
+const directorRoutes = require("./routes/directorRoutes");
 const authRoutes = require("./routes/authRoute");
 const profileRoutes = require("./routes/profileRoute");
 const reportRoutes = require("./routes/reportRoutes");
-const inventoryRoutes = require("./routes/inventoryRoutes");
-const issueRoutes = require("./routes/issueRoutes");
-const maintenanceRoutes = require("./routes/maintenanceRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const shippingAddressRoute = require("./routes/shippingAddressRoute");
+const contactRoutes = require("./routes/contactRoutes");
 
+const inventoryRoutes = require("./routes/inventoryRoutes");
+
+ 
 
 const app = express();
 
 // ✅ CORS – allow frontend requests
 app.use(cors({
   origin: [
-    "http://localhost:3000", // React (CRA)
-    "http://localhost:5173", // Vite
-    "http://localhost:4000"  // if frontend runs here
+    "http://localhost:3000",
+    "http://localhost:4000",
+    "http://localhost:5173",
+    "http://localhost:5174"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
@@ -30,13 +36,22 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Static folder (for images/files)
+// ✅ Static folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/uploads", express.static("uploads"));
 
+// 👇 Debug mount check
+app.use("/api/products", (req, res, next) => {
+  console.log("📦 /api/products route accessed");
+  next();
+}, productRoutes);
 
-// ✅ API routes
-app.use("/api/products", productRoutes);
+app.get("/api/test-product/:id", (req, res) => {
+  res.json({ id: req.params.id });
+});
+
+
+// ✅ Other API routes
 app.use("/api/events", eventRoutes);
 app.use("/api/directors", directorRoutes);
 app.use("/api/auth", authRoutes);
@@ -44,13 +59,15 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/reports", reportRoutes);
 app.use("/api/shipping-address", require("./routes/shippingAddressRoute"));
+
+app.use("/api/contact", contactRoutes);
+
 app.use("/api/inventory", inventoryRoutes);
-app.use("/api/issues", issueRoutes);
-app.use("/api/maintenance", maintenanceRoutes);
+
 
 // ✅ Test route
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "API is running 🚀" });
+  res.json({ message: "API is running 🚀" });
 });
 
 module.exports = app;
