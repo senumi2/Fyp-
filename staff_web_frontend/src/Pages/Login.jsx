@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 import "./Login.css";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
@@ -10,9 +10,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
+  const handleLogin = async () => {
     const res = await fetch("http://localhost:5000/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -22,7 +20,7 @@ function Login() {
     const data = await res.json();
 
     if (res.ok) {
-      login(data); // token + user save
+      login(data); // 🔥 THIS updates navbar immediately
       navigate("/");
     } else {
       alert(data.message);
@@ -30,30 +28,28 @@ function Login() {
   };
 
   return (
-    <div className="auth-container">
-      <form className="auth-box" onSubmit={handleLogin}>
-        <h2>Login</h2>
+    <div className="login-page">
+      <div className="login-box">
+        <h2>Member Login</h2>
 
-        <input
-          type="email"
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-          required
+        <input type="email" placeholder="Email"
+          className="login-input"
+          onChange={e => setEmail(e.target.value)}
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
+        <input type="password" placeholder="Password"
+          className="login-input"
+          onChange={e => setPassword(e.target.value)}
         />
 
-        <button type="submit">Login</button>
+        <button className="login-btn" onClick={handleLogin}>
+          Sign In
+        </button>
 
         <p>
-          Don’t have an account? <Link to="/register">Register</Link>
+          Don't have account? <Link to="/register">Register</Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 }

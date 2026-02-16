@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./Register.css";
+import "./register.css";
+import { AuthContext } from "../context/AuthContext";
 
 function Register() {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -12,11 +14,10 @@ function Register() {
     contact: ""
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
-  const handleRegister = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const res = await fetch("http://localhost:5000/api/auth/register", {
@@ -28,56 +29,31 @@ function Register() {
     const data = await res.json();
 
     if (res.ok) {
-      alert("Registration successful");
-      navigate("/login");
+      login(data);
+      navigate("/");
     } else {
       alert(data.message);
     }
   };
 
   return (
-    <div className="auth-container">
-      <form className="auth-box" onSubmit={handleRegister}>
+    <div className="register-container">
+      <div className="register-box">
         <h2>Create Account</h2>
 
-        <input
-          type="text"
-          name="fullName"
-          placeholder="Full Name"
-          onChange={handleChange}
-          required
-        />
+        <form className="register-form" onSubmit={handleSubmit}>
+          <input name="fullName" placeholder="Full Name" onChange={handleChange} />
+          <input name="email" placeholder="Email" onChange={handleChange} />
+          <input name="contact" placeholder="Contact" onChange={handleChange} />
+          <input name="password" type="password" placeholder="Password" onChange={handleChange} />
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="text"
-          name="contact"
-          placeholder="Contact Number"
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
-
-        <button type="submit">Register</button>
+          <button className="register-btn">Register</button>
+        </form>
 
         <p>
-          Already have an account? <Link to="/login">Login</Link>
+          Already have account? <Link to="/login">Login</Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 }

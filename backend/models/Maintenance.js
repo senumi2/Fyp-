@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 
-const maintenanceSchema = new mongoose.Schema({
-  date: Date,
-  issue: String,
-  status: String
-}, { timestamps: true });
+const MaintenanceSchema = new mongoose.Schema({
+  // 'issue' වෙනුවට 'description' ලෙස වෙනස් කළා
+  description: { type: String, required: true }, 
+  status: { type: String, required: true }
+}, { 
+  timestamps: true 
+});
 
-module.exports = mongoose.model("Maintenance", maintenanceSchema);
+module.exports = mongoose.model("Maintenance", MaintenanceSchema);

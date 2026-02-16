@@ -15,6 +15,8 @@ const shippingAddressRoute = require("./routes/shippingAddressRoute");
 const contactRoutes = require("./routes/contactRoutes");
 
 const inventoryRoutes = require("./routes/inventoryRoutes");
+const issueRoutes = require("./routes/issueRoutes");
+const maintenanceRoutes = require("./routes/maintenanceRoutes");
 
  
 
@@ -60,9 +62,13 @@ app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/reports", reportRoutes);
 app.use("/api/shipping-address", require("./routes/shippingAddressRoute"));
 
+app.use("/api/inventory", inventoryRoutes);
+app.use("/api/issues", issueRoutes);
+app.use("/api/maintenance", maintenanceRoutes);
+
 app.use("/api/contact", contactRoutes);
 
-app.use("/api/inventory", inventoryRoutes);
+
 
 
 // ✅ Test route

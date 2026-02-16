@@ -1,0 +1,32 @@
+.test-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 100vh;
+  }
+  
+  .menu-toggle-icon {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1000; /* Sidebar එකටත් උඩින් පේන්න */
+    background: #f4f4f4;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .content-area {
+    flex: 1;
+    padding: 50px 20px 20px 20px; /* උඩින් icon එකට ඉඩ තැබීමට */
+    background-color: #f9f9f9;
+  }
+  
+  .sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #D9D9D9;
+    padding-top: 60px; /* Toggle icon එකට යට නොවීමට */
+  }

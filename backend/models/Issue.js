@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
 
-const issueSchema = new mongoose.Schema({
-  date: Date,
-  issue: String,
-  status: String
-}, { timestamps: true });
+const IssueSchema = new mongoose.Schema({
+  date: { type: Date, default: Date.now },
+  issue: { type: String, required: true },
+  status: { type: String, default: 'Pending' }
+},
 
-module.exports = mongoose.model("Issue", issueSchema);
+{ 
+  timestamps: true 
+});
+
+module.exports = mongoose.model("Issue", IssueSchema);
