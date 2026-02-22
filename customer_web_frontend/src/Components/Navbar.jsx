@@ -29,8 +29,8 @@ function Navbar() {
 
         {user && (
           <>
-            <Link to="/profile" className="profile-btn-navi">
-              Profile
+            <Link to="/dashboard" className="profile-btn-navi">
+              Dashboard
             </Link>
 
             <button className="logout-btn-navi" onClick={handleLogout}>

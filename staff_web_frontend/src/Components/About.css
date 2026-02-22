@@ -1,82 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
 .about-section {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #8faea0, #9fbfb1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-    font-family: "Inter", sans-serif;
-  }
-  
-  .about-container {
-    max-width: 1100px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 40px;
-  }
-  
-  .about-card {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(10px);
-    padding: 40px 30px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-    transition: all 0.4s ease;
-    position: relative;
-  }
-  
-  .about-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 20px;
-    background: linear-gradient(
-      120deg,
-      rgba(255, 255, 255, 0.3),
-      transparent
-    );
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-  
-  .about-card:hover::before {
+  min-height: 100vh;
+  background-color: #f0f4f2;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow: hidden;
+}
+
+/* Background Animated Blobs */
+.about-bg-elements .blob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, #28666e22, #8faea022);
+  filter: blur(80px);
+  border-radius: 50%;
+  z-index: 0;
+  animation: moveBlob 15s infinite alternate;
+}
+
+.blob-1 { top: -100px; right: -100px; }
+.blob-2 { bottom: -100px; left: -100px; animation-delay: -5s !important; }
+
+.about-container {
+  max-width: 1200px;
+  width: 100%;
+  z-index: 1;
+}
+
+.about-header-text {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.sub-title {
+  color: #28666e;
+  font-weight: 800;
+  letter-spacing: 3px;
+  font-size: 0.8rem;
+}
+
+.about-header-text h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-top: 10px;
+}
+
+/* Card Grid */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.about-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  padding: 50px 35px;
+  border-radius: 35px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-icon-box {
+  font-size: 2.5rem;
+  color: #28666e;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.card-icon-box.gold { color: #d4af37; }
+
+.about-card h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1f3d32;
+  margin-bottom: 15px;
+}
+
+.card-line {
+  width: 40px;
+  height: 4px;
+  background: #28666e;
+  margin: 0 auto 25px;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.about-card p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #555;
+}
+
+/* Hover Effects */
+.about-card:hover {
+  transform: translateY(-15px) scale(1.02);
+  background: #ffffff;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.1);
+  border-color: #28666e44;
+}
+
+.about-card:hover .card-line {
+  width: 80px;
+}
+
+/* Animations */
+.animate-up {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeInUp 0.8s forwards;
+}
+
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  to {
     opacity: 1;
+    transform: translateY(0);
   }
-  
-  .about-card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-  }
-  
-  .about-card h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #1f3d32;
-    text-align: center;
-    letter-spacing: 0.5px;
-  }
-  
-  .about-card p {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #333;
-    text-align: center;
-  }
-  
-  .about-card.highlight {
-    background: linear-gradient(135deg, #ffffff, #eef7f3);
-    border: 1px solid rgba(31, 61, 50, 0.2);
-  }
-  
-  @media (max-width: 600px) {
-    .about-card {
-      padding: 30px 20px;
-    }
-  
-    .about-card h2 {
-      font-size: 24px;
-    }
-  }
-  
+}
+
+@keyframes moveBlob {
+  from { transform: translate(0, 0); }
+  to { transform: translate(50px, 100px); }
+}
+
+@media (max-width: 768px) {
+  .about-header-text h1 { font-size: 2.2rem; }
+  .about-grid { grid-template-columns: 1fr; }
+}

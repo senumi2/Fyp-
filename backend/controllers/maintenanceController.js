@@ -1,6 +1,6 @@
 const Maintenance = require("../models/Maintenance");
 
-// 1. Kotha Maintenance Log ni create cheyyadam
+//  Kotha Maintenance Log ni create cheyyadam
 exports.createMaintenance = async (req, res) => {
     try {
         const data = await Maintenance.create(req.body);
@@ -10,7 +10,7 @@ exports.createMaintenance = async (req, res) => {
     }
 };
 
-// 2. Data ni get cheyyadam mariyu Search cheyyadam
+//  Data ni get cheyyadam mariyu Search cheyyadam
 exports.getMaintenance = async (req, res) => {
     const { search } = req.query;
     let query = {};
@@ -28,7 +28,7 @@ exports.getMaintenance = async (req, res) => {
     }
 };
 
-// 3. Data ni update cheyyadam
+//  Data ni update cheyyadam
 exports.updateMaintenance = async (req, res) => {
     try {
         const data = await Maintenance.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -38,7 +38,7 @@ exports.updateMaintenance = async (req, res) => {
     }
 };
 
-// 4. Data ni delete cheyyadam
+//  Data ni delete cheyyadam
 exports.deleteMaintenance = async (req, res) => {
     try {
         await Maintenance.findByIdAndDelete(req.params.id);

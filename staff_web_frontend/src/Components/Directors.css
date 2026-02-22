@@ -1,126 +1,159 @@
-.directors {
-  padding: 100px 20px;
-  background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+.directors-section {
+  padding: 60px 0;
+  background-color: #f8fafc;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .directors-container {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
+  padding: 0 50px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .section-title {
-  font-size: 42px;
-  font-weight: 700;
-  margin-bottom: 15px;
-  color: #2c3e50;
-  letter-spacing: -0.5px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0f172a;
 }
 
-.section-subtitle {
-  font-size: 16px;
-  color: #7f8c8d;
-  margin-bottom: 50px;
-  font-weight: 300;
+.title-underline {
+  width: 50px;
+  height: 4px;
+  background: #28666E;
+  margin: 10px auto;
+  border-radius: 10px;
 }
 
-.directors-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-}
-
-.director-card {
-  background: white;
-  padding: 40px 25px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+/* Slider Layout */
+.slider-wrapper {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
+}
+
+.directors-window {
+  width: 100%;
+  overflow: hidden;
+  padding: 15px 0;
+}
+
+.directors-track {
+  display: flex;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.director-item {
+  flex: 0 0 33.333%; /* Desktop cards 3 */
+  padding: 0 10px; /* කාඩ් අතර පරතරය අඩු කළා */
+  box-sizing: border-box;
+}
+
+/* Compact Card with Large Image */
+.director-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 15px; /* Padding අඩු කර කාඩ් එක කුඩා කළා */
   text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s ease;
+  border: 1px solid #f1f5f9;
 }
 
 .director-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(40, 102, 110, 0.1);
 }
 
-.director-image-wrapper {
-  margin-bottom: 20px;
+/* පින්තූරය විශාල කිරීම */
+.image-wrapper {
+  width: 100%; /* Card එකේ පළලටම යන ලෙස */
+  max-width: 280px; /* උපරිම පළල සීමා කළා */
+  aspect-ratio: 1 / 1; /* සමචතුරස්‍ර හැඩය */
+  border-radius: 15px; /* රවුම් කරනවා වෙනුවට ලස්සනට වටකුරු කළා */
+  overflow: hidden;
+  margin: 0 auto 15px;
 }
 
-.director-img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin: 0 auto;
-  display: block;
-  border: 4px solid #667eea;
-  transition: all 0.3s ease;
-}
-
-.director-card:hover .director-img {
-  border-color: #764ba2;
-  transform: scale(1.05);
-}
-
-.director-content {
+.director-photo {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
-.director-name {
-  margin: 15px 0 8px 0;
-  font-size: 20px;
-  color: #2c3e50;
-  font-weight: 600;
+.director-card:hover .director-photo {
+  transform: scale(1.08);
 }
 
-.director-role {
-  font-weight: 600;
-  color: #667eea;
-  font-size: 14px;
-  margin-bottom: 12px;
+/* Info Section */
+.director-info .name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.director-info .role {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #28666E;
+  margin-bottom: 10px;
+  display: block;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-.director-description {
-  font-size: 13px;
-  color: #7f8c8d;
-  line-height: 1.6;
+.director-info .bio {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Bio එක පේළි 2කට සීමා කළා */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.loading {
-  padding: 40px 20px;
-  font-size: 16px;
-  color: #7f8c8d;
-  font-weight: 500;
+/* Arrows */
+.slide-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: #28666E;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
 }
 
-@media (max-width: 768px) {
-  .directors {
-    padding: 60px 15px;
-  }
+.slide-arrow.left { left: 0; }
+.slide-arrow.right { right: 0; }
 
-  .section-title {
-    font-size: 32px;
-    margin-bottom: 10px;
-  }
+.slide-arrow.is-disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
 
-  .directors-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
+/* Responsive */
+@media (max-width: 1024px) {
+  .director-item { flex: 0 0 50%; }
+}
 
-  .director-card {
-    padding: 30px 20px;
-  }
-
-  .director-img {
-    width: 120px;
-    height: 120px;
-  }
+@media (max-width: 600px) {
+  .director-item { flex: 0 0 100%; }
+  .directors-container { padding: 0 20px; }
+  .slide-arrow { display: none; }
 }

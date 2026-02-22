@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
+
 import "./Profile.css";
 
 function Profile() {
@@ -65,7 +65,7 @@ function Profile() {
 
   return (
     <div className="profile-layout">
-      <Sidebar />
+      
 
       <div className="profile-content">
         {/* Avatar */}
@@ -112,7 +112,7 @@ function Profile() {
         />
 
         {!editMode ? (
-          <button onClick={() => setEditMode(true)}>
+          <button className="Edit-btn"onClick={() => setEditMode(true)}>
             Edit Profile
           </button>
         ) : (

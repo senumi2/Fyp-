@@ -5,7 +5,7 @@ import Issues from '../Pages/Issues';
 import Maintenance from '../Pages/Maintenance';
 import "./EqupmentUsage.css";
 
-const Test = () => {
+const EqupmentUsage = () => {
     const [activePage, setActivePage] = useState("inventory"); // මුලින්ම පෙන්වන පේජ් එක
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -42,4 +42,4 @@ const Test = () => {
   );
 };
 
-export default Test;
+export default EqupmentUsage;

@@ -13,6 +13,7 @@ const reportRoutes = require("./routes/reportRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const shippingAddressRoute = require("./routes/shippingAddressRoute");
 const contactRoutes = require("./routes/contactRoutes");
+const stockRoutes = require('./routes/stockRoutes');
 
 const inventoryRoutes = require("./routes/inventoryRoutes");
 const issueRoutes = require("./routes/issueRoutes");
@@ -67,7 +68,7 @@ app.use("/api/issues", issueRoutes);
 app.use("/api/maintenance", maintenanceRoutes);
 
 app.use("/api/contact", contactRoutes);
-
+app.use('/api/stocks', stockRoutes);
 
 
 

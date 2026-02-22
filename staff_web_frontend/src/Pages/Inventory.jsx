@@ -96,8 +96,8 @@ const Inventory = () => { // <--- Component එක මෙතනින් පට�
                             <td>{item.items}</td>
                             <td>{item.quantity}</td>
                             <td>
-                                <button className="edit-icon-btn" onClick={() => openEditModal(item)}>✏️</button>
-                                <button className="delete-icon-btn" onClick={() => handleDelete(item._id)}>🗑️</button>
+                                <button className="edit-btn" onClick={() => openEditModal(item)}>Edit</button>
+                                <button className="delete-btn" onClick={() => handleDelete(item._id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

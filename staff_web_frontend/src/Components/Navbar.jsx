@@ -18,7 +18,8 @@ function Navbar() {
         <NavLink className="nav-link" to="/">Home</NavLink>
         <NavLink className="nav-link" to="/about">About Us</NavLink>
         <NavLink className="nav-link" to="/equpmentUsage">EqupmentUsage</NavLink>
-        <NavLink className="/inventoryManagement" to="/InventoryManagement">Events</NavLink>
+        <NavLink className="nav-link" to="/inventoryManagement">InventoryManagement</NavLink>
+        <NavLink className="nav-link" to="/pondsManagement">PondsManagement</NavLink>
       </div>
 
       <div className="nav-right">

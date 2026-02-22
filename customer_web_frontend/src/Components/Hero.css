@@ -1,65 +1,137 @@
 /* Hero Section Main Container */
 .hero-container {
   height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
+  width: 100%;
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  background-color: #000; /* රූපය load වන තුරු කළු පැහැය */
+}
+
+/* Background Image Animation - Zoom effect එක තවත් පැහැදිලි කළා */
+.hero-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: inherit; /* JSX එකෙන් එන image එක ගනී */
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  /* තප්පර 25ක කාලයක් තුළ වඩාත් පැහැදිලිව Zoom වේ */
+  animation: ultraZoom 25s ease-in-out infinite alternate;
+}
+
+@keyframes ultraZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.25); } /* Zoom එක 1.25 දක්වා වැඩි කළා */
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: linear-gradient(
+    90deg, 
+    rgba(0,0,0,0.85) 0%, 
+    rgba(0,0,0,0.4) 60%, 
+    rgba(0,0,0,0.2) 100%
+  );
+  z-index: 1;
 }
 
-/* Text Box / Shadow Card */
+/* Hero Content Box */
 .hero-content {
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.45); /* shadow-glass effect */
-  padding: 30px;
-  border-radius: 10px;
-  color: #ffffff;
-  max-width: 450px;
-  backdrop-filter: blur(4px);
-  box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
+  position: relative;
+  z-index: 2;
+  margin-left: 10%;
+  max-width: 600px;
+  padding: 45px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
 }
 
-/* Title */
+/* Text Animations - කාලය (Duration) වැඩි කර මෘදු කළා */
 .hero-title {
-  font-size: 2.8rem;
-  font-weight: bold;
+  color: #ffffff;
   margin-bottom: 15px;
+  opacity: 0; /* මුලින් නොපෙනී තිබීමට */
 }
 
-/* Subtitle */
+h2.hero-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 4px;
+  color: #2979ff;
+  text-transform: uppercase;
+  /* තප්පර 1.2 ක මෘදු animation එකක් */
+  animation: softSlideDown 1.2s ease-out forwards;
+}
+
+h1.hero-title {
+  font-size: 3.6rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  /* h2 එක ආවාට පසු තප්පර 0.5 කින් ඇරඹේ */
+  animation: softSlideDown 1.5s ease-out 0.5s forwards;
+}
+
 .hero-subtitle {
   font-size: 1.2rem;
-  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  margin-top: 25px;
+  padding-left: 20px;
+  opacity: 0;
+  /* අන්තිමටම තප්පර 1.8 ක කාලයක් ගනිමින් පාවී එයි */
+  animation: softSlideRight 1.8s ease-out 1s forwards;
 }
 
+/* Keyframes - Animations වල දුර සහ වේගය පාලනය */
+@keyframes softSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes softSlideRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+  .hero-container {
+    justify-content: center;
+  }
   .hero-content {
-    left: 5%;
-    right: 5%;
-    max-width: none;
-    padding: 20px;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 35px 25px;
+    text-align: center;
+    max-width: 90%;
   }
-
-  .hero-title {
-    font-size: 2rem;
-  }
-
+  h1.hero-title { font-size: 2.5rem; }
   .hero-subtitle {
-    font-size: 1rem;
+    border-left: none;
+    border-top: 3px solid #2979ff;
+    padding-left: 0;
+    padding-top: 20px;
   }
 }

@@ -1,0 +1,57 @@
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #d1d5db;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-btn {
+    padding: 12px;
+    background-color: #9ca3af;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: left;
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.section-tank {
+    background-color: #a3b1a2;
+    padding: 20px;
+}
+
+.section-salinity {
+    background-color: #cbd5e1;
+    padding: 20px;
+}
+
+.table-style {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: white;
+}
+
+.table-style th, .table-style td {
+    border: 1px solid #666;
+    padding: 10px;
+    text-align: center;
+}
+
+.action-btn {
+    margin-top: 5px;
+    padding: 5px 15px;
+    cursor: pointer;
+}

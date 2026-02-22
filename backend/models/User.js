@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
       default: "User"
     },
 
-    // 🔥 profile image path
+    //  profile image path
     profileImage: {
       type: String
     }

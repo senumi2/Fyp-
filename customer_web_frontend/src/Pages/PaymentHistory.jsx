@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../Components/Sidebar";
+
 import "./PaymentHistory.css"
 
 function PaymentHistory() {
@@ -25,7 +25,7 @@ function PaymentHistory() {
   return (
 
     <div className="PaymentHistory-layout">
-          <Sidebar />
+          
 
      <div className="payment-history">
       <h2>Order History</h2>

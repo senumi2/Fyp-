@@ -1,99 +1,103 @@
 .footer {
   background-color: #315b60;
-  color: white;
-  padding: 45px 20px 30px;
-  font-family: Arial, sans-serif;
+  color: #ffffff;
+  padding: 60px 20px 20px;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* main container */
 .footer-container {
-  max-width: 1100px;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 40px;
-  flex-wrap: wrap;
-}
-
-/* columns */
-.footer-column {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 220px;
+  padding-bottom: 40px;
 }
 
 .footer-column h3 {
-  font-size: 18px;
-  margin-bottom: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  position: relative;
 }
 
-/* links */
+/* Logo පෙනුම */
+.footer-logo {
+  font-size: 1.5rem !important;
+  letter-spacing: 1px;
+}
+
+.footer-logo span {
+  font-weight: 300;
+  opacity: 0.8;
+}
+
+.address-text {
+  line-height: 1.6;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* Links සහ Navigation */
+.footer-nav, .contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .footer-column a {
-  color: white;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  font-size: 14px;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  width: fit-content;
 }
 
 .footer-column a:hover {
-  opacity: 0.8;
-  transform: translateX(4px);
+  color: #ffffff;
+  transform: translateX(8px);
+  opacity: 1;
 }
 
-/* center column */
-.center {
-  text-align: center;
-}
-
-.contact-row {
+/* Contact Items */
+.contact-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* icons */
-.icon {
-  font-size: 18px;
-}
-
-/* social icons */
-.social-icons {
-  margin-top: 12px;
+/* Social Icons */
+.social-links {
   display: flex;
-  justify-content: center;
-  gap: 16px;
+  gap: 15px;
+  margin-top: 20px;
 }
 
-.social-icons img {
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+.social-links img {
+  width: 32px;
+  height: 32px;
+  filter: brightness(0) invert(1); /* Icons සුදු පැහැ ගැන්වීමට */
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.social-icons img:hover {
-  transform: scale(1.15);
-  opacity: 0.75;
+.social-links img:hover {
+  transform: translateY(-5px) scale(1.1);
 }
 
-/* bottom */
+/* Bottom Bar */
 .footer-bottom {
-  margin-top: 30px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 25px;
   text-align: center;
-  font-size: 13px;
-  opacity: 0.85;
+  font-size: 14px;
+  opacity: 0.7;
 }
 
-/* responsive */
+/* Responsive */
 @media (max-width: 768px) {
-  .footer-container {
-    flex-direction: column;
-    align-items: center;
+  .footer {
     text-align: center;
+    padding: 40px 20px 20px;
   }
 
   .footer-column {
@@ -101,6 +105,10 @@
   }
 
   .footer-column a:hover {
-    transform: none;
+    transform: translateY(-2px);
+  }
+
+  .footer-nav, .social-links, .contact-links {
+    align-items: center;
   }
 }

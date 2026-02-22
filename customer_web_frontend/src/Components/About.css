@@ -1,43 +1,111 @@
 .story {
   display: flex;
-  padding: 40px;
-  background-color: white;
-  height: 70vh;
+  align-items: center; 
+  justify-content: space-between;
+  padding: 100px 8%; 
+  background-color: #ffffff;
+  min-height: 80vh; 
+  gap: 60px; 
+  overflow: hidden;
 }
 
 .story-left {
-  flex: 1;
-  margin-top: 30px;
-  position: relative;
-  overflow: hidden;
+  flex: 1.2;
   text-align: justify;
-  margin-right: 60px;
+  line-height: 1.8; /* කියවීමට පහසු වීමට පේළි අතර පරතරය */
+}
+
+.story-left h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 25px;
+  position: relative;
+  display: inline-block;
+}
+
+/* මාතෘකාව යටින් ලස්සන blue line එකක් */
+.story-left h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 60px;
+  height: 5px;
+  background: #2979ff;
+  border-radius: 10px;
+}
+
+.story-left p {
+  font-size: 1.05rem;
+  color: #444;
+  margin-bottom: 20px;
+  font-weight: 400;
 }
 
 .story-img {
-  width: 500px;
-  height: 400px;
+  flex: 0.8;
+  width: 100%;
+  max-width: 550px;
+  height: 450px;
   object-fit: cover;
-  margin-right: 30px;
-  margin-top: 40px;
+  border-radius: 30px; /* Modern වටකුරු පෙනුම */
+  box-shadow: 25px 25px 0px rgba(41, 121, 255, 0.05), 
+              0 20px 40px rgba(0,0,0,0.1); /* පින්තූරය පිටුපසින් subtle block shadow එකක් */
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
 
-/* ===== Scroll Animation ===== */
+.story-img:hover {
+  transform: scale(1.03) translateY(-10px);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+}
+
+/* ===== Scroll Animation Improvements ===== */
 
 .animate {
   opacity: 0;
-  transition: all 0.9s ease-out;
+  filter: blur(5px); /* Animation එක පටන් ගන්න කොට මදක් blur වීම modern */
+  transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+              filter 1.2s ease;
 }
 
 .slide-left {
-  transform: translateX(-120px);
+  transform: translateX(-80px); /* දුර මදක් අඩු කළා පෙනුම soft වීමට */
 }
 
 .slide-right {
-  transform: translateX(120px);
+  transform: translateX(80px);
 }
 
 .animate.show {
   opacity: 1;
+  filter: blur(0);
   transform: translateX(0);
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .story {
+    flex-direction: column;
+    padding: 60px 5%;
+    text-align: center;
+  }
+  
+  .story-left {
+    margin-right: 0;
+    text-align: center;
+  }
+
+  .story-left h2::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .story-img {
+    width: 100%;
+    height: 350px;
+    margin-top: 30px;
+    margin-right: 0;
+  }
 }

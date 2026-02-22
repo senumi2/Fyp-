@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
 
-  // ❌ No token
+  //  No token
   if (!token) {
     return res.status(401).json({ message: "No token" });
   }
@@ -22,7 +22,7 @@ module.exports = (req, res, next) => {
       }
     */
 
-    // 🔥 normalize user data (old + new processes friendly)
+    //  normalize user data (old + new processes friendly)
     req.user = {
       id: decoded.id || decoded._id || decoded.userId,
       email: decoded.email,

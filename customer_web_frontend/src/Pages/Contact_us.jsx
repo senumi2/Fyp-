@@ -35,6 +35,7 @@ function Contact_us() {
   };
 
     return(
+      <section className="Contact_Us" id="contact_us">
         <div className="contact-page">
             <div className="contact-container">
 
@@ -114,7 +115,9 @@ function Contact_us() {
         
             </div>
         </div>
+        </section>
     )
+    
 }
 
 export default Contact_us;

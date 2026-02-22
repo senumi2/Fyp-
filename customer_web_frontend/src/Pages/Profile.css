@@ -1,6 +1,6 @@
 .profile-layout {
   display: flex;
-  height: 100vh;
+  height: 92vh;
   background: linear-gradient(135deg, #eef2f3, #dbe9ee);
 }
 
@@ -10,6 +10,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
 }
 
 /* Avatar */
@@ -88,22 +89,27 @@
   transform: translateY(-3px);
 }
 
+.Edit-btn {
+  background: #28666E;
+  color: white;
+}
+
 .save-btn {
-  background: #2563eb;
+  background: #28666E;
   color: white;
 }
 
 .save-btn:hover {
-  background: #1e40af;
+  background: #28666E;
 }
 
 .cancel-btn {
-  background: #e5e7eb;
+  background: #aabea8;
   margin-left: 10px;
 }
 
 .cancel-btn:hover {
-  background: #d1d5db;
+  background: #aabea8;
 }
 
 .btn-group {

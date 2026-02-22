@@ -16,7 +16,7 @@ exports.updateProfile = async (req, res) => {
       contact,
     };
 
-    // 🔥 image eka thibboth witharai update wenne
+    //  image eka thibboth witharai update wenne
     if (req.file) {
       updateData.profileImage = `/uploads/${req.file.filename}`;
     }

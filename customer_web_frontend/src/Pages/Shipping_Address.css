@@ -1,64 +1,150 @@
-.shippingAddress-layout {
-  display: flex;
-  height: 95vh;
-}
-
-.contact_information-box {
-  flex: 1;
-  max-width: 420px;
-  background: #bfd7db;
-  padding: 40px;
-  border-radius: 22px;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.15);
-  margin: auto;
-  animation: slideFade 0.7s ease;
-}
-
-.contact_information-box h2 {
-  text-align: center;
-  margin-bottom: 18px;
-  font-weight: 600;
-}
-
-.information-form input {
+/* මුළු පිටුවම ආවරණය වන පරිදි Background එක සකස් කිරීම */
+.shipping-page-wrapper {
   width: 100%;
-  padding: 13px;
-  margin-top: 12px;
-  border-radius: 14px;
-  border: 1px solid #ccc;
+  min-height: 100vh;
+  background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Scroll කරද්දී image එක නොසැලී පවතී */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.shipping-overlay {
+  width: 100%;
+  min-height: 100vh;
+  background: rgba(255, 255, 255, 0.05); /* ඉතාමත් සියුම් ලේයර් එකක් */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px; /* පිටතින් ඇති ඉඩ වැඩි කළා */
+}
+
+/* Desktop එකට ගැලපෙන සේ Form එක විශාල කිරීම */
+.shipping-card {
+  background: rgba(255, 255, 255, 0.35); /* Transparent Water Look */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(25px);
+  
+  width: 100%;
+  max-width: 850px; /* Desktop එකට ගැලපෙන ලෙස Form එක පළල් කළා */
+  
+  padding: 70px; /* Form එක ඇතුළේ ඉඩ කඩ (Spacing) උපරිම කළා */
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.shipping-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.shipping-header h2 {
+  font-size: 3rem; /* විශාල Desktop තිර සඳහා මාතෘකාව විශාල කළා */
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: -1px;
+}
+
+.shipping-header p {
+  color: #1a1a1a;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Form එකේ Grid එකක් භාවිතා කර ඉඩ කළමනාකරණය කිරීම */
+.shipping-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Desktop එකේදී කොටස් දෙකකට බෙදීම */
+  gap: 40px; 
+}
+
+/* Save button එක මුළු පළලම ගන්නා ලෙස සකස් කිරීම */
+.shipping-save-btn {
+  grid-column: span 2; /* පේළි දෙකම ආවරණය කිරීමට */
+  background: #000000;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 25px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.shipping-save-btn:hover {
+  background: #222222;
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* RECIPIENT DETAILS සහ DELIVERY LOCATION පේළි දෙකකට නොයා එක ළඟ තැබීමට (Desktop) */
+.form-section:nth-child(2) {
+  grid-column: span 2; /* ලිපිනය ඇති කොටස සම්පූර්ණ පළලම ගනී */
+}
+
+.form-section label {
+  color: #000000;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.shipping-form input {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #000000;
+  padding: 18px 25px;
+  border-radius: 20px;
+  font-size: 1.05rem;
+  font-weight: 500;
   transition: 0.3s;
 }
 
-.information-form input:focus {
-  border-color: #2979ff;
-  box-shadow: 0 0 8px rgba(41,121,255,0.4);
+.shipping-form input:focus {
+  background: rgba(255, 255, 255, 1);
+  border-color: #000000;
+  outline: none;
 }
 
-.submit-btn {
-  width: 100%;
-  margin-top: 25px;
-  padding: 13px;
-  background: linear-gradient(135deg, #2979ff, #1c54b2);
-  color: white;
-  border: none;
-  border-radius: 14px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* District, Province, Postal Code එකම පේළියට */
+  gap: 15px;
 }
 
-.submit-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(41,121,255,0.45);
-}
-
-@keyframes slideFade {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
+/* Mobile එකේදී නැවතත් පරණ විදිහට සකස් කිරීම */
+@media (max-width: 900px) {
+  .shipping-form {
+    grid-template-columns: 1fr;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .shipping-save-btn, .form-section:nth-child(2) {
+    grid-column: span 1;
+  }
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+  .shipping-card {
+    padding: 40px 25px;
+  }
+  .shipping-header h2 {
+    font-size: 2rem;
   }
 }

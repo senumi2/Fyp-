@@ -1,99 +1,138 @@
-.products {
-  padding: 100px 20px;
-  text-align: center;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+.products-section {
+  padding: 100px 0;
+  background: linear-gradient(180deg, #28666E 0%, #1d4d54 100%);
+  color: white;
+  overflow: hidden;
 }
 
-.products-container {
+.container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
-.products h2 {
-  font-size: 42px;
-  margin-bottom: 15px;
-  font-weight: 700;
-  color: #2c3e50;
-  letter-spacing: -0.5px;
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
 }
 
-.products-subtitle {
-  font-size: 16px;
-  color: #7f8c8d;
-  margin-bottom: 50px;
-  font-weight: 300;
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 10px;
 }
 
+.underline {
+  width: 60px;
+  height: 4px;
+  background: #f4d35e;
+  margin: 0 auto 20px;
+}
+
+/* Grid System */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 30px;
-  margin-bottom: 40px;
+  /* මෙහි transition එකක් දැමීමෙන් blur වීම සුමට වේ */
+  transition: all 0.4s ease-in-out; 
 }
 
+/* === BLUR EFFECT LOGIC (The Fix) === */
+
+/* 1. Grid එක Hover කළ විට මුලින්ම සියලුම cards blur කරන්න */
+.product-list:hover .product-card {
+  filter: blur(4px);
+  opacity: 0.6;
+  transform: scale(0.95);
+}
+
+/* 2. නමුත් ඔබ හරියටම Hover කර ඇති Card එකේ blur එක ඉවත් කර එය ඉදිරියට ගන්න */
+.product-list:hover .product-card:hover {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateY(-15px) scale(1.08); /* ඉදිරියට නෙරා ඒම */
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #f4d35e;
+  z-index: 10;
+}
+
+/* Card Styling */
 .product-card {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
   text-decoration: none;
-  color: #333;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  /* Hover එක ඉවත් කළ විට නැවත තිබූ තත්වයට පත්වන වේගය */
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
 }
 
-.product-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-}
-
-.product-card img {
+/* Image Styling */
+.product-image-container {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  padding: 25px;
+  overflow: hidden;
+}
+
+.product-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   transition: transform 0.5s ease;
 }
 
 .product-card:hover img {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
+/* Info Area */
 .product-info {
   padding: 20px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+  text-align: center;
 }
 
-.product-card h3 {
-  font-size: 18px;
+.product-info h3 {
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.explore-btn {
+  background: transparent;
+  border: 1px solid #f4d35e;
+  color: #f4d35e;
+  padding: 8px 24px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
   font-weight: 600;
-  margin-bottom: 10px;
-  color: #2c3e50;
-  text-align: left;
 }
 
-.product-price {
-  font-size: 16px;
-  font-weight: 700;
-  color: #667eea;
-  text-align: left;
-  margin-top: auto;
+.product-card:hover .explore-btn {
+  background: #f4d35e;
+  color: #1d4d54;
 }
 
+/* Animations (Page Load) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
-  .products {
-    padding: 60px 15px;
+  /* Mobile වලදී blur effect එක කරදරයක් විය හැකි නිසා එය ඉවත් කළා */
+  .product-list:hover .product-card {
+    filter: none;
+    opacity: 1;
+    transform: none;
   }
-
-  .products h2 {
-    font-size: 32px;
-    margin-bottom: 10px;
+  .product-list:hover .product-card:hover {
+    transform: translateY(-5px);
   }
-
-  .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
-  }
+}

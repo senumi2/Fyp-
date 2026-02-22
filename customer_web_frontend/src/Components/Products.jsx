@@ -10,24 +10,36 @@ function Products() {
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.log("Error fetching products:", err));
- }, []);
+  }, []);
 
- 
-  
   return (
-    <section className="products">
-      <h2>Our Products</h2>
-     
-      <div className="product-grid">
-        {products.map(product => (
-          <Link
-           key={product._id}
-            to={`/product/${product._id}`} 
-            className="product-card">
-            <img src={`http://localhost:5000${product.imageUrl}`} alt={product.name} />
-            <h3>{product.name}</h3>
-           </Link>
-        ))}
+    <section className="products-section" id="products">
+      <div className="container">
+        <div className="section-header">
+          <h2 className="title">Our Premium Selection</h2>
+          <div className="underline"></div>
+          <p className="subtitle">High-quality salt products crafted for excellence</p>
+        </div>
+        
+        {/* 'product-list' පන්තිය Blur effect එක පාලනය කිරීමට එක් කරන ලදී */}
+        <div className="product-grid product-list">
+          {products.map((product, index) => (
+            <Link
+              key={product._id}
+              to={`/product/${product._id}`} 
+              className="product-card"
+              style={{ "--delay": index }}
+            >
+              <div className="product-image-container">
+                <img src={`http://localhost:5000${product.imageUrl}`} alt={product.name} />
+              </div>
+              <div className="product-info">
+                <h3>{product.name}</h3>
+                <button className="explore-btn">Explore</button>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 const Inventory = require("../models/Inventory");
 
-// 1. අලුතින් Item එකක් එකතු කිරීම
+// Add new items to inventory
 exports.createInventory = async (req, res) => {
     try {
         const data = await Inventory.create(req.body);
@@ -10,19 +10,19 @@ exports.createInventory = async (req, res) => {
     }
 };
 
-// 2. දත්ත ලබා ගැනීම සහ Search කිරීම
+//  search and get data
 exports.getInventory = async (req, res) => {
     const { search, all } = req.query;
     let query = {};
 
-    // මාසයක කාල සීමාව ඇතුළත දත්ත පමණක් පෙන්වීමට (all=true නොවේ නම්)
+    // show data within only month (if not all=true)
     if (!all) {
         const lastMonth = new Date();
         lastMonth.setMonth(lastMonth.getMonth() - 1);
         query.createdAt = { $gte: lastMonth };
     }
 
-    // Search logic එක - මෙහිදී field name එක 'items' බවට සහතික කරගන්න
+   
     if (search) {
         query.items = { $regex: search, $options: "i" };
     }
@@ -35,7 +35,7 @@ exports.getInventory = async (req, res) => {
     }
 };
 
-// 3. දත්ත Update කිරීම
+// update dat
 exports.updateInventory = async (req, res) => {
     try {
         const data = await Inventory.findByIdAndUpdate(
@@ -49,7 +49,7 @@ exports.updateInventory = async (req, res) => {
     }
 };
 
-// 4. දත්ත Delete කිරීම
+// delete data
 exports.deleteInventory = async (req, res) => {
     try {
         await Inventory.findByIdAndDelete(req.params.id);

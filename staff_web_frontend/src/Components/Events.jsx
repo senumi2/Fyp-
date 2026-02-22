@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Events.css";
+import"./Events.css";
 
 function Events() {
   // Sample events for fallback
@@ -47,7 +47,7 @@ function Events() {
   const displayedEvents = showAll ? events : events.slice(0, 3);
 
   return (
-    <section className="events">
+    <section className="events" id="events">
       <div className="events-container">
         <h2 className="section-title">Events & Activities</h2>
         <p className="section-subtitle">Discover our upcoming events and community activities</p>
@@ -81,7 +81,7 @@ function Events() {
             className="view-btn"
             onClick={() => setShowAll(!showAll)}
           >
-            {showAll ? "Show Less ▲" : "View More Events ▼"}
+            {showAll ? "Show Less ▲" : "Explore Events ▼"}
           </button>
         )}
       </div>

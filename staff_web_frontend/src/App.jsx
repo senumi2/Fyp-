@@ -14,7 +14,9 @@ import Reports from "./Pages/Reports";
 import Profile from "./Pages/Profile";
 
 import EqupmentUsage from "./Components/EqupmentUsage";
-
+import Stock from "./Pages/Stock";
+import InventoryManagement from "./Components/InventoryManagement.JSX";
+import PondsManagement from "./Components/PondsManagement";
 
 import Inventory from "./Pages/Inventory";
 import Issues from "./Pages/Issues";
@@ -54,6 +56,8 @@ function App() {
             <Route path="/maintenance" element={<Maintenance />} />
 
         <Route path="/equpmentUsage" element={<EqupmentUsage />} />
+        <Route path="/inventoryManagement" element={<InventoryManagement />} />
+        <Route path="/pondsManagement" element={<PondsManagement />} />
          </Routes>
 
 

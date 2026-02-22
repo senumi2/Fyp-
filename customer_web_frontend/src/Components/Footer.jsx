@@ -1,64 +1,63 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { HashLink as Link } from "react-router-hash-link";
+import fbImg from "../images/fb.jpg";
+import instaImg from "../images/insta.jpg";
 import "./Footer.css";
 
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer-container">
-
-        {/* Left */}
-        <div className="footer-column">
-          <h3>National Salt Limited</h3>
-          <p>Mahawe­liyaya, Hambantota</p>
-          <p>Sri Lanka</p>
+        
+        {/* වම් පස - විස්තර */}
+        <div className="footer-column about-section">
+          <h3 className="footer-logo">National Salt <span>Limited</span></h3>
+          <p className="address-text">
+            Mahaweiliyaya, Hambantota<br />
+            Sri Lanka
+          </p>
         </div>
 
-        {/* Center */}
-        <div className="footer-column center">
-          <h3>Contact</h3>
-
-          <div className="contact-row">
-            <span className="icon">✉️</span>
-            <a href="mailto:info@lankasalt.lk">
-              info@lankasalt.lk
+        {/* මැද - සබඳතා */}
+        <div className="footer-column contact-section">
+          <h3>Contact Us</h3>
+          <div className="contact-links">
+            <a href="mailto:info@lankasalt.lk" className="contact-item">
+              <span className="icon">✉️</span> info@lankasalt.lk
+            </a>
+            <a href="tel:+945269632" className="contact-item">
+              <span className="icon">📞</span> +94 526 9632
             </a>
           </div>
-
-          <div className="contact-row">
-            <span className="icon">📞</span>
-            <a href="tel:+945269632">
-              +94 526 9632
+          
+          <div className="social-links">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
+              <img src={fbImg} alt="FB" />
             </a>
-          </div>
-
-          <div className="social-icons">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer">
-              <img src="/fb.png" alt="Facebook" />
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <img src={instaImg} alt="Insta" />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer">
-              <img src="/insta.png" alt="Instagram" />
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer">
+            <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter">
               <img src="/twitter.png" alt="Twitter" />
             </a>
           </div>
         </div>
 
-        {/* Right */}
-        <div className="footer-column">
+        {/* දකුණු පස - Quick Links */}
+        <div className="footer-column links-section">
           <h3>Quick Links</h3>
-
-          {/* 🔥 React router links */}
-          <Link to="/products">Products</Link>
-          <Link to="/events">Events</Link>
-          <Link to="/board">Board</Link>
-          <Link to="/downloads">Downloads</Link>
+          <nav className="footer-nav">
+            {/* smooth scroll වෙමින් අදාළ section එකට යයි */}
+            <Link smooth to="/#products">Products</Link>
+            <Link smooth to="/#events">Events</Link>
+            <Link smooth to="/#directors">Directors</Link>
+          </nav>
         </div>
 
       </div>
 
       <div className="footer-bottom">
-        © National Salt Limited. All rights reserved.
+        <p>© {new Date().getFullYear()} National Salt Limited. All rights reserved.</p>
       </div>
     </footer>
   );
