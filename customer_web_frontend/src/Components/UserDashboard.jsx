@@ -10,13 +10,13 @@ function UserDashboard() {
     <div className="dashboard-wrapper">
       <div className="dashboard-container">
         
-        {/* සරල මාතෘකාවක් පමණක් */}
+        
         <div className="dashboard-header-simple">
           <h2>User Dashboard</h2>
           <p>Manage your account and orders from one place</p>
         </div>
 
-        {/* Menu Grid - Cards හතර පමණයි */}
+
         <div className="dashboard-grid">
           
           {/* TRACK ORDER CARD */}

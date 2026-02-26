@@ -12,7 +12,7 @@
 .story-left {
   flex: 1.2;
   text-align: justify;
-  line-height: 1.8; /* කියවීමට පහසු වීමට පේළි අතර පරතරය */
+  line-height: 1.8; 
 }
 
 .story-left h2 {
@@ -24,7 +24,7 @@
   display: inline-block;
 }
 
-/* මාතෘකාව යටින් ලස්සන blue line එකක් */
+
 .story-left h2::after {
   content: "";
   position: absolute;
@@ -49,9 +49,9 @@
   max-width: 550px;
   height: 450px;
   object-fit: cover;
-  border-radius: 30px; /* Modern වටකුරු පෙනුම */
+  border-radius: 30px; 
   box-shadow: 25px 25px 0px rgba(41, 121, 255, 0.05), 
-              0 20px 40px rgba(0,0,0,0.1); /* පින්තූරය පිටුපසින් subtle block shadow එකක් */
+              0 20px 40px rgba(0,0,0,0.1); 
   transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
 
@@ -60,18 +60,18 @@
   box-shadow: 0 30px 60px rgba(0,0,0,0.15);
 }
 
-/* ===== Scroll Animation Improvements ===== */
+
 
 .animate {
   opacity: 0;
-  filter: blur(5px); /* Animation එක පටන් ගන්න කොට මදක් blur වීම modern */
+  filter: blur(5px); 
   transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), 
               transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
               filter 1.2s ease;
 }
 
 .slide-left {
-  transform: translateX(-80px); /* දුර මදක් අඩු කළා පෙනුම soft වීමට */
+  transform: translateX(-80px); 
 }
 
 .slide-right {

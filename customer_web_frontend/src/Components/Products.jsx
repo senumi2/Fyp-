@@ -21,7 +21,7 @@ function Products() {
           <p className="subtitle">High-quality salt products crafted for excellence</p>
         </div>
         
-        {/* 'product-list' පන්තිය Blur effect එක පාලනය කිරීමට එක් කරන ලදී */}
+        
         <div className="product-grid product-list">
           {products.map((product, index) => (
             <Link

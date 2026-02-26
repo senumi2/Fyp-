@@ -1,14 +1,14 @@
-/* Section Base */
+
 .directors-section {
   padding: 60px 0;
   background-color: #ffffff;
-  overflow: hidden; /* Arrows පිටතට පැනීම වැළැක්වීමට */
+  overflow: hidden; 
 }
 
 .directors-container {
-  max-width: 1200px; /* Container එක මඳක් විශාල කළා */
+  max-width: 1200px; 
   margin: 0 auto;
-  padding: 0 80px; /* Arrows සඳහා දෙපසින් ඉඩ තැබුවා */
+  padding: 0 80px; 
   position: relative;
 }
 
@@ -32,7 +32,7 @@
   border-radius: 2px;
 }
 
-/* Slider System */
+
 .slider-viewport {
   position: relative;
   display: flex;
@@ -52,11 +52,11 @@
 
 .director-item {
   flex: 0 0 33.3333%;
-  padding: 0 20px; /* Cards අතර පරතරය */
+  padding: 0 20px; 
   box-sizing: border-box;
 }
 
-/* Card Styling */
+
 .director-card {
   display: flex;
   flex-direction: column;
@@ -64,7 +64,7 @@
   text-align: center;
 }
 
-/* Image with Tilt & Gray Filter */
+
 .image-wrapper {
   width: 100%;
   max-width: 240px;
@@ -86,7 +86,7 @@
   transition: filter 0.5s ease;
 }
 
-/* Hover Effects */
+
 .director-item:hover .image-wrapper {
   transform: rotate(0deg) scale(1.05);
   box-shadow: 0 15px 35px rgba(0,0,0,0.15);
@@ -96,7 +96,7 @@
   filter: grayscale(0%);
 }
 
-/* Text Details */
+
 .director-info {
   width: 100%;
 }
@@ -124,7 +124,7 @@
   padding: 0 5px;
 }
 
-/* Arrows - Always Visible with Gap */
+
 .slide-arrow {
   position: absolute;
   top: 40%; 
@@ -154,7 +154,7 @@
   cursor: not-allowed;
 }
 
-/* මෙතැනින් පරතරය වැඩි කර ඇත */
+
 .left { 
   left: -40px; 
 }

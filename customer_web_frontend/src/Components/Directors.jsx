@@ -40,7 +40,7 @@ function Directors() {
         </header>
 
         <div className="slider-viewport">
-          {/* Left Arrow - Always Displayed */}
+          
           <button 
             className={`slide-arrow left ${currentIndex === 0 ? "is-disabled" : ""}`} 
             onClick={prevSlide}
@@ -57,7 +57,7 @@ function Directors() {
                 <div key={director._id} className="director-item">
                   <div className="director-card">
                     
-                    {/* Image Area */}
+                    
                     <div className="image-wrapper">
                       <img 
                         src={`http://localhost:5000${director.imageUrl}`} 
@@ -69,7 +69,7 @@ function Directors() {
                       />
                     </div>
                     
-                    {/* Details Area - Exactly below the image */}
+                    
                     <div className="director-info">
                       <h3 className="name">{director.name}</h3>
                       <p className="role">{director.role}</p>
@@ -82,7 +82,7 @@ function Directors() {
             </div>
           </div>
 
-          {/* Right Arrow - Always Displayed */}
+          
           <button 
             className={`slide-arrow right ${currentIndex >= directors.length - 3 ? "is-disabled" : ""}`} 
             onClick={nextSlide}

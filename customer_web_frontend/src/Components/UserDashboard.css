@@ -4,7 +4,7 @@
   background-color: #fcfcfc;
   display: flex;
   justify-content: center;
-  align-items: center; /* පිටුවේ සිරස්ව මැදට ගැනීම සඳහා */
+  align-items: center; 
 }
 
 .dashboard-container {
@@ -13,7 +13,7 @@
   padding: 40px 20px;
 }
 
-/* සරල මාතෘකාව */
+
 .dashboard-header-simple {
   text-align: center;
   margin-bottom: 50px;
@@ -31,7 +31,7 @@
   font-size: 1.1rem;
 }
 
-/* Grid Layout */
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -96,7 +96,7 @@
   margin: 0;
 }
 
-/* Arrow Button */
+
 .arrow-btn {
   position: absolute;
   bottom: 40px;

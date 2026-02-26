@@ -9,7 +9,7 @@ function Footer() {
     <footer className="footer">
       <div className="footer-container">
         
-        {/* වම් පස - විස්තර */}
+        
         <div className="footer-column about-section">
           <h3 className="footer-logo">National Salt <span>Limited</span></h3>
           <p className="address-text">
@@ -18,7 +18,7 @@ function Footer() {
           </p>
         </div>
 
-        {/* මැද - සබඳතා */}
+        
         <div className="footer-column contact-section">
           <h3>Contact Us</h3>
           <div className="contact-links">
@@ -43,11 +43,11 @@ function Footer() {
           </div>
         </div>
 
-        {/* දකුණු පස - Quick Links */}
+
         <div className="footer-column links-section">
           <h3>Quick Links</h3>
           <nav className="footer-nav">
-            {/* smooth scroll වෙමින් අදාළ section එකට යයි */}
+           
             <Link smooth to="/#products">Products</Link>
             <Link smooth to="/#events">Events</Link>
             <Link smooth to="/#directors">Directors</Link>

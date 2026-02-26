@@ -1,4 +1,4 @@
-/* Main Section - උස සහ Padding අඩු කළා */
+
 .events {
   padding: 50px 5%; 
   background: #e2dddd;
@@ -6,11 +6,11 @@
 }
 
 .events-container {
-  max-width: 1100px; /* පළල මදක් අඩු කළා */
+  max-width: 1100px; 
   margin: 0 auto;
 }
 
-/* Titles - Size අඩු කළා */
+
 .section-title {
   font-size: 2.2rem;
   font-weight: 800;
@@ -21,10 +21,10 @@
 .section-subtitle {
   font-size: 0.95rem;
   color: #666;
-  margin-bottom: 30px; /* Space අඩු කළා */
+  margin-bottom: 30px; 
 }
 
-/* Event Grid - Columns අතර ඉඩ ප්‍රශස්ත කළා */
+
 .event-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -32,7 +32,7 @@
   margin-bottom: 30px;
 }
 
-/* Event Card - උස සහ අනවශ්‍ය Space අඩු කළා */
+
 .event-card {
   background: #ffffff;
   border-radius: 16px;
@@ -41,7 +41,7 @@
   transition: all 0.4s ease;
   display: flex;
   flex-direction: column;
-  height: auto; /* අන්තර්ගතය අනුව හැඩගැසීමට */
+  height: auto; 
   border: 1px solid #eee;
 }
 
@@ -50,10 +50,10 @@
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Image Section - උස සැලකිය යුතු ලෙස අඩු කළා */
+
 .event-image-wrapper {
   width: 100%;
-  height: 160px; /* 230px සිට 160px දක්වා අඩු කළා */
+  height: 160px; 
   overflow: hidden;
 }
 
@@ -64,7 +64,7 @@
   transition: transform 0.6s ease;
 }
 
-/* Content Area - Padding අඩු කළා */
+
 .event-content {
   padding: 18px; 
   text-align: left;
@@ -72,25 +72,25 @@
 
 .event-card h3 {
   margin: 0 0 8px 0;
-  font-size: 17px; /* Title එක කුඩා කළා */
+  font-size: 17px; 
   color: #2c3e50;
   font-weight: 700;
   line-height: 1.2;
 }
 
 .event-description {
-  font-size: 13.5px; /* Text size එක පොඩ්ඩක් අඩු කළා */
+  font-size: 13.5px; 
   color: #5d6d7e;
   margin-bottom: 15px;
   line-height: 1.4;
-  /* පේළි 3කට වඩා වැඩි නම් ඉතිරිය සැඟවීමට (Modern look) */
+  
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Date Tag - Compact කළා */
+
 .event-date {
   font-size: 12px;
   color: #667eea;
@@ -101,7 +101,7 @@
   display: inline-block;
 }
 
-/* View More Button - Size එක සහ Padding අඩු කළා */
+
 .view-btn {
   margin-top: 10px;
   padding: 10px 30px;

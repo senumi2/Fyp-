@@ -11,7 +11,7 @@ const Stock = () => {
     const items = ["Salt", "Jipsum", "Artemiya", "Agriculture Salt"];
     const tableRefs = useRef({});
 
-    // අද දිනය YYYY-MM-DD format එකට ගැනීම
+    
     const today = new Date().toISOString().split('T')[0];
 
     const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ const Stock = () => {
         quantity: ''
     });
 
-    // ඔබගේ Backend URL එක (මෙහි /api/stocks දක්වා පමණක් ඇතුළත් කරන්න)
+    
     const API_URL = "http://localhost:5000/api/stocks";
 
     useEffect(() => {
@@ -62,18 +62,18 @@ const Stock = () => {
     const handleAdd = async (e) => {
         e.preventDefault();
 
-        // Backend එකේ Schema එකට අනුව Payload එක සකස් කිරීම
+ 
         const payload = { 
             itemName: formData.itemName,
-            transactionType: activeTab, // 'Inward' හෝ 'Outward'
-            date: new Date(formData.date), // Date object එකක් ලෙස යැවීම
+            transactionType: activeTab, // 'Inward' or 'Outward'
+            date: new Date(formData.date), 
             subType: formData.subType,
-            quantity: Number(formData.quantity), // අනිවාර්යයෙන්ම Number එකක් විය යුතුයි
+            quantity: Number(formData.quantity), 
             no: formData.no
         };
 
         try {
-            // ඔබේ stockRoutes.js හි ඇත්තේ router.post('/add', addStock) බැවින්:
+           
             const response = await axios.post(`${API_URL}/add`, payload);
             
             if (response.status === 201) {
@@ -91,7 +91,7 @@ const Stock = () => {
         tableRefs.current[itemName]?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // Table එකේ දත්ත පෙන්වන function එක
+    // show data in the Table 
     const renderTable = (itemName) => {
         const filtered = allData.filter(d => 
             d.itemName === itemName && 

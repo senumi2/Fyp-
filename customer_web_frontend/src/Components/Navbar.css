@@ -4,7 +4,7 @@
   align-items: center;
   padding: 10px 40px;
 
-  /* ❗ background colours unchanged */
+  
   background: linear-gradient(90deg, #FEDC97, #B4D2B1, #28666E);
 
   position: sticky;
@@ -46,7 +46,7 @@
   width: 100%;
 }
 
-/* ACTIVE LINK */
+
 .nav-link.active {
   color: #0a2952;
   font-weight: 600;

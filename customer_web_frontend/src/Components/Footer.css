@@ -21,7 +21,7 @@
   position: relative;
 }
 
-/* Logo පෙනුම */
+
 .footer-logo {
   font-size: 1.5rem !important;
   letter-spacing: 1px;
@@ -38,7 +38,7 @@
   opacity: 0.9;
 }
 
-/* Links සහ Navigation */
+/* Links and Navigation */
 .footer-nav, .contact-links {
   display: flex;
   flex-direction: column;
@@ -84,7 +84,7 @@
   transform: translateY(-5px) scale(1.1);
 }
 
-/* Bottom Bar */
+
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 25px;

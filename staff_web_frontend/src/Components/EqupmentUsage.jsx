@@ -6,7 +6,7 @@ import Maintenance from '../Pages/Maintenance';
 import "./EqupmentUsage.css";
 
 const EqupmentUsage = () => {
-    const [activePage, setActivePage] = useState("inventory"); // මුලින්ම පෙන්වන පේජ් එක
+  const [activePage, setActivePage] = useState("inventory"); 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   

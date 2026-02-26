@@ -20,7 +20,7 @@ function Login() {
     const data = await res.json();
 
     if (res.ok) {
-      login(data); // 🔥 THIS updates navbar immediately
+      login(data); 
       navigate("/");
     } else {
       alert(data.message);

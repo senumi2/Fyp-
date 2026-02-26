@@ -1,4 +1,4 @@
-/* Hero Section Main Container */
+
 .hero-container {
   height: 100vh;
   width: 100%;
@@ -7,25 +7,25 @@
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
-  background-color: #000; /* රූපය load වන තුරු කළු පැහැය */
+  background-color: #000; /* Till load the image */
 }
 
-/* Background Image Animation - Zoom effect එක තවත් පැහැදිලි කළා */
+/* Background Image Animation - Zoom effect  */
 .hero-container::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: inherit; /* JSX එකෙන් එන image එක ගනී */
+  background-image: inherit; 
   background-size: cover;
   background-position: center;
   z-index: 0;
-  /* තප්පර 25ක කාලයක් තුළ වඩාත් පැහැදිලිව Zoom වේ */
+  /* Zoom  within 25seconds */
   animation: ultraZoom 25s ease-in-out infinite alternate;
 }
 
 @keyframes ultraZoom {
   0% { transform: scale(1); }
-  100% { transform: scale(1.25); } /* Zoom එක 1.25 දක්වා වැඩි කළා */
+  100% { transform: scale(1.25); } 
 }
 
 .hero-overlay {
@@ -40,7 +40,7 @@
   z-index: 1;
 }
 
-/* Hero Content Box */
+
 .hero-content {
   position: relative;
   z-index: 2;
@@ -55,11 +55,11 @@
   box-shadow: 0 30px 60px rgba(0,0,0,0.5);
 }
 
-/* Text Animations - කාලය (Duration) වැඩි කර මෘදු කළා */
+
 .hero-title {
   color: #ffffff;
   margin-bottom: 15px;
-  opacity: 0; /* මුලින් නොපෙනී තිබීමට */
+  opacity: 0; 
 }
 
 h2.hero-title {
@@ -68,7 +68,6 @@ h2.hero-title {
   letter-spacing: 4px;
   color: #2979ff;
   text-transform: uppercase;
-  /* තප්පර 1.2 ක මෘදු animation එකක් */
   animation: softSlideDown 1.2s ease-out forwards;
 }
 
@@ -77,7 +76,6 @@ h1.hero-title {
   font-weight: 900;
   line-height: 1.1;
   letter-spacing: -1px;
-  /* h2 එක ආවාට පසු තප්පර 0.5 කින් ඇරඹේ */
   animation: softSlideDown 1.5s ease-out 0.5s forwards;
 }
 
@@ -88,11 +86,11 @@ h1.hero-title {
   margin-top: 25px;
   padding-left: 20px;
   opacity: 0;
-  /* අන්තිමටම තප්පර 1.8 ක කාලයක් ගනිමින් පාවී එයි */
+  
   animation: softSlideRight 1.8s ease-out 1s forwards;
 }
 
-/* Keyframes - Animations වල දුර සහ වේගය පාලනය */
+
 @keyframes softSlideDown {
   0% {
     opacity: 0;

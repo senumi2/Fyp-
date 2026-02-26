@@ -34,30 +34,27 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 30px;
-  /* මෙහි transition එකක් දැමීමෙන් blur වීම සුමට වේ */
   transition: all 0.4s ease-in-out; 
 }
 
-/* === BLUR EFFECT LOGIC (The Fix) === */
 
-/* 1. Grid එක Hover කළ විට මුලින්ම සියලුම cards blur කරන්න */
 .product-list:hover .product-card {
   filter: blur(4px);
   opacity: 0.6;
   transform: scale(0.95);
 }
 
-/* 2. නමුත් ඔබ හරියටම Hover කර ඇති Card එකේ blur එක ඉවත් කර එය ඉදිරියට ගන්න */
+
 .product-list:hover .product-card:hover {
   filter: blur(0);
   opacity: 1;
-  transform: translateY(-15px) scale(1.08); /* ඉදිරියට නෙරා ඒම */
+  transform: translateY(-15px) scale(1.08); 
   background: rgba(255, 255, 255, 0.15);
   border-color: #f4d35e;
   z-index: 10;
 }
 
-/* Card Styling */
+
 .product-card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
@@ -67,11 +64,10 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  /* Hover එක ඉවත් කළ විට නැවත තිබූ තත්වයට පත්වන වේගය */
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
 }
 
-/* Image Styling */
+
 .product-image-container {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -90,7 +86,7 @@
   transform: scale(1.1);
 }
 
-/* Info Area */
+
 .product-info {
   padding: 20px;
   text-align: center;
@@ -118,7 +114,7 @@
   color: #1d4d54;
 }
 
-/* Animations (Page Load) */
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -126,7 +122,7 @@
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  /* Mobile වලදී blur effect එක කරදරයක් විය හැකි නිසා එය ඉවත් කළා */
+
   .product-list:hover .product-card {
     filter: none;
     opacity: 1;

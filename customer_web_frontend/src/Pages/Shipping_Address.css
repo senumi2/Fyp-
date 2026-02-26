@@ -28,9 +28,9 @@
   -webkit-backdrop-filter: blur(25px);
   
   width: 100%;
-  max-width: 850px; /* Desktop එකට ගැලපෙන ලෙස Form එක පළල් කළා */
+  max-width: 850px; 
   
-  padding: 70px; /* Form එක ඇතුළේ ඉඩ කඩ (Spacing) උපරිම කළා */
+  padding: 70px; 
   border-radius: 50px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
@@ -45,7 +45,7 @@
 }
 
 .shipping-header h2 {
-  font-size: 3rem; /* විශාල Desktop තිර සඳහා මාතෘකාව විශාල කළා */
+  font-size: 3rem; 
   font-weight: 900;
   color: #000000;
   letter-spacing: -1px;
@@ -57,16 +57,16 @@
   font-weight: 500;
 }
 
-/* Form එකේ Grid එකක් භාවිතා කර ඉඩ කළමනාකරණය කිරීම */
+
 .shipping-form {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Desktop එකේදී කොටස් දෙකකට බෙදීම */
+  grid-template-columns: 1fr 1fr; 
   gap: 40px; 
 }
 
-/* Save button එක මුළු පළලම ගන්නා ලෙස සකස් කිරීම */
+
 .shipping-save-btn {
-  grid-column: span 2; /* පේළි දෙකම ආවරණය කිරීමට */
+  grid-column: span 2; 
   background: #000000;
   color: #ffffff;
   padding: 20px;
@@ -94,7 +94,7 @@
 
 /* RECIPIENT DETAILS සහ DELIVERY LOCATION පේළි දෙකකට නොයා එක ළඟ තැබීමට (Desktop) */
 .form-section:nth-child(2) {
-  grid-column: span 2; /* ලිපිනය ඇති කොටස සම්පූර්ණ පළලම ගනී */
+  grid-column: span 2; 
 }
 
 .form-section label {
