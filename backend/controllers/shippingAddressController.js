@@ -1,29 +1,20 @@
 const ShippingAddress = require("../models/ShippingAddress");
 
-// GET (auto fill)
-exports.getShippingAddress = async (req, res) => {
+// 1. GET - ලොග් වී සිටින User ගේ සියලුම ලිපින ලබා ගැනීම
+exports.getShippingAddresses = async (req, res) => {
   try {
-    const address = await ShippingAddress.findOne({ user: req.user.id });
-    res.json(address);
+    // findOne වෙනුවට find පාවිච්චි කරන්න (සියල්ලම ගැනීමට)
+    const addresses = await ShippingAddress.find({ user: req.user.id });
+    res.json(addresses);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// CREATE or UPDATE
+// 2. CREATE - අලුත් ලිපිනයක් (Warehouse Location) එකතු කිරීම
 exports.saveShippingAddress = async (req, res) => {
   try {
-    const existing = await ShippingAddress.findOne({ user: req.user.id });
-
-    if (existing) {
-      const updated = await ShippingAddress.findByIdAndUpdate(
-        existing._id,
-        req.body,
-        { new: true }
-      );
-      return res.json(updated);
-    }
-
+    // හැමතිස්සෙම අලුත් එකක් විදිහට Save කරන්න (Overwrite කරන්නේ නැහැ)
     const newAddress = new ShippingAddress({
       ...req.body,
       user: req.user.id
@@ -31,6 +22,19 @@ exports.saveShippingAddress = async (req, res) => {
 
     await newAddress.save();
     res.status(201).json(newAddress);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// 3. DELETE - අවශ්‍ය නැති ලිපිනයක් ඉවත් කිරීම
+exports.deleteShippingAddress = async (req, res) => {
+  try {
+    await ShippingAddress.findOneAndDelete({ 
+      _id: req.params.id, 
+      user: req.user.id // තහවුරු කරගන්න තමන්ගේම ලිපිනයක්ද කියලා
+    });
+    res.json({ message: "Location deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

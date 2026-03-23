@@ -12,11 +12,18 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import Reports from "./Pages/Reports";
 import Profile from "./Pages/Profile";
+import StaffLogin from "./Components/StaffLogin";
+import AdminDashboard from "./Components/AdminDashboard";
+
+
 
 import EqupmentUsage from "./Components/EqupmentUsage";
-import Stock from "./Pages/Stock";
-import InventoryManagement from "./Components/InventoryManagement.JSX";
+import InventoryManagement from "./Components/InventoryManagement";
 import PondsManagement from "./Components/PondsManagement";
+import HarvestManagement from "./Components/HarvestManagement";
+import ExpensesFinance from "./Components/ExpensesFinance";
+
+
 
 import Inventory from "./Pages/Inventory";
 import Issues from "./Pages/Issues";
@@ -38,6 +45,7 @@ function App() {
             <>
               <Hero />
               <About />
+              <StaffLogin />
               <Events />
               <Reports />
               <Directors />
@@ -47,17 +55,25 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/About" element={<About />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/board" element={<Directors />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin/directors" element={<AdminDirectors />} />
+        <Route path="/staff" element={<StaffLogin />} />
             
             <Route path="/" element={<Inventory />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/issues" element={<Issues />} />
             <Route path="/maintenance" element={<Maintenance />} />
 
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/equpmentUsage" element={<EqupmentUsage />} />
         <Route path="/inventoryManagement" element={<InventoryManagement />} />
         <Route path="/pondsManagement" element={<PondsManagement />} />
+        <Route path="/harvestManagement" element={<HarvestManagement />} />
+        <Route path="/expensesFinance" element={<ExpensesFinance />} />
+        
          </Routes>
 
 

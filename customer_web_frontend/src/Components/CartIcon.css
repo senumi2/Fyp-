@@ -1,0 +1,47 @@
+.floating-cart-container {
+    position: fixed; /* පිටුව scroll කරන කොටත් එකම තැන තියෙන්න */
+    bottom: 40px; 
+    right: 40px;
+    z-index: 99999 !important; /* හැමදේටම වඩා උඩින් තියෙන්න අනිවාර්යයි */
+    cursor: pointer;
+    display: block !important; /* Hide වෙලා නැති බව තහවුරු කිරීමට */
+}
+
+.cart-circle {
+    background: #000;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: 0.3s;
+}
+
+.cart-circle:hover {
+    transform: scale(1.1);
+    background: #222;
+}
+
+.main-cart-svg {
+    color: #fff;
+    font-size: 26px;
+}
+
+.cart-floating-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff3b3b;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #fff;
+}

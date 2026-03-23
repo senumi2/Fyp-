@@ -9,7 +9,7 @@ function Profile() {
 
   const token = localStorage.getItem("token");
 
-  // 🔹 Load profile
+  //  Load profile
   const loadProfile = async () => {
     const res = await fetch("http://localhost:5000/api/profile", {
       headers: {
@@ -24,12 +24,12 @@ function Profile() {
     loadProfile();
   }, []);
 
-  // 🔹 Input change
+  //  Input change
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  // 🔹 Image select + preview
+  //  Image select + preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -38,7 +38,7 @@ function Profile() {
     }
   };
 
-  // 🔹 Save profile (FIXED)
+  //  Save profile (FIXED)
   const handleSave = async () => {
     const formData = new FormData();
     formData.append("fullName", user.fullName);
@@ -55,7 +55,7 @@ function Profile() {
 
     const updatedUser = await res.json();
 
-    // 🔥 IMPORTANT FIXES
+    //  IMPORTANT FIXES
     setUser(updatedUser);   // update frontend with backend data
     setEditMode(false);
     setPreview(null);

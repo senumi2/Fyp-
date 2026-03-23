@@ -12,7 +12,7 @@
   overflow: hidden;
 }
 
-/* Background Animated Blobs */
+
 .about-bg-elements .blob {
   position: absolute;
   width: 500px;
@@ -114,14 +114,19 @@
 }
 
 /* Animations */
+
 .animate-up {
   opacity: 0;
   transform: translateY(40px);
+}
+
+
+.visible .animate-up {
   animation: fadeInUp 0.8s forwards;
 }
 
-.delay-1 { animation-delay: 0.2s; }
-.delay-2 { animation-delay: 0.4s; }
+.visible .delay-1 { animation-delay: 0.2s; }
+.visible .delay-2 { animation-delay: 0.4s; }
 
 @keyframes fadeInUp {
   to {

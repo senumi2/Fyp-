@@ -22,7 +22,7 @@ const EqupmentUsage = () => {
 
   return (
     <div className="test-container">
-      {/*controling sidebar open and close*/}
+      
       <div className="menu-toggle-icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
         ☰
       </div>

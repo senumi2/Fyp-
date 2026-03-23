@@ -55,7 +55,7 @@ const Issues = () => {
     };
 
     return (
-        <div className="page-container" style={{ backgroundColor: '#E9C46A' }}>
+        <div className="page-container" style={{ backgroundColor: '#99A8AA' }}>
             <div className="header-row">
                 <h2>Reported Issues</h2>
                 <div className="search-container">

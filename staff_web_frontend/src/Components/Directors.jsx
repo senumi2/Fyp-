@@ -16,7 +16,7 @@ function Directors() {
       .catch((err) => console.error("Error fetching directors:", err));
   }, []);
 
-  const itemsVisible = 3; // Number of cards visible at once
+  const itemsVisible = 3;
 
   const nextSlide = () => {
     if (currentIndex < directors.length - itemsVisible) {
@@ -30,54 +30,49 @@ function Directors() {
     }
   };
 
-  if (directors.length === 0) return <div className="loading">Loading Leadership Team...</div>;
+  if (directors.length === 0) return null;
 
   return (
-    <section className="directors-section" id="directors">
-      <div className="directors-container">
+    <section className="modern-directors-section" id="directors">
+      <div className="modern-container-full"> 
         <header className="section-header">
+          <span className="sub-title">OUR LEADERSHIP</span>
           <h2 className="section-title">The Board Of Directors</h2>
           <div className="title-underline"></div>
         </header>
 
-        <div className="slider-wrapper">
-          {/* Navigation Arrows */}
+        <div className="modern-slider-wrapper">
           <button 
-            className={`slide-arrow left ${currentIndex === 0 ? "is-disabled" : ""}`} 
+            className={`modern-arrow left ${currentIndex === 0 ? "is-disabled" : ""}`} 
             onClick={prevSlide}
-            aria-label="Previous slide"
+            disabled={currentIndex === 0}
           >
             &#10094;
           </button>
 
-          <div className="directors-window">
+          <div className="modern-window">
             <div 
-              className="directors-track" 
+              className="modern-track" 
               style={{ 
                 transform: `translateX(-${currentIndex * (100 / itemsVisible)}%)` 
               }}
             >
               {directors.map((director) => (
-                <div key={director._id} className="director-item">
-                  <div className="director-card">
-                    
-                    <div className="image-wrapper">
+                <div key={director._id} className="director-modern-item">
+                  <div className="director-modern-card">
+                    <div className="card-top-accent"></div>
+                    <div className="image-frame">
                       <img 
                         src={`http://localhost:5000${director.imageUrl}`} 
                         alt={director.name}
                         className="director-photo"
-                        onError={(e) => {
-                          e.target.src = "https://via.placeholder.com/400x500?text=No+Photo";
-                        }}
                       />
                     </div>
-                    
-                    <div className="director-info">
+                    <div className="director-details">
                       <h3 className="name">{director.name}</h3>
                       <p className="role">{director.role}</p>
-                      <p className="bio">{director.description}</p>
+                      <p className="description-summary">{director.description}</p>
                     </div>
-
                   </div>
                 </div>
               ))}
@@ -85,9 +80,9 @@ function Directors() {
           </div>
 
           <button 
-            className={`slide-arrow right ${currentIndex >= directors.length - itemsVisible ? "is-disabled" : ""}`} 
+            className={`modern-arrow right ${currentIndex >= directors.length - itemsVisible ? "is-disabled" : ""}`} 
             onClick={nextSlide}
-            aria-label="Next slide"
+            disabled={currentIndex >= directors.length - itemsVisible}
           >
             &#10095;
           </button>

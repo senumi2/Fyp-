@@ -1,0 +1,159 @@
+.admin-stock-container {
+    --primary-dark: #0f172a;
+    --sidebar-bg: #1e293bf0;
+    --accent-blue: #2563eb;
+    --slate-50: #f8fafc;
+    --slate-200: #e2e8f0;
+    --slate-600: #475569;
+
+    background: var(--slate-50);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.admin-stock-container .stock-layout {
+    display: flex;
+}
+
+/* Sidebar - Fixed width, No expanding */
+.admin-stock-container .stock-sidebar {
+    width: 75px; 
+    background: var(--sidebar-bg);
+    min-height: 100vh;
+    padding: 30px 0;
+    position: sticky;
+    top: 80px; /* Stay below Navbar */
+    z-index: 50; /* Lower z-index so navbar stays on top */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-stock-container .sidebar-header {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+}
+
+.admin-stock-container .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.admin-stock-container .sidebar-nav button {
+    position: relative; /* Tooltip position eka hadanna */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 15px 0;
+    background: transparent;
+    color: #94a3b8;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-stock-container .nav-icon {
+    font-size: 1.5rem;
+}
+
+/* Floating Tooltip Label */
+.admin-stock-container .nav-tooltip {
+    position: absolute;
+    left: 85px; /* Icon ekata dakunu paththen penna */
+    background: var(--primary-dark);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Triangle for Tooltip */
+.admin-stock-container .nav-tooltip::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 6px 6px 6px 0;
+    border-style: solid;
+    border-color: transparent var(--primary-dark) transparent transparent;
+}
+
+/* Show Tooltip on Hover */
+.admin-stock-container .sidebar-nav button:hover .nav-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.admin-stock-container .sidebar-nav button.active {
+    color: var(--accent-blue);
+    border-right: 4px solid var(--accent-blue);
+}
+
+.admin-stock-container .sidebar-nav button:hover .nav-icon {
+    color: white;
+}
+
+/* Content Area */
+.admin-stock-container .stock-content {
+    flex: 1;
+    padding: 40px;
+}
+
+.admin-stock-container .tab-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+}
+
+.admin-stock-container .search-input {
+    width: 320px;
+    padding: 12px 20px;
+    border: 2px solid var(--slate-200);
+    border-radius: 50px;
+    outline: none;
+}
+
+.admin-stock-container .inventory-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border: 1px solid var(--slate-200);
+}
+
+.admin-stock-container .inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-stock-container .inventory-table th {
+    text-align: left;
+    padding: 12px;
+    font-size: 0.75rem;
+    color: var(--slate-600);
+    border-bottom: 2px solid var(--slate-50);
+}
+
+.admin-stock-container .inventory-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--slate-50);
+}
+
+.admin-stock-container .ref-tag {
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+}

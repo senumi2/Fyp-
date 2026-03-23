@@ -55,7 +55,7 @@ const Maintenance = () => {
     };
 
     return (
-        <div className="page-container" style={{ backgroundColor: '#264653', color: 'white' }}>
+        <div className="page-container" style={{ backgroundColor: '#6e8673cc', color: 'white' }}>
             <div className="header-row">
                 <h2>Maintenance Logs</h2>
                 <div className="search-container">

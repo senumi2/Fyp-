@@ -10,24 +10,18 @@ exports.createInventory = async (req, res) => {
     }
 };
 
-//  search and get data
+// Search and get data (Fixed Search Logic)
 exports.getInventory = async (req, res) => {
-    const { search, all } = req.query;
+    const { search } = req.query;
     let query = {};
 
-    // show data within only month (if not all=true)
-    if (!all) {
-        const lastMonth = new Date();
-        lastMonth.setMonth(lastMonth.getMonth() - 1);
-        query.createdAt = { $gte: lastMonth };
-    }
-
-   
-    if (search) {
+    // Search query ekak thibunොth pamanak filter apply karanawa
+    if (search && search.trim() !== "") {
         query.items = { $regex: search, $options: "i" };
     }
 
     try {
+        // Date filter eka ain kara search eka broad karanna
         const data = await Inventory.find(query).sort({ createdAt: -1 });
         res.json(data);
     } catch (err) { 
@@ -35,7 +29,7 @@ exports.getInventory = async (req, res) => {
     }
 };
 
-// update dat
+// Update data
 exports.updateInventory = async (req, res) => {
     try {
         const data = await Inventory.findByIdAndUpdate(
@@ -49,7 +43,7 @@ exports.updateInventory = async (req, res) => {
     }
 };
 
-// delete data
+// Delete data
 exports.deleteInventory = async (req, res) => {
     try {
         await Inventory.findByIdAndDelete(req.params.id);

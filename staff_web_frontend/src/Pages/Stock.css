@@ -1,19 +1,27 @@
 /* Professional Enterprise Theme Variables */
 :root {
     --primary-dark: #0f172a;
-    --sidebar-bg: #1e293b;
+    --sidebar-bg: #1e293bf0;
     --accent-blue: #2563eb;
-    --success-green: #10b981;
+    --success-green: #10b981; /* මඳක් දීප්තිමත් කොළ පැහැයක් */
     --danger-red: #ef4444;
     --slate-50: #f8fafc;
     --slate-200: #e2e8f0;
     --slate-600: #475569;
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --search-focus-glow: rgba(37, 99, 235, 0.2);
+}
+
+/* Global Placeholder Styling - මෙය සියලුම inputs වල අකුරු පෙන්වීමට උදව් වේ */
+::placeholder {
+    color: #94a3b8 !important; /* පැහැදිලි අළු පැහැයක් */
+    opacity: 1; 
+    font-weight: 400;
 }
 
 .stock-module-wrapper {
-    margin-top: 60px;
+    margin-top: 0px; 
     background: var(--slate-50);
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
@@ -30,7 +38,7 @@
     min-height: 100vh;
     padding: 30px 20px;
     position: sticky;
-    top: 60px;
+    top: 0px; 
     display: flex;
     flex-direction: column;
 }
@@ -93,20 +101,25 @@
     color: var(--primary-dark);
 }
 
+/* --- UPDATED SEARCH INPUT --- */
 .search-input {
-    width: 320px;
-    padding: 12px 20px;
-    border: 1px solid var(--slate-200);
-    border-radius: 14px;
+    width: 350px;
+    padding: 14px 25px;
+    border: 2px solid var(--slate-200);
+    border-radius: 50px; /* ලස්සන Capsule shape එකක් */
     outline: none;
     background: white;
-    box-shadow: var(--shadow-sm);
-    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 0.95rem;
+    color: var(--primary-dark);
 }
 
 .search-input:focus {
+    width: 400px; /* Focus කළ විට මඳක් විශාල වේ */
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    background: #ffffff;
+    box-shadow: 0 10px 20px var(--search-focus-glow);
 }
 
 /* Item Navigation Cards */
@@ -149,7 +162,7 @@
     border-color: var(--accent-blue);
 }
 
-/* Form Styling */
+/* --- UPDATED FORM STYLING --- */
 .stock-form {
     background: white;
     padding: 30px;
@@ -160,40 +173,51 @@
     margin-bottom: 50px;
     box-shadow: var(--shadow-md);
     align-items: flex-end;
+    border: 1px solid #edf2f7;
 }
 
 .form-group label {
     font-size: 0.75rem;
     font-weight: 700;
     color: var(--slate-600);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     display: block;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .stock-form input, .stock-form select {
     width: 100%;
-    padding: 12px;
-    border: 1px solid var(--slate-200);
+    padding: 14px; /* Placeholder අකුරු වැසීම වැළැක්වීමට padding වැඩි කරන ලදී */
+    border: 1.5px solid var(--slate-200);
     border-radius: 12px;
-    background: var(--slate-50);
+    background: #fff;
+    color: var(--primary-dark);
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.stock-form input:focus {
+    border-color: var(--accent-blue);
+    outline: none;
 }
 
 .form-add-btn {
     background: var(--success-green);
     color: white;
-    padding: 14px;
+    padding: 15px;
     border: none;
     border-radius: 12px;
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 .form-add-btn:hover {
     background: #059669;
-    transform: scale(1.02);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
 }
 
 /* Inventory Table Cards */
@@ -219,7 +243,7 @@
 }
 
 .count-badge {
-    background: var(--slate-50);
+    background: #eff6ff;
     padding: 6px 14px;
     border-radius: 50px;
     font-size: 0.75rem;
@@ -235,9 +259,10 @@
 .inventory-table th {
     text-align: left;
     padding: 15px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--slate-600);
     border-bottom: 2px solid var(--slate-50);
+    text-transform: uppercase;
 }
 
 .inventory-table td {
@@ -247,11 +272,12 @@
 }
 
 .ref-tag {
-    background: #eff6ff;
-    color: var(--accent-blue);
+    background: #f1f5f9;
+    color: var(--primary-dark);
     padding: 4px 10px;
     border-radius: 8px;
     font-weight: 700;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .type-pill {
@@ -305,25 +331,12 @@
     margin-bottom: 40px;
 }
 
-.chart-header {
-    margin-bottom: 30px;
-}
-
-.chart-header h4 {
-    font-size: 1.3rem;
-    margin-bottom: 5px;
-}
-
-.chart-header p {
-    font-size: 0.9rem;
-    color: var(--slate-600);
-}
-
 /* Read Only/Custom */
 .read-only-input {
     background: #f8fafc !important;
-    border: 1px dashed var(--slate-200) !important;
-    color: #94a3b8;
+    border: 1.5px dashed var(--slate-200) !important;
+    color: #64748b !important;
+    cursor: not-allowed;
 }
 
 @media (max-width: 1024px) {

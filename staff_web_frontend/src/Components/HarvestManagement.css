@@ -1,0 +1,111 @@
+.harvest-container {
+     display: flex; 
+     height: 100vh; 
+     font-family: sans-serif; 
+    }
+
+.sidebar {
+     width: 220px;
+     background: #d1d5db;
+     padding: 20px;
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+     border-right: 1px solid #999; 
+    }
+
+.sidebar-header {
+     font-size: 24px;
+      margin-bottom: 20px; 
+    }
+
+.nav-btn {
+      padding: 12px;
+      background: #9ca3af; 
+      border: none; 
+      font-weight: bold; 
+      cursor: pointer;
+      text-align: left;
+     }
+
+.nav-btn.active {
+     background: #6b7280;
+     color: white;
+     }
+
+.main-content {
+     flex: 1;
+      overflow-y: auto; 
+    }
+
+.section { 
+    padding: 30px; 
+    min-height: 100%;
+ }
+
+.management-bg {
+     background-color: #a3b1a2; 
+    } 
+
+.tracking-bg {
+     background-color: #cbd5e1; 
+    }
+
+.harvest-block {
+     margin-bottom: 30px;
+     }
+
+.cat-title { 
+    font-weight: bold; 
+    margin-bottom: 8px;
+ }
+
+.harvest-table {
+     width: 100%;
+      max-width: 650px; 
+      border-collapse: collapse;
+       background: #bdc7c7; 
+    }
+
+.harvest-table th, .harvest-table td {
+     border: 1px solid #555;
+      padding: 8px; text-align: center;
+       font-size: 14px; 
+    }
+
+.input-row { 
+    background: #d1dadd; 
+}
+
+.input-row input {
+     width: 90%;
+      background: transparent; 
+      border: 1px solid #888;
+       padding: 4px;
+     }
+
+.btn-group {
+     display: flex;
+      gap: 5px;
+       margin-top: 8px;
+     }
+
+.action-btn { 
+    padding: 4px 15px; 
+    background: #d1d5db;
+     border: 1px solid #777;
+      cursor: pointer; font-size: 12px;
+     }
+
+.chart-grid {
+     display: grid; 
+     grid-template-columns: 1fr 1fr; 
+     gap: 20px; 
+    }
+
+.chart-box { 
+    background: white;
+    padding: 15px;
+    border-radius: 5px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    }

@@ -1,0 +1,132 @@
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sidebar Styling */
+.admin-sidebar {
+    width: 280px;
+    background-color: #cbd5e1; /* Image එකේ තිබූ ලා අළු පැහැය */
+    padding: 30px 20px;
+    border-right: 1px solid #94a3b8;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 40px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sidebar-nav button {
+    padding: 16px 20px;
+    background-color: #94a3b8; /* බටන් වල අළු පැහැය */
+    color: #1e293b;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar-nav button:hover {
+    background-color: #64748b;
+    color: white;
+}
+
+.sidebar-nav button.active {
+    background-color: #334155; /* Click කළ පසු තද පැහැය */
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Content Area */
+.admin-main-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.view-title {
+    font-size: 1.8rem;
+    color: #0f172a;
+    margin-bottom: 30px;
+}
+
+/* Charts Grid */
+.admin-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.admin-chart-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.graph-box-placeholder {
+    height: 250px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    color: #94a3b8;
+    border: 1px dashed #cbd5e1;
+}
+
+.chart-label {
+    font-weight: 700;
+    color: #475569;
+}
+
+/* Table Styling */
+.admin-custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.admin-custom-table th, .admin-custom-table td {
+    padding: 18px;
+    text-align: left;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-custom-table th {
+    background: #f8fafc;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #64748b;
+}
+
+.status-badge.pending {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}

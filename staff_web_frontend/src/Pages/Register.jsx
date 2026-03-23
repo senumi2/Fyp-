@@ -1,61 +1,107 @@
-import React, { useState, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import "./register.css";
-import { AuthContext } from "../context/AuthContext";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Icons import කරන්න
+import './Auth.css';
 
-function Register() {
-  const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
-
-  const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    contact: ""
+const Register = () => {
+  const [formData, setFormData] = useState({
+    fullName: '', email: '', contact: '', jobRole: '', password: '', confirmPassword: ''
   });
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const [showPassword, setShowPassword] = useState(false); // Password පෙන්වීමට state එක
+  const navigate = useNavigate();
+
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(formData.password !== formData.confirmPassword) {
+        return alert("Passwords do not match");
+    }
+    
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/register', formData);
+      
+      // ✅ Register සාර්ථක නම් Alert එක පෙන්වන්න
+      alert("Registration Successful!");
 
-    const res = await fetch("http://localhost:5000/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form)
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      login(data);
-      navigate("/");
-    } else {
-      alert(data.message);
+      // ✅ Auto-login: Backend එකෙන් එවන Token එක localStorage එකට දාන්න
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        
+        // කෙලින්ම Dashboard එකට යවන්න (Login එකට නොයා)
+        navigate('/dashboard'); 
+      }
+    } catch (err) {
+      alert(err.response?.data?.msg || "Registration Failed");
     }
   };
 
   return (
-    <div className="register-container">
-      <div className="register-box">
+    <div className="auth-container">
+      <div className="auth-card">
         <h2>Create Account</h2>
+        <p>Saltern Management System</p>
+        
+        <form onSubmit={handleSubmit}>
+          <div className="input-group">
+            <input type="text" name="fullName" placeholder="Full Name" onChange={handleChange} required />
+            <input type="email" name="email" placeholder="Email Address" onChange={handleChange} required />
+          </div>
+          
+          <div className="input-group">
+            <input type="text" name="contact" placeholder="Contact Number" onChange={handleChange} required />
+            <select name="jobRole" onChange={handleChange} required defaultValue="">
+              <option value="" disabled>Select Job Role</option>
+              <option value="Admin">Admin</option>
+              <option value="Ponds Management">Ponds Management</option>
+              <option value="Inventory Management">Inventory Management</option>
+              <option value="Harvest Management">Harvest Management</option>
+              <option value="Equipment Usage">Equipment Usage</option>
+              <option value="Expenses & Finance">Expenses & Finance</option>
+            </select>
+          </div>
+          
+          {/* Password field with Eye Icon */}
+          <div className="password-wrapper">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              name="password" 
+              placeholder="Password" 
+              onChange={handleChange} 
+              required 
+            />
+            <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
 
-        <form className="register-form" onSubmit={handleSubmit}>
-          <input name="fullName" placeholder="Full Name" onChange={handleChange} />
-          <input name="email" placeholder="Email" onChange={handleChange} />
-          <input name="contact" placeholder="Contact" onChange={handleChange} />
-          <input name="password" type="password" placeholder="Password" onChange={handleChange} />
+          <div className="password-wrapper">
+          <input 
+              type={showPassword ? "text" : "password"} 
+              name="onfirmPassword" 
+              placeholder="Confirm Password" 
+              onChange={handleChange} 
+              required 
+            />
+            <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
 
-          <button className="register-btn">Register</button>
+          
+          
+          <button type="submit" className="auth-btn">Register Now</button>
         </form>
 
-        <p>
-          Already have account? <Link to="/login">Login</Link>
-        </p>
+        <div className="auth-footer">
+          <p>Already have an account? <span className="auth-link" onClick={() => navigate('/login')}>Login Here</span></p>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default Register;

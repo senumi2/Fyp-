@@ -6,7 +6,7 @@ const TankSchema = new mongoose.Schema({
     totalPonds: Number,
     location: String,
     salinityRecords: [{
-        date: Date,
+        date: { type: Date, default: Date.now },
         level: Number,
         process: String
     }],

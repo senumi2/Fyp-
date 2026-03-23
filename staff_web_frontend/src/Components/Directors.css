@@ -1,132 +1,138 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
-.directors-section {
-  padding: 60px 0;
-  background-color: #f8fafc;
+/* Main Section */
+.modern-directors-section {
+  padding: 30px 0; 
+  background-color: #99b2aaaf;
   font-family: 'Plus Jakarta Sans', sans-serif;
+  width: 100%;
 }
 
-.directors-container {
-  max-width: 1300px;
+.modern-container-full {
+  max-width: 1100px; 
   margin: 0 auto;
-  padding: 0 50px;
+  padding: 0 20px;
 }
 
+/* Header Section */
 .section-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .section-title {
-  font-size: 2.2rem;
+  font-size: 1.8rem; 
   font-weight: 800;
   color: #0f172a;
 }
 
 .title-underline {
-  width: 50px;
-  height: 4px;
+  width: 35px;
+  height: 3px;
   background: #28666E;
-  margin: 10px auto;
+  margin: 5px auto;
   border-radius: 10px;
 }
 
 /* Slider Layout */
-.slider-wrapper {
+.modern-slider-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  padding: 0 45px;
 }
 
-.directors-window {
+.modern-window {
   width: 100%;
   overflow: hidden;
-  padding: 15px 0;
 }
 
-.directors-track {
+.modern-track {
   display: flex;
-  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.director-item {
-  flex: 0 0 33.333%; /* Desktop cards 3 */
-  padding: 0 10px; /* කාඩ් අතර පරතරය අඩු කළා */
+.director-modern-item {
+  flex: 0 0 33.333%;
+  padding: 8px; 
   box-sizing: border-box;
 }
 
-/* Compact Card with Large Image */
-.director-card {
+/* Smaller Card Styling */
+.director-modern-card {
   background: #ffffff;
-  border-radius: 20px;
-  padding: 15px; /* Padding අඩු කර කාඩ් එක කුඩා කළා */
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: all 0.4s ease;
+  border-radius: 12px;
+  padding: 12px; 
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
   border: 1px solid #f1f5f9;
+  position: relative;
+  transition: all 0.3s ease;
+  height: auto;
+  max-width: 280px; 
+  margin: 0 auto; 
 }
 
-.director-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(40, 102, 110, 0.1);
+.director-modern-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
 }
 
-/* පින්තූරය විශාල කිරීම */
-.image-wrapper {
-  width: 100%; /* Card එකේ පළලටම යන ලෙස */
-  max-width: 280px; /* උපරිම පළල සීමා කළා */
-  aspect-ratio: 1 / 1; /* සමචතුරස්‍ර හැඩය */
-  border-radius: 15px; /* රවුම් කරනවා වෙනුවට ලස්සනට වටකුරු කළා */
+.card-top-accent {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: #28666E;
+  border-radius: 12px 12px 0 0;
+}
+
+
+.image-frame {
+  width: 100%;
+  aspect-ratio: 1.2 / 1; 
+  border-radius: 8px;
   overflow: hidden;
-  margin: 0 auto 15px;
+  margin-bottom: 10px;
 }
 
 .director-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
 }
 
-.director-card:hover .director-photo {
-  transform: scale(1.08);
+/* Text Styling */
+.name { 
+  font-size: 1rem; 
+  font-weight: 700; 
+  color: #1e293b; 
+  margin-bottom: 2px; 
 }
 
-/* Info Section */
-.director-info .name {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #1e293b;
-  margin: 0 0 4px 0;
+.role { 
+  font-size: 0.7rem; 
+  font-weight: 700; 
+  color: #28666E; 
+  text-transform: uppercase; 
+  margin-bottom: 6px; 
 }
 
-.director-info .role {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #28666E;
-  margin-bottom: 10px;
-  display: block;
-  text-transform: uppercase;
-}
-
-.director-info .bio {
-  font-size: 0.85rem;
-  color: #64748b;
-  line-height: 1.4;
-  margin: 0;
+.description-summary { 
+  font-size: 0.8rem; 
+  color: #64748b; 
+  line-height: 1.3;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Bio එක පේළි 2කට සීමා කළා */
+  -webkit-line-clamp: 2; 
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Arrows */
-.slide-arrow {
+/* Smaller Arrows */
+.modern-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   background: #28666E;
   color: white;
   border: none;
@@ -136,24 +142,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.3s;
+  font-size: 14px;
 }
 
-.slide-arrow.left { left: 0; }
-.slide-arrow.right { right: 0; }
-
-.slide-arrow.is-disabled {
-  background: #cbd5e1;
-  cursor: not-allowed;
-}
+.modern-arrow.left { left: 0px; }
+.modern-arrow.right { right: 0px; }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .director-item { flex: 0 0 50%; }
+  .director-modern-item { flex: 0 0 50%; }
 }
 
 @media (max-width: 600px) {
-  .director-item { flex: 0 0 100%; }
-  .directors-container { padding: 0 20px; }
-  .slide-arrow { display: none; }
+  .director-modern-item { flex: 0 0 100%; }
 }

@@ -19,10 +19,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    role: {
-      type: String,
-      enum: ["User", "Admin", "Staff"],
-      default: "User"
+    jobRole: { 
+      type: String, 
+      required: true,
+      enum: ['Admin', 'Ponds Management', 'Inventory Management', 'Harvest Management', 'Equipment Usage', 'Expenses & Finance']
     },
 
     //  profile image path

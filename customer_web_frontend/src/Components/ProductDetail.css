@@ -1,108 +1,241 @@
-.product-detail {
-    display: flex;
-    gap: 50px;
-    padding: 60px;
-    background: #f9fbfc;
-  }
-  
-  .product-detail img {
-    width: 420px;
-    height: 420px;
-    object-fit: cover;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  }
-  
-  .product-info {
-    max-width: 600px;
-  }
-  
-  .product-info h2 {
-    font-size: 32px;
-    margin-bottom: 15px;
-  }
-  
-  .description {
-    margin-bottom: 15px;
-    color: #555;
-  }
-  
-  .price {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 10px;
-  }
-  
-  .stock {
-    margin-bottom: 20px;
-    font-weight: 500;
-  }
-  
-  .quantity {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .quantity button {
-    padding: 6px 14px;
-    font-size: 18px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #546c75;
-    color: white;
-  }
-  
-  .btn-group {
-    margin-bottom: 30px;
-  }
-  
-  .add-cart,
-  .buy-now {
-    padding: 12px 24px;
-    margin-right: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #546c75;
-    color: white;
-    transition: 0.3s;
-  }
-  
-  .add-cart:hover,
-  .buy-now:hover {
-    opacity: 0.85;
-  }
-  
-  .reviews {
-    margin-top: 30px;
-  }
-  
-  .review-card {
-    background: white;
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-  }
-  
-  .add-review input,
-  .add-review textarea {
-    width: 100%;
-    margin: 8px 0;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-  }
-  
-  .add-review button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    background: #546c75;
-    color: white;
-    cursor: pointer;
-  }
-  
+/* --- General Page Layout --- */
+.product-page { 
+  max-width: 1200px; 
+  margin: 40px auto; 
+  padding: 0 20px; 
+}
+
+.product-top-section { 
+  display: flex; 
+  gap: 60px; 
+  margin-bottom: 50px; 
+}
+
+.product-image-hold img {
+  width: 420px; 
+  height: 420px; 
+  object-fit: cover;
+  border-radius: 12px; 
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.product-info-hold h2 { 
+  font-size: 32px; 
+  margin-bottom: 10px; 
+  color: #333; 
+}
+
+.price-tag { 
+  font-size: 26px; 
+  font-weight: bold; 
+  color: #2c3e50; 
+  margin-bottom: 20px; 
+}
+
+.description-text { 
+  color: #555; 
+  line-height: 1.6; 
+  margin-bottom: 20px; 
+}
+
+.stock-info { 
+  font-weight: 600; 
+  color: #27ae60; 
+  margin-bottom: 20px; 
+}
+
+/* --- Quantity Input --- */
+.quantity-box { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+  margin-bottom: 30px; 
+  font-weight: 600; 
+}
+
+.custom-qty-input {
+  width: 65px; 
+  padding: 10px; 
+  border-radius: 8px; 
+  border: 1px solid #ccc;
+  text-align: center; 
+  font-size: 16px; 
+  font-weight: bold; 
+  outline: none;
+}
+
+.custom-qty-input::-webkit-inner-spin-button,
+.custom-qty-input::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+/* --- Action Buttons --- */
+.action-buttons { 
+  display: flex; 
+  gap: 15px; 
+}
+
+.btn-cart, .btn-buy {
+  padding: 15px 30px; 
+  border-radius: 8px; 
+  border: none; 
+  font-weight: bold;
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  transition: 0.3s ease;
+}
+
+.btn-cart { background: #546c75; color: white; }
+.btn-buy { background: #27ae60; color: white; }
+
+.btn-cart:hover, .btn-buy:hover { 
+  opacity: 0.85; 
+  transform: translateY(-2px);
+}
+
+.section-divider { 
+  border: 0; 
+  border-top: 1px solid #eee; 
+  margin: 50px 0; 
+}
+
+/* --- Feedbacks Section (3 per row) --- */
+.title-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  margin-bottom: 30px; 
+}
+
+.feedbacks-grid {
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px;
+}
+
+.feedback-card {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  padding: 22px;
+  border-radius: 18px; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: 0.3s ease;
+}
+
+.feedback-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+  border-color: #d1d5db;
+}
+
+.card-header { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  margin-bottom: 10px; 
+  position: relative; 
+}
+
+.user-circle {
+  width: 40px; 
+  height: 40px; 
+  background: linear-gradient(135deg, #546c75 0%, #3d5159 100%);
+  color: white;
+  border-radius: 50%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.user-meta strong {
+  display: block;
+  font-size: 15px;
+  color: #333;
+}
+
+/* --- Stars Display --- */
+.star-display {
+  display: flex;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.delete-icon-btn { 
+  position: absolute; 
+  right: 0; 
+  background: none; 
+  border: none; 
+  color: #e74c3c; 
+  cursor: pointer; 
+  padding: 5px;
+  transition: 0.2s;
+}
+
+.delete-icon-btn:hover {
+  transform: scale(1.1);
+}
+
+.comment-body {
+  color: #4b5563;
+  font-size: 14.5px;
+  line-height: 1.6;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+/* --- Add Feedback Form --- */
+.add-feedback-form { 
+  background: #f4f7f6; 
+  padding: 30px; 
+  border-radius: 15px; 
+  margin-top: 40px; 
+}
+
+.form-inner { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px; 
+}
+
+.form-inner select, 
+.form-inner textarea { 
+  padding: 12px; 
+  border: 1px solid #ddd; 
+  border-radius: 8px; 
+  font-family: inherit;
+}
+
+.form-inner textarea {
+  height: 100px;
+  resize: none;
+}
+
+.submit-feedback-btn { 
+  background: #546c75; 
+  color: white; 
+  padding: 15px; 
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-weight: bold; 
+  transition: 0.3s;
+}
+
+.submit-feedback-btn:hover {
+  background: #3d5159;
+}
+
+/* --- Responsive Layout --- */
+@media (max-width: 900px) { 
+  .feedbacks-grid { grid-template-columns: repeat(2, 1fr); } 
+  .product-top-section { flex-direction: column; align-items: center; }
+}
+
+@media (max-width: 600px) { 
+  .feedbacks-grid { grid-template-columns: 1fr; } 
+}

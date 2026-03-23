@@ -1,11 +1,11 @@
-/* මුළු පිටුවම ආවරණය වන පරිදි Background එක සකස් කිරීම */
+/* --- මුළු පිටුවම වැසෙන සේ පසුබිම් රූපය --- */
 .shipping-page-wrapper {
   width: 100%;
   min-height: 100vh;
   background-size: cover; 
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Scroll කරද්දී image එක නොසැලී පවතී */
+  background-attachment: fixed; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,76 +14,61 @@
 .shipping-overlay {
   width: 100%;
   min-height: 100vh;
-  background: rgba(255, 255, 255, 0.05); /* ඉතාමත් සියුම් ලේයර් එකක් */
+  background: rgba(255, 255, 255, 0.05);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 60px; /* පිටතින් ඇති ඉඩ වැඩි කළා */
+  padding: 40px; 
 }
 
-/* Desktop එකට ගැලපෙන සේ Form එක විශාල කිරීම */
-.shipping-card {
+/* --- ප්‍රධාන Glass Card එක (පැති දෙකකට බෙදා ඇත) --- */
+.shipping-card.multi-location {
   background: rgba(255, 255, 255, 0.35); /* Transparent Water Look */
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(25px);
   
   width: 100%;
-  max-width: 850px; 
-  
-  padding: 70px; 
+  max-width: 1100px; 
+  padding: 60px; 
   border-radius: 50px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
   
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr; /* වම් පැත්ත Form එකට, දකුණු පැත්ත List එකට */
+  gap: 40px;
+  align-items: start;
+}
+
+/* --- වම් පස තීරුව (Form Column) --- */
+.form-column {
   display: flex;
   flex-direction: column;
 }
 
 .shipping-header {
-  text-align: center;
-  margin-bottom: 50px;
+  text-align: left; /* ලිපිනයන් ලැයිස්තුවක් ඇති නිසා වමට කළා */
+  margin-bottom: 40px;
 }
 
 .shipping-header h2 {
-  font-size: 3rem; 
+  font-size: 2.8rem; 
   font-weight: 900;
   color: #000000;
   letter-spacing: -1px;
+  margin-bottom: 5px;
 }
 
 .shipping-header p {
   color: #1a1a1a;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 
-
 .shipping-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr; 
-  gap: 40px; 
-}
-
-
-.shipping-save-btn {
-  grid-column: span 2; 
-  background: #000000;
-  color: #ffffff;
-  padding: 20px;
-  border-radius: 25px;
-  font-weight: 800;
-  font-size: 1.1rem;
-  border: none;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: all 0.3s ease;
-  letter-spacing: 1px;
-}
-
-.shipping-save-btn:hover {
-  background: #222222;
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .form-section {
@@ -92,15 +77,10 @@
   gap: 15px;
 }
 
-/* RECIPIENT DETAILS සහ DELIVERY LOCATION පේළි දෙකකට නොයා එක ළඟ තැබීමට (Desktop) */
-.form-section:nth-child(2) {
-  grid-column: span 2; 
-}
-
 .form-section label {
   color: #000000;
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   letter-spacing: 1.5px;
   display: flex;
   align-items: center;
@@ -124,27 +104,142 @@
   outline: none;
 }
 
-.input-row {
+/* District, Province, Postal Code පේළිය */
+.input-row-3 {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* District, Province, Postal Code එකම පේළියට */
-  gap: 15px;
+  grid-template-columns: 1fr 1fr 1fr; 
+  gap: 12px;
 }
 
-/* Mobile එකේදී නැවතත් පරණ විදිහට සකස් කිරීම */
-@media (max-width: 900px) {
-  .shipping-form {
+.shipping-save-btn {
+  background: #000000;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 25px;
+  font-weight: 800;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.shipping-save-btn:hover {
+  background: #222222;
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* --- දකුණු පස තීරුව (Saved Locations List) --- */
+.locations-column {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 30px;
+  border-radius: 35px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  height: 100%;
+}
+
+.locations-column h3 {
+  color: #000;
+  margin-bottom: 25px;
+  font-weight: 800;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.location-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 550px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Scrollbar එක පිරිසිදු කිරීමට */
+.location-list::-webkit-scrollbar { width: 4px; }
+.location-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+
+.address-item-card {
+  background: rgba(255, 255, 255, 0.5);
+  padding: 20px;
+  border-radius: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid transparent;
+  transition: 0.3s ease;
+}
+
+.address-item-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.1);
+  transform: translateX(-5px);
+}
+
+.loc-info strong { 
+    display: block; 
+    font-size: 1.05rem; 
+    color: #000; 
+    margin-bottom: 4px;
+}
+
+.loc-info p { 
+    font-size: 0.9rem; 
+    color: #333; 
+    margin: 0; 
+    line-height: 1.4;
+}
+
+.loc-info small { 
+    color: #666; 
+    font-weight: 600;
+    display: block;
+    margin-top: 5px;
+}
+
+.delete-loc-btn {
+  background: rgba(255, 77, 77, 0.1);
+  border: none;
+  color: #ff4d4d;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.delete-loc-btn:hover {
+  background: #ff4d4d;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* --- ජංගම දුරකථන සඳහා (Responsive) --- */
+@media (max-width: 1000px) {
+  .shipping-card.multi-location {
     grid-template-columns: 1fr;
-  }
-  .shipping-save-btn, .form-section:nth-child(2) {
-    grid-column: span 1;
-  }
-  .input-row {
-    grid-template-columns: 1fr;
-  }
-  .shipping-card {
     padding: 40px 25px;
   }
+  
+  .input-row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .locations-column {
+    margin-top: 20px;
+  }
+
   .shipping-header h2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 }

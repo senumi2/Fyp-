@@ -1,0 +1,198 @@
+:root {
+    --primary: #2563eb;
+    --bg-color: #f8fcfb;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-sub: #64748b;
+    --danger: #ef4444;
+    --success: #10b981;
+  }
+  
+  .admin-events-page {
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .header-minimal { margin-bottom: 20px; }
+  .header-minimal h2 { margin: 0; color: var(--text-main); font-weight: 700; }
+  .header-minimal span { font-size: 0.9rem; color: var(--text-sub); }
+  
+  /* Modern Form Style */
+  .modern-form-container {
+    margin-bottom: 40px;
+  }
+  
+  .glass-form {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .input-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input-box label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .input-box input, .input-box textarea {
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: #fdfdfd;
+    transition: 0.3s;
+  }
+  
+  .input-box input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    outline: none;
+  }
+  
+  .description { flex: 3; }
+  .description textarea { height: 42px; resize: none; }
+  
+  .neon-add-btn {
+    align-self: flex-end;
+    padding: 12px 30px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    height: 42px;
+  }
+  
+  .neon-add-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+  
+  /* 4 Items Per Row Grid */
+  .events-grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Direct 4 columns */
+    gap: 20px;
+  }
+  
+  .modern-event-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s ease;
+    border: 1px solid #edf2f7;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modern-event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  }
+  
+  .card-media {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+  }
+  
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .card-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    backdrop-filter: blur(4px);
+  }
+  
+  .card-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .card-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 1.05rem;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .card-info p {
+    font-size: 0.85rem;
+    color: var(--text-sub);
+    line-height: 1.5;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .minimal-del-btn {
+    margin-top: auto;
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid #fee2e2;
+    padding: 7px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .del-btn:hover {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+  }
+  
+  /* Responsive Scaling */
+  @media (max-width: 1200px) {
+    .events-grid-container { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .events-grid-container { grid-template-columns: repeat(2, 1fr); }
+    .form-row { flex-direction: column; }
+  }

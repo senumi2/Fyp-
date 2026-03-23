@@ -137,7 +137,7 @@ const Stock = () => {
         );
     };
 
-    // --- Graph Data Logic ---
+    // Graph Data Logic 
     const getChartData = (itemName) => {
         const filtered = allData.filter(d => d.itemName === itemName);
         const summary = {};

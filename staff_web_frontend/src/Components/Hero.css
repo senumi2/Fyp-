@@ -1,70 +1,102 @@
-/* Hero Section Main Container */
 .hero-container {
-    
-    height: 100vh;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    /* very important for clarity */
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden; 
   image-rendering: -webkit-optimize-contrast;
-  }
   
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+
+  animation: bgZoom 10s infinite alternate ease-in-out;
+}
+
+@keyframes bgZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative; 
+  z-index: 2;
+  margin-left: 10%;
+  background: rgba(255, 255, 255, 0.1); /* Glassmorphism effect */
+  padding: 40px;
+  border-radius: 15px;
+  color: #ffffff;
+  max-width: 500px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+
+  /* Entrance Animation */
+  animation: slideInLeft 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes slideInLeft {
+  0% {
+      transform: translateX(-100px);
+      opacity: 0;
   }
-  
-  /* Text Box / Shadow Card */
+  100% {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #e0e0e0;
+  border-left: 4px solid #007bff; 
+  padding-left: 15px;
+  animation: fadeIn 2s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
   .hero-content {
-    position: absolute;
-    top: 50%;
-    left: 10%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.45); /* shadow-glass effect */
-    padding: 30px;
-    border-radius: 10px;
-    color: #ffffff;
-    max-width: 450px;
-    backdrop-filter: blur(4px);
-    box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
-  }
-  
-  /* Title */
-  .hero-title {
-    font-size: 2.8rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
-  
-  /* Subtitle */
-  .hero-subtitle {
-    font-size: 1.2rem;
-    line-height: 1.6;
-  }
-  
-  
-  /* Mobile Responsive */
-  @media (max-width: 768px) {
-    .hero-content {
-      left: 5%;
-      right: 5%;
+      margin: 0 20px;
       max-width: none;
-      padding: 20px;
-    }
-  
-    .hero-title {
-      font-size: 2rem;
-    }
-  
-    .hero-subtitle {
-      font-size: 1rem;
-    }
+      padding: 30px;
+      text-align: center;
   }
-  
+
+  .hero-title {
+      font-size: 2rem;
+  }
+
+  .hero-subtitle {
+      border-left: none;
+      border-top: 3px solid #007bff;
+      padding-left: 0;
+      padding-top: 15px;
+  }
+}

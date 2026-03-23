@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { FaUserCircle } from "react-icons/fa"; // User icon එකක් ලස්සනට පෙන්වන්න
 import "./Navbar.css";
 
 function Navbar() {
@@ -17,9 +18,8 @@ function Navbar() {
       <div className="nav-left">
         <NavLink className="nav-link" to="/">Home</NavLink>
         <NavLink className="nav-link" to="/about">About Us</NavLink>
-        <NavLink className="nav-link" to="/equpmentUsage">EqupmentUsage</NavLink>
-        <NavLink className="nav-link" to="/inventoryManagement">InventoryManagement</NavLink>
-        <NavLink className="nav-link" to="/pondsManagement">PondsManagement</NavLink>
+        {/* User කෙනෙක් නැති වෙලාවට විතරක් Staff Login පෙන්වන්න පුළුවන් */}
+        {!user && <NavLink className="nav-link" to="/staff">Staff Login</NavLink>}
       </div>
 
       <div className="nav-right">
@@ -31,6 +31,14 @@ function Navbar() {
 
         {user && (
           <>
+            {/* User ගේ නම සහ Icon එක පෙන්වන කොටස */}
+            <div className="user-profile-nav" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginRight: '15px' }}>
+              <FaUserCircle style={{ fontSize: '20px', color: '#fdbb2d' }} />
+              <span className="nav-user-name" style={{ color: '#fff', fontWeight: '500', fontSize: '14px' }}>
+                {user.fullName || "User"}
+              </span>
+            </div>
+
             <Link to="/profile" className="profile-btn-navi">
               Profile
             </Link>
@@ -46,4 +54,3 @@ function Navbar() {
 }
 
 export default Navbar;
-

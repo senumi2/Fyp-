@@ -1,0 +1,156 @@
+/* Container styling with the specific saltern-themed gradient */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #083833, #5ba9a1, #c9b872); 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+  }
+  
+  /* Glassmorphism card effect */
+  .auth-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px); /* Safari support */
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 500px;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .auth-card h2 { 
+    text-align: center; 
+    margin-bottom: 5px; 
+    font-weight: 600; 
+    letter-spacing: 1px;
+  }
+  
+  .auth-card p { 
+    text-align: center; 
+    margin-bottom: 25px; 
+    opacity: 0.8; 
+    font-size: 14px; 
+  }
+  
+  /* Grouping layout for Name/Email and Contact/Role */
+  .input-group { 
+    display: flex; 
+    gap: 8px; 
+    margin-bottom: 5px; 
+  }
+  
+  /* Inputs and Select drop-down styling */
+  input, select {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    outline: none;
+    transition: all 0.3s ease;
+    font-size: 14px;
+  }
+  
+  input::placeholder { 
+    color: rgba(255, 255, 255, 0.6); 
+  }
+  
+  /* Select option styling */
+  select option { 
+    background: #2c3e50; 
+    color: #fff; 
+  }
+  
+  input:focus, select:focus { 
+    background: rgba(255, 255, 255, 0.25); 
+    border-color: #fdbb2d;
+  }
+  
+  /* Password eye icon wrapper */
+  .password-wrapper {
+    position: relative;
+    width: 90%;
+  }
+  
+  .password-wrapper input {
+    padding-right: 45px; /* Icon එකට ඉඩ තැබීමට */
+  }
+  
+  .eye-icon {
+    position: absolute;
+    right: 20px; ;
+    top: 40%; /* මධ්‍යයට ආසන්න කිරීමට */
+    transform: translateY(-50%); /* නිවැරදිව මැදට ගැනීම */
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 18px;
+    transition: 0.3s;
+    z-index: 10;
+  }
+  
+  .eye-icon:hover {
+    color: #fdbb2d;
+  }
+  
+  /* Submit button styling */
+  .auth-btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #fff;
+    color: #083833;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    margin-top: 10px;
+    font-size: 15px;
+  }
+  
+  .auth-btn:hover { 
+    background: #fdbb2d; 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Footer and links */
+  .auth-footer {
+    margin-top: 25px;
+    text-align: center;
+  }
+  
+  .auth-footer p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0;
+  }
+  
+  .auth-link {
+    color: #fdbb2d;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+    margin-left: 5px;
+  }
+  
+  .auth-link:hover {
+    text-decoration: underline;
+    color: #fff;
+  }
+  
+  /* Responsive adjustment for small screens */
+  @media (max-width: 480px) {
+    .input-group {
+      flex-direction: column;
+      gap: 0;
+    }
+  }

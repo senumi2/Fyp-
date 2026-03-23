@@ -1,106 +1,128 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   
-    /* ❗ background colours unchanged */
-    background: linear-gradient(90deg, #FEDC97, #B4D2B1, #28666E);
+ 
+  width: 100%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  box-sizing: border-box; 
   
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  height: 50px;
+  padding: 10px 40px;
+  background: linear-gradient(90deg, #FEDC97, #B4D2B1, #28666E);
   
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-    animation: slideDown 0.6s ease;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  animation: slideDown 0.6s ease;
+}
+
+/* --- Responsive (Mobile) --- */
+@media (max-width: 768px) {
+  .navbar {
+      padding: 10px 20px;
   }
   
-  /* LEFT LINKS */
   .nav-link {
-    margin-right: 40px;
-    color: #010101;
-    text-decoration: none;
-    font-weight: 500;
-    position: relative;
-    transition: color 0.3s ease;
+      margin-right: 15px;
+      font-size: 14px;
   }
-  
-  /* underline animation */
-  .nav-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -6px;
-    width: 0;
-    height: 3px;
-    background: #0a2952;
-    border-radius: 4px;
-    transition: width 0.3s ease;
-  }
-  
-  .nav-link:hover {
-    color: #0a2952;
-  }
-  
-  .nav-link:hover::after {
-    width: 100%;
-  }
-  
-  /* ACTIVE LINK */
-  .nav-link.active {
-    color: #0a2952;
-    font-weight: 600;
-  }
-  
-  /* RIGHT SIDE */
-  .nav-right a,
-  .logout-btn-navi {
-    margin-left: 15px;
-  }
-  
-  /* BUTTON STYLES */
+
   .login-btn-navi,
   .profile-btn-navi,
   .logout-btn-navi {
-    background: white;
-    color: #0a2952;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-  
-    transition: transform 0.25s ease, box-shadow 0.25s ease,
-      background 0.25s ease;
+      padding: 6px 12px;
+      font-size: 12px;
   }
-  
-  /* BUTTON HOVER */
-  .login-btn-navi:hover,
-  .profile-btn-navi:hover,
-  .logout-btn-navi:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background: #f4f6f7;
-  }
-  
-  /* BUTTON CLICK */
-  .login-btn-navi:active,
-  .profile-btn-navi:active,
-  .logout-btn-navi:active {
-    transform: scale(0.95);
-  }
-  
-  /* NAVBAR ENTRY ANIMATION */
-  @keyframes slideDown {
-    from {
+}
+
+/* LEFT LINKS */
+.nav-link {
+  margin-right: 40px;
+  color: #010101;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* underline animation */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 3px;
+  background: #0a2952;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #0a2952;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ACTIVE LINK */
+.nav-link.active {
+  color: #0a2952;
+  font-weight: 600;
+}
+
+/* RIGHT SIDE */
+.nav-right a,
+.logout-btn-navi {
+  margin-left: 15px;
+}
+
+/* BUTTON STYLES */
+.login-btn-navi,
+.profile-btn-navi,
+.logout-btn-navi {
+  background: white;
+  color: #0a2952;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+/* BUTTON HOVER & CLICK */
+.login-btn-navi:hover,
+.profile-btn-navi:hover,
+.logout-btn-navi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  background: #f4f6f7;
+}
+
+.login-btn-navi:active,
+.profile-btn-navi:active,
+.logout-btn-navi:active {
+  transform: scale(0.95);
+}
+
+/* NAVBAR ENTRY ANIMATION */
+@keyframes slideDown {
+  from {
       opacity: 0;
       transform: translateY(-20px);
-    }
-    to {
-      opacity: 5;
-      transform: translateY(0);
-    }
   }
-  
+  to {
+      opacity: 1; 
+      transform: translateY(0);
+  }
+}

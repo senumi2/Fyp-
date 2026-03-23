@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import"./Events.css";
+import "./Events.css";
 
 function Events() {
-  // Sample events for fallback
   const defaultEvents = [
     {
       _id: "1",
@@ -32,16 +31,16 @@ function Events() {
 
   useEffect(() => {
     fetch("http://localhost:5000/api/events")
-      .then(res => res.json())
-      .then(data => {
-        console.log("Events fetched:", data);
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
+      .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setEvents(data);
         }
       })
-      .catch(err => {
-        console.log("Error fetching events, using default:", err);
-      });
+      .catch((err) => console.log("Error fetching events:", err));
   }, []);
 
   const displayedEvents = showAll ? events : events.slice(0, 3);
@@ -53,7 +52,7 @@ function Events() {
         <p className="section-subtitle">Discover our upcoming events and community activities</p>
 
         <div className="event-grid">
-          {displayedEvents.map(event => (
+          {displayedEvents.map((event) => (
             <div key={event._id} className="event-card">
               <div className="event-image-wrapper">
                 <img
@@ -61,28 +60,38 @@ function Events() {
                   alt={event.title}
                   className="event-img"
                   onError={(e) => {
-                    e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Crect fill='%23ddd' width='280' height='180'/%3E%3Ctext x='50%23' y='50%23' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='18' fill='%23999'%3EEvent Image%3C/text%3E%3C/svg%3E";
+                    e.target.onerror = null;
+                    e.target.src = "https://via.placeholder.com/280x180?text=Event+Image";
                   }}
                 />
               </div>
               <div className="event-content">
                 <h3>{event.title}</h3>
                 <p className="event-description">{event.description}</p>
-                <span className="event-date">
-                  📅 {new Date(event.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                </span>
+                <div className="event-footer">
+                  <span className="event-date">
+                    📅 {new Date(event.date).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
         </div>
 
         {events.length > 3 && (
-          <button
-            className="view-btn"
-            onClick={() => setShowAll(!showAll)}
-          >
-            {showAll ? "Show Less ▲" : "Explore Events ▼"}
-          </button>
+          <div className="btn-wrapper">
+            <button
+              className="modern-view-btn" 
+              onClick={() => setShowAll(!showAll)}
+            >
+              <span>{showAll ? "Show Less" : "Explore Events"}</span>
+              <i className="btn-icon">{showAll ? "▲" : "➔"}</i>
+            </button>
+          </div>
         )}
       </div>
     </section>

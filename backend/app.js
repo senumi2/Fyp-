@@ -2,9 +2,8 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 
+// --- Routes Import ---
 const productRoutes = require("./routes/productRoutes");
-console.log("✅ Product routes file loaded successfully"); // 👈 STEP 4 DEBUG
-
 const eventRoutes = require("./routes/eventRoute");
 const directorRoutes = require("./routes/directorRoutes");
 const authRoutes = require("./routes/authRoute");
@@ -16,14 +15,21 @@ const contactRoutes = require("./routes/contactRoutes");
 const stockRoutes = require('./routes/stockRoutes');
 
 const inventoryRoutes = require("./routes/inventoryRoutes");
-const issueRoutes = require("./routes/issueRoutes");
+const issueRoutes = require("./routes/issueRoutes"); 
 const maintenanceRoutes = require("./routes/maintenanceRoutes");
+const tankRoutes = require("./routes/tankRoutes");
+const harvestRoutes = require("./routes/harvestRoutes");
 
- 
+const payhereRoutes = require("./routes/payhereRoute");
+
+// Finance/Expenses Route
+const financeRoutes = require("./routes/financeRoutes"); 
+
+console.log("✅ All routes files loaded successfully");
 
 const app = express();
 
-// ✅ CORS – allow frontend requests
+// ✅ CORS Config
 app.use(cors({
   origin: [
     "http://localhost:3000",
@@ -39,38 +45,31 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Static folder
+app.use(express.urlencoded({ extended: true })); // PayHere එවන්නේ Form data නිසා මේක අනිවාර්යයි
+app.use("/api/payhere", payhereRoutes);
+
+// ✅ Static folders
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/uploads", express.static("uploads"));
 
-// 👇 Debug mount check
-app.use("/api/products", (req, res, next) => {
-  console.log("📦 /api/products route accessed");
-  next();
-}, productRoutes);
-
-app.get("/api/test-product/:id", (req, res) => {
-  res.json({ id: req.params.id });
-});
-
-
-// ✅ Other API routes
+// ✅ API Routes Mount
+app.use("/api/products", productRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/directors", directorRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
-app.use("/api/orders", require("./routes/orderRoutes"));
+app.use("/api/orders", orderRoutes);
 app.use("/api/reports", reportRoutes);
-app.use("/api/shipping-address", require("./routes/shippingAddressRoute"));
-
+app.use("/api/shipping-address", shippingAddressRoute);
 app.use("/api/inventory", inventoryRoutes);
-app.use("/api/issues", issueRoutes);
+app.use("/api/issues", issueRoutes); 
 app.use("/api/maintenance", maintenanceRoutes);
-
 app.use("/api/contact", contactRoutes);
 app.use('/api/stocks', stockRoutes);
+app.use("/api/tanks", tankRoutes);
+app.use("/api/harvest", harvestRoutes);
 
-
+// Finance API
+app.use("/api/finance", financeRoutes); 
 
 // ✅ Test route
 app.get("/", (req, res) => {

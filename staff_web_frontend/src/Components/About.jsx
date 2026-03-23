@@ -1,8 +1,15 @@
 import React from "react";
 import "./About.css";
 import { FiTarget, FiAward, FiTrendingUp } from "react-icons/fi";
+import { useInView } from "react-intersection-observer";
 
 function About() {
+  // Intersection Observer options
+  const { ref, inView } = useInView({
+    triggerOnce: true, 
+    threshold: 0.2,    
+  });
+
   return (
     <section className="about-section">
       <div className="about-bg-elements">
@@ -16,7 +23,8 @@ function About() {
           <h1>Quality Salt for Every Home</h1>
         </div>
 
-        <div className="about-grid">
+        
+        <div className={`about-grid ${inView ? "visible" : ""}`} ref={ref}>
           {/* Vision Card */}
           <div className="about-card animate-up">
             <div className="card-icon-box">
@@ -46,7 +54,7 @@ function About() {
             </p>
           </div>
 
-          {/* Strategy Card (නව එකතු කිරීමක් සම්පූර්ණ පෙනුම සඳහා) */}
+          {/* Strategy Card  */}
           <div className="about-card animate-up delay-2">
             <div className="card-icon-box">
               <FiTrendingUp />

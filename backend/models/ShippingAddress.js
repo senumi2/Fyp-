@@ -7,6 +7,7 @@ const shippingAddressSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
+    warehouseName: { type: String, required: true }, // අලුතින් එක් කළා
     fullName: String,
     contactNumber: String,
     address: String,

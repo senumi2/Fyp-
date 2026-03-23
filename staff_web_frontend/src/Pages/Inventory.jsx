@@ -1,30 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import "./Inventory.css";
 
-const Inventory = () => { // <--- Component එක මෙතනින් පටන් ගත යුතුයි
+const Inventory = () => { 
     const [items, setItems] = useState([]);
     const [search, setSearch] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false); 
     const [selectedId, setSelectedId] = useState(null);
-    
     const [formData, setFormData] = useState({ items: '', quantity: '' });
 
-    // 1. Fetch & Search Logic
-    useEffect(() => {
-        const fetchInventory = async () => {
-            try {
-                const res = await axios.get(`http://localhost:5000/api/inventory?search=${search}`);
-                setItems(res.data);
-            } catch (err) {
-                console.error("Search Error:", err);
-            }
-        };
-        fetchInventory();
-    }, [search]); 
+    // Fetch function eka separate kara
+    const fetchInventory = useCallback(async () => {
+        try {
+            const res = await axios.get(`http://localhost:5000/api/inventory?search=${search}`);
+            setItems(res.data);
+        } catch (err) {
+            console.error("Fetch Error:", err);
+        }
+    }, [search]);
 
-    // 2. Add or Update Logic
+    // Search trigger wenna
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            fetchInventory();
+        }, 300);
+        return () => clearTimeout(timeoutId);
+    }, [fetchInventory]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -33,16 +36,13 @@ const Inventory = () => { // <--- Component එක මෙතනින් පට�
             } else {
                 await axios.post("http://localhost:5000/api/inventory", formData);
             }
-            
-            const res = await axios.get(`http://localhost:5000/api/inventory?search=${search}`);
-            setItems(res.data);
+            fetchInventory();
             closeModal();
         } catch (err) {
             alert("Error saving data");
         }
     };
 
-    // 3. Edit Modal open logic
     const openEditModal = (item) => {
         setIsEdit(true);
         setSelectedId(item._id);
@@ -56,24 +56,19 @@ const Inventory = () => { // <--- Component එක මෙතනින් පට�
         setFormData({ items: '', quantity: '' });
     };
 
-    const handleDelete = async (id) => {
-        if (window.confirm("Delete this item?")) {
-            await axios.delete(`http://localhost:5000/api/inventory/${id}`);
-            setItems(items.filter(item => item._id !== id));
-        }
-    };
-
     return (
-        <div className="page-container" style={{ backgroundColor: '#A3B18A' }}>
+        <div className="page-container">
             <div className="header-row">
                 <h2>Manage Equipments</h2>
                 <div className="search-container">
                     <span>🔍</span>
                     <input 
                         type="text" 
-                        placeholder="Type item name to search..." 
+                        placeholder="Search items..." 
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)} 
+                        /* Mehi onChange eka check karanna */
+                        onChange={(e) => setSearch(e.target.value)}
+                        autoFocus
                     />
                 </div>
             </div>
@@ -97,7 +92,11 @@ const Inventory = () => { // <--- Component එක මෙතනින් පට�
                             <td>{item.quantity}</td>
                             <td>
                                 <button className="edit-btn" onClick={() => openEditModal(item)}>Edit</button>
-                                <button className="delete-btn" onClick={() => handleDelete(item._id)}>Delete</button>
+                                <button className="delete-btn" onClick={() => {
+                                    if(window.confirm("Delete?")) {
+                                        axios.delete(`http://localhost:5000/api/inventory/${item._id}`).then(() => fetchInventory());
+                                    }
+                                }}>Delete</button>
                             </td>
                         </tr>
                     ))}
@@ -111,24 +110,24 @@ const Inventory = () => { // <--- Component එක මෙතනින් පට�
             {isModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-box">
-                        <h3>{isEdit ? "Update Equipment" : "Add New Equipment"}</h3>
+                        <h3>{isEdit ? "Update" : "Add New"}</h3>
                         <form onSubmit={handleSubmit}>
                             <input 
                                 type="text" 
                                 placeholder="Item Name" 
-                                required
                                 value={formData.items}
                                 onChange={(e) => setFormData({...formData, items: e.target.value})}
+                                required
                             />
                             <input 
                                 type="number" 
                                 placeholder="Quantity" 
-                                required
                                 value={formData.quantity}
                                 onChange={(e) => setFormData({...formData, quantity: e.target.value})}
+                                required
                             />
                             <div className="modal-buttons">
-                                <button type="submit" className="save-btn">{isEdit ? "Update" : "Save"}</button>
+                                <button type="submit" className="save-btn">Save</button>
                                 <button type="button" className="cancel-btn" onClick={closeModal}>Cancel</button>
                             </div>
                         </form>
