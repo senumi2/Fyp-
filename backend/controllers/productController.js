@@ -1,9 +1,9 @@
 const Product = require("../models/Product");
 
-// Create Product (Admin)
+// ➕ Create Product (Admin) - Updated with Quality Specs
 exports.createProduct = async (req, res) => {
   try {
-    const { name, description, price, stock } = req.body;
+    const { name, description, price, stock, purity, iodine, moisture } = req.body;
     if (!req.file) return res.status(400).json({ message: "Image required" });
 
     const product = new Product({
@@ -11,6 +11,9 @@ exports.createProduct = async (req, res) => {
       description,
       price,
       stock,
+      purity: purity || "98.5%", // අගයක් එව්වේ නැත්නම් default අගය ගනී
+      iodine: iodine || "25-30 ppm",
+      moisture: moisture || "< 0.5%",
       imageUrl: `/uploads/${req.file.filename}`
     });
 
@@ -21,11 +24,13 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// Update Product (Admin)
+// 🔄 Update Product (Admin) - Updated to handle quality specs
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = { ...req.body };
+    
+    // රූපරාමුවක් අලුතින් upload කරොත් පමණක් path එක update කරයි
     if (req.file) updateData.imageUrl = `/uploads/${req.file.filename}`;
 
     const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
@@ -35,7 +40,7 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-// Delete Product (Admin)
+// 🗑️ Delete Product (Admin)
 exports.deleteProduct = async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
@@ -45,7 +50,7 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-// Get All Products (Public)
+// 🌐 Get All Products (Public)
 exports.getProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
@@ -55,12 +60,12 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-// Get Product By ID (Public)
+// 🔍 Get Product By ID (Public) - Combined version for safety
 exports.getProductById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Validate ObjectId
+    // Validate ObjectId (ID එකේ වැරද්දක් ඇත්දැයි බලයි)
     if (!require("mongoose").Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid product ID" });
     }
@@ -79,8 +84,7 @@ exports.getProductById = async (req, res) => {
   }
 };
 
-
-// Add Review (Public/User)
+// ⭐ Add Review (Public/User)
 exports.addReview = async (req, res) => {
   try {
     const { user, rating, comment } = req.body;
@@ -93,20 +97,5 @@ exports.addReview = async (req, res) => {
     res.json(product);
   } catch (err) {
     res.status(500).json({ message: err.message });
-  }
-};
-
-// GET PRODUCT BY ID
-exports.getProductById = async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./OrderTracking.css";
-import { FiPackage, FiTruck, FiCheckCircle, FiClock, FiArrowLeft } from "react-icons/fi";
+import { FiPackage, FiTruck, FiCheckCircle, FiClock, FiArrowLeft, FiMapPin } from "react-icons/fi";
 
 function OrderTracking() {
   const [orders, setOrders] = useState([]);
@@ -31,12 +31,11 @@ function OrderTracking() {
   };
 
   const getStatusIndex = (status) => {
-    const steps = ["Pending", "Processing", "Shipped", "Delivered"];
-    const idx = steps.indexOf(status);
+    const stepsList = ["Pending", "Processing", "Shipped", "Delivered"];
+    const idx = stepsList.indexOf(status);
     return idx === -1 ? 0 : idx;
   };
 
-  // --- පෙනුම 1: ඇණවුම් ලැයිස්තුව (List View) ---
   if (!selectedOrder) {
     return (
       <div className="tracking-wrapper">
@@ -46,11 +45,11 @@ function OrderTracking() {
               <FiArrowLeft /> Dashboard
             </button>
             <h2>My Salt Orders</h2>
-            <p>Select an order to view tracking details.</p>
+            <p>Select an order to view real-time tracking.</p>
           </div>
 
           {loading ? (
-            <div className="loader">Loading your orders...</div>
+            <div className="loader-container"><div className="loader"></div></div>
           ) : orders.length === 0 ? (
             <div className="no-orders">You haven't placed any orders yet.</div>
           ) : (
@@ -59,7 +58,7 @@ function OrderTracking() {
                 <div key={order._id} className="order-summary-card" onClick={() => setSelectedOrder(order)}>
                   <div className="summary-left">
                     <h4>{order.items}</h4>
-                    <span>Order ID: #{order._id.slice(-6)}</span>
+                    <span className="order-id-label">ID: #{order._id.slice(-6)}</span>
                     <p>{new Date(order.date).toLocaleDateString()}</p>
                   </div>
                   <div className={`status-pill ${order.status.toLowerCase()}`}>
@@ -75,11 +74,10 @@ function OrderTracking() {
     );
   }
 
-  // --- පෙනුම 2: ඇණවුම පවතින තැන (Tracking View) ---
   const steps = [
-    { label: "Placed", icon: <FiClock /> },
+    { label: "Pending", icon: <FiClock /> },
     { label: "Processing", icon: <FiPackage /> },
-    { label: "On Way", icon: <FiTruck /> },
+    { label: "Shipped", icon: <FiTruck /> },
     { label: "Delivered", icon: <FiCheckCircle /> },
   ];
 
@@ -93,33 +91,57 @@ function OrderTracking() {
         </button>
 
         <div className="track-main-header">
-          <h3>Tracking Order #{selectedOrder._id.slice(-6)}</h3>
+          <h3>Order Tracking <span className="order-id-badge">#{selectedOrder._id.slice(-6)}</span></h3>
           <p>{selectedOrder.items} | {selectedOrder.quantity}kg</p>
         </div>
 
-        <div className="stepper-horizontal">
+        {/* --- 🚛 Updated Stepper with Connecting Lines --- */}
+        <div className="stepper-container">
           {steps.map((step, index) => (
-            <div key={index} className={`step-block ${index <= currentIdx ? "completed" : ""}`}>
-              <div className="step-icon-circle">{step.icon}</div>
-              <span className="step-text">{step.label}</span>
-              {index < steps.length - 1 && <div className="progress-line"></div>}
+            <div key={index} className={`step-item ${index <= currentIdx ? "active" : ""}`}>
+              <div className="step-circle">
+                {step.icon}
+              </div>
+              <span className="step-label">{step.label}</span>
+              
+              {/* ලයින් එක පියවරවල් අතර පමණක් පෙන්වීමට */}
+              {index < steps.length - 1 && (
+                <div className={`step-line ${index < currentIdx ? "filled" : ""}`}></div>
+              )}
             </div>
           ))}
         </div>
 
-        <div className="logistics-info">
-          <div className="info-group">
-            <label>Truck Number</label>
-            <strong>{selectedOrder.truckNumber}</strong>
+        <div className="logistics-info-grid">
+          <div className="logistics-box">
+            <div className="info-item">
+              <label>Truck Number</label>
+              <strong>{selectedOrder.truckNumber || "N/A"}</strong>
+            </div>
+            <div className="info-item">
+              <label>Driver</label>
+              <strong>{selectedOrder.driverName || "Assigning..."}</strong>
+            </div>
+            <div className="info-item">
+              <label>Estimated Delivery</label>
+              <strong>{selectedOrder.estimatedDelivery || "TBD"}</strong>
+            </div>
           </div>
-          <div className="info-group">
-            <label>Driver Name</label>
-            <strong>{selectedOrder.driverName}</strong>
-          </div>
-          <div className="info-group">
-            <label>Expected Delivery</label>
-            <strong>{selectedOrder.estimatedDelivery}</strong>
-          </div>
+          
+          <div className="destination-box">
+    <h4><FiMapPin /> Delivery Destination</h4>
+    {selectedOrder.shippingAddress ? (
+      <div className="address-details">
+        <p><strong>{selectedOrder.shippingAddress.addressLine1}</strong></p>
+        <p>{selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.province}</p>
+        <p style={{ marginTop: "5px", fontSize: "0.75rem", color: "#666" }}>
+          Contact: {selectedOrder.shippingAddress.phone}
+        </p>
+      </div>
+    ) : (
+      <p>Address details not available.</p>
+    )}
+</div>
         </div>
       </div>
     </div>

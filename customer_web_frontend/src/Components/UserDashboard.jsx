@@ -1,65 +1,159 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./UserDashboard.css";
-import { FiMapPin, FiCreditCard, FiSettings, FiPackage, FiTruck, FiFileText, FiClock } from "react-icons/fi";
+import { 
+  FiMapPin, FiCreditCard, FiSettings, FiPackage, 
+  FiTruck, FiFileText, FiClock, FiTrendingUp, 
+  FiBell, FiShoppingCart, FiHelpCircle 
+} from "react-icons/fi";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 function UserDashboard() {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState(""); // මුලින් හිස්ව තබන්න
+  const [userName, setUserName] = useState(""); 
   const [loading, setLoading] = useState(true);
+  
+  // --- Backend දත්ත සඳහා States ---
+  const [stats, setStats] = useState({
+    totalOrders: 0,
+    pendingPayments: 0,
+    activeShipments: 0,
+    totalSpent: 0,
+    monthlyData: []
+  });
+
+  const [notices, setNotices] = useState([]); // 👈 අලුත් Notices State එක
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        setLoading(false);
+        navigate("/login");
         return;
       }
+
       try {
-        const res = await fetch("http://localhost:5000/api/auth/profile", {
+        // 1. User Profile Fetch
+        const userRes = await fetch("http://localhost:5000/api/auth/profile", {
           headers: { "Authorization": `Bearer ${token}` },
         });
-        const data = await res.json();
-        if (data.fullName) {
-          setUserName(data.fullName.split(" ")[0]); 
+        const userData = await userRes.json();
+        if (userData.fullName) {
+          setUserName(userData.fullName.split(" ")[0]); 
         }
+
+        // 2. Dashboard Stats Fetch
+        const statsRes = await fetch("http://localhost:5000/api/orders/dashboard-stats", {
+          headers: { "Authorization": `Bearer ${token}` },
+        });
+        const statsData = await statsRes.json();
+
+        const formattedChartData = statsData.monthlyStats.map(item => ({
+          month: new Date(0, item._id - 1).toLocaleString('en', { month: 'short' }),
+          amount: item.totalAmount
+        }));
+
+        setStats({
+          totalOrders: statsData.totalOrders,
+          pendingPayments: statsData.pendingPayments,
+          activeShipments: statsData.activeShipments,
+          totalSpent: statsData.totalSpent,
+          monthlyData: formattedChartData
+        });
+
+        // 3. Important Notices Fetch (අලුතින් එක් කළා)
+        const noticesRes = await fetch("http://localhost:5000/api/notices/all");
+        const noticesData = await noticesRes.json();
+        setNotices(noticesData);
+
       } catch (err) {
-        console.error("User name fetch failed");
+        console.error("Error fetching dashboard data:", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchUserData();
-  }, []);
+
+    fetchData();
+  }, [navigate]);
 
   return (
     <div className="dashboard-wrapper">
       <div className="dashboard-container">
         
+        {/* Header Section */}
         <div className="dashboard-header-simple">
-          {/* Loading වන විට "..." පෙන්වයි, නැත්නම් නම පෙන්වයි */}
           <h2>{loading ? "Loading..." : `Welcome , ${userName || "Valued Customer"}!`}</h2>
-          <p>Manage your salt orders and business profile from your secure dashboard.</p>
+          <p>Real-time analytics and management for your salt supply chain.</p>
         </div>
 
-        {/* --- Quick Status Counters (සංශෝධනය කළා) --- */}
+        {/* --- Quick Status Counters --- */}
         <div className="status-overview">
           <div className="status-item">
-            <span className="status-label">Active Orders</span>
-            <span className="status-value">02</span>
+            <span className="status-label">Total Orders</span>
+            <span className="status-value">{stats.totalOrders}</span>
           </div>
           <div className="status-item">
-            <span className="status-label">Last Order Status</span>
-            <span className="status-value processing-text">Processing</span>
+            <span className="status-label">Pending Payments</span>
+            <span className="status-value processing-text">{stats.pendingPayments}</span>
           </div>
           <div className="status-item">
-            <span className="status-label">Membership</span>
-            <span className="status-value gold-text">Wholesale</span>
+            <span className="status-label">Active Shipments</span>
+            <span className="status-value green-text">{stats.activeShipments}</span>
+          </div>
+          <div className="status-item">
+            <span className="status-label">Total Spent</span>
+            <span className="status-value">LKR {stats.totalSpent.toLocaleString()}</span>
           </div>
         </div>
 
-        <div className="dashboard-grid">
+        {/* --- 🚀 Dynamic Notice Board & Quick Actions --- */}
+        <div className="info-row">
+          <div className="notice-board">
+            <h4><FiBell className="bell-icon" /> Important Notices</h4>
+            <ul>
+              {notices.length > 0 ? (
+                notices.map((notice) => (
+                  <li key={notice._id}>
+                    {notice.type === "warning" ? "⚠️" : "✅"} {notice.message}
+                  </li>
+                ))
+              ) : (
+                <li>No new announcements from the Saltern today.</li>
+              )}
+            </ul>
+          </div>
           
+          <div className="quick-actions">
+            <button className="q-btn buy-now" onClick={() => navigate("/products")}>
+              <FiShoppingCart /> Shop Now
+            </button>
+            <button className="q-btn support" onClick={() => window.open('https://wa.me/947XXXXXXXX')}>
+              <FiHelpCircle /> Live Support
+            </button>
+          </div>
+        </div>
+
+        {/* --- Monthly Purchase Chart --- */}
+        <div className="analytics-card">
+          <h3 className="chart-title"><FiTrendingUp /> Monthly Salt Procurement (LKR)</h3>
+          <div style={{ width: '100%', height: 250, marginTop: '20px' }}>
+            <ResponsiveContainer>
+              <BarChart data={stats.monthlyData.length > 0 ? stats.monthlyData : [{month: 'No Data', amount: 0}]}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#888', fontSize: 12}} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: '#888', fontSize: 12}} />
+                <Tooltip 
+                    cursor={{fill: '#f9f9f9'}} 
+                    contentStyle={{borderRadius: '10px', border: 'none', boxShadow: '0 4px 15px rgba(0,0,0,0.05)'}}
+                />
+                <Bar dataKey="amount" fill="#008fa0" radius={[6, 6, 0, 0]} barSize={40} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Navigation Grid */}
+        <div className="dashboard-grid">
           <div className="menu-card track-highlight" onClick={() => navigate("/OrderTracking")}>
             <div className="icon-box gold-bg"><FiTruck /></div>
             <div className="card-content">
@@ -87,16 +181,6 @@ function UserDashboard() {
             <div className="arrow-btn">❯</div>
           </div>
 
-          <div className="menu-card account-card" onClick={() => navigate("/profile")}>
-            <div className="icon-box blue-bg"><FiSettings /></div>
-            <div className="card-content">
-              <h3>ACCOUNT SETTINGS</h3>
-              <p>Update your business profile and security settings.</p>
-            </div>
-            <div className="arrow-btn blue-btn">❯</div>
-          </div>
-
-          {/* අලුතින් එක් කළ card එක - Quality Reports (Saltern එකකට වැදගත්) */}
           <div className="menu-card quality-card" onClick={() => navigate("/QualityReports")}>
             <div className="icon-box purple-bg"><FiFileText /></div>
             <div className="card-content">
@@ -106,6 +190,14 @@ function UserDashboard() {
             <div className="arrow-btn purple-btn">❯</div>
           </div>
 
+          <div className="menu-card account-card" onClick={() => navigate("/profile")}>
+            <div className="icon-box blue-bg"><FiSettings /></div>
+            <div className="card-content">
+              <h3>ACCOUNT SETTINGS</h3>
+              <p>Update your business profile and security settings.</p>
+            </div>
+            <div className="arrow-btn blue-btn">❯</div>
+          </div>
         </div>
       </div>
     </div>

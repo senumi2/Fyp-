@@ -20,6 +20,8 @@ const maintenanceRoutes = require("./routes/maintenanceRoutes");
 const tankRoutes = require("./routes/tankRoutes");
 const harvestRoutes = require("./routes/harvestRoutes");
 
+const noticeRoutes = require("./routes/noticeRoutes");
+
 const payhereRoutes = require("./routes/payhereRoute");
 
 // Finance/Expenses Route
@@ -67,6 +69,7 @@ app.use("/api/contact", contactRoutes);
 app.use('/api/stocks', stockRoutes);
 app.use("/api/tanks", tankRoutes);
 app.use("/api/harvest", harvestRoutes);
+app.use("/api/notices", noticeRoutes);
 
 // Finance API
 app.use("/api/finance", financeRoutes); 
