@@ -1,0 +1,111 @@
+.order-history-wrapper {
+    padding: 60px 20px;
+    background: #f8fafc;
+    min-height: 100vh;
+  }
+  
+  .order-history-card {
+    max-width: 1150px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+  }
+  
+  .order-title {
+    color: #0f172a;
+    margin-bottom: 5px;
+    font-weight: 800;
+    font-size: 1.8rem;
+  }
+  
+  .subtitle {
+    color: #64748b;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+  }
+  
+  .order-table-container { overflow-x: auto; }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+  }
+  
+  th {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 18px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: left;
+  }
+  
+  td {
+    padding: 20px 18px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    font-size: 0.95rem;
+  }
+  
+  .id-cell { font-weight: 700; color: #008fa0; }
+  .price-cell { font-weight: 800; color: #1e293b; }
+  
+  /* Status Tags */
+  .order-status-tag {
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+  
+  .order-status-tag.pending { background: #fffbeb; color: #92400e; }
+  .order-status-tag.processing { background: #eff6ff; color: #1e40af; }
+  .order-status-tag.shipped { background: #faf5ff; color: #6b21a8; }
+  .order-status-tag.delivered { background: #ecfdf5; color: #065f46; }
+  
+  /* Action Buttons */
+  .action-cell {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .track-btn {
+    padding: 8px 16px;
+    background: #008fa0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s ease;
+  }
+  
+  .track-btn:hover { background: #006d7a; transform: scale(1.05); }
+  
+  .inv-btn {
+    background-color: #e3f2fd; /* Light Blue */
+    color: #1976d2;
+    border: 1px solid #1976d2;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+  }
+  
+  .inv-btn:hover {
+    background-color: #1976d2;
+    color: white;
+  }
+  
+  .no-data {
+    padding: 50px;
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+  }

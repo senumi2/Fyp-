@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // useLocation එකතු කළා
 import "./OrderTracking.css";
 import { FiPackage, FiTruck, FiCheckCircle, FiClock, FiArrowLeft, FiMapPin } from "react-icons/fi";
 
@@ -8,6 +8,11 @@ function OrderTracking() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  
+  // URL එකේ තියෙන parameters කියවීමට
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const orderIdFromUrl = queryParams.get("orderId");
 
   useEffect(() => {
     fetchOrders();
@@ -22,6 +27,16 @@ function OrderTracking() {
       const data = await res.json();
       if (res.ok) {
         setOrders(data);
+        
+        // --- 🚀 මෙතන තමයි අලුත් logic එක ---
+        // URL එකේ orderId එකක් තියෙනවා නම්, fetch වුණු orders අතරින් ඒක හොයාගෙන select කරනවා
+        if (orderIdFromUrl) {
+          const foundOrder = data.find(o => o._id === orderIdFromUrl);
+          if (foundOrder) {
+            setSelectedOrder(foundOrder);
+          }
+        }
+        // -----------------------------------
       }
     } catch (err) {
       console.error("Error fetching orders:", err);
@@ -86,7 +101,11 @@ function OrderTracking() {
   return (
     <div className="tracking-wrapper">
       <div className="tracking-detail-card">
-        <button className="back-link" onClick={() => setSelectedOrder(null)}>
+        <button className="back-link" onClick={() => {
+            // Back click කරද්දී URL එකේ තියෙන orderId එක අයින් කරන එක හොඳයි
+            setSelectedOrder(null);
+            navigate("/order-tracking", { replace: true });
+        }}>
           <FiArrowLeft /> Back to List
         </button>
 
@@ -95,7 +114,6 @@ function OrderTracking() {
           <p>{selectedOrder.items} | {selectedOrder.quantity}kg</p>
         </div>
 
-        {/* --- 🚛 Updated Stepper with Connecting Lines --- */}
         <div className="stepper-container">
           {steps.map((step, index) => (
             <div key={index} className={`step-item ${index <= currentIdx ? "active" : ""}`}>
@@ -104,7 +122,6 @@ function OrderTracking() {
               </div>
               <span className="step-label">{step.label}</span>
               
-              {/* ලයින් එක පියවරවල් අතර පමණක් පෙන්වීමට */}
               {index < steps.length - 1 && (
                 <div className={`step-line ${index < currentIdx ? "filled" : ""}`}></div>
               )}
@@ -129,19 +146,19 @@ function OrderTracking() {
           </div>
           
           <div className="destination-box">
-    <h4><FiMapPin /> Delivery Destination</h4>
-    {selectedOrder.shippingAddress ? (
-      <div className="address-details">
-        <p><strong>{selectedOrder.shippingAddress.addressLine1}</strong></p>
-        <p>{selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.province}</p>
-        <p style={{ marginTop: "5px", fontSize: "0.75rem", color: "#666" }}>
-          Contact: {selectedOrder.shippingAddress.phone}
-        </p>
-      </div>
-    ) : (
-      <p>Address details not available.</p>
-    )}
-</div>
+            <h4><FiMapPin /> Delivery Destination</h4>
+            {selectedOrder.shippingAddress ? (
+              <div className="address-details">
+                <p><strong>{selectedOrder.shippingAddress.addressLine1}</strong></p>
+                <p>{selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.province}</p>
+                <p style={{ marginTop: "5px", fontSize: "0.75rem", color: "#666" }}>
+                  Contact: {selectedOrder.shippingAddress.phone}
+                </p>
+              </div>
+            ) : (
+              <p>Address details not available.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

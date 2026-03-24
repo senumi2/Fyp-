@@ -21,6 +21,7 @@ import Shipping_address from "./pages/Shipping_address";
 import OrderTracking from "./Pages/orderTracking";
 import PaymentHistory from "./Pages/PaymentHistory";
 import Payment from "./Pages/Payment";
+import OrderHistory from "./Pages/OrderHistory";
 
 import "./App.css";
 import AddProduct from "./Pages/AddProduct";
@@ -74,6 +75,7 @@ function App() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/invoice/:id" element={<Invoice />} />
+        <Route path="/OrderHistory" element={<OrderHistory />} />
 
       </Routes>
 

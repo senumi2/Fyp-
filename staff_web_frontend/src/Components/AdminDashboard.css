@@ -1,3 +1,4 @@
+/* --- Base Container --- */
 .admin-container {
     display: flex;
     min-height: 100vh;
@@ -5,10 +6,10 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Sidebar Styling */
+/* --- Sidebar Styling --- */
 .admin-sidebar {
     width: 280px;
-    background-color: #cbd5e1; /* Image එකේ තිබූ ලා අළු පැහැය */
+    background-color: #cbd5e1;
     padding: 30px 20px;
     border-right: 1px solid #94a3b8;
     display: flex;
@@ -32,7 +33,7 @@
 
 .sidebar-nav button {
     padding: 16px 20px;
-    background-color: #94a3b8; /* බටන් වල අළු පැහැය */
+    background-color: #94a3b8;
     color: #1e293b;
     border: none;
     border-radius: 6px;
@@ -49,12 +50,12 @@
 }
 
 .sidebar-nav button.active {
-    background-color: #334155; /* Click කළ පසු තද පැහැය */
+    background-color: #334155;
     color: white;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-/* Content Area */
+/* --- Content Area --- */
 .admin-main-content {
     flex: 1;
     padding: 40px;
@@ -67,46 +68,14 @@
     margin-bottom: 30px;
 }
 
-/* Charts Grid */
-.admin-charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 30px;
-}
-
-.admin-chart-card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    text-align: center;
-}
-
-.graph-box-placeholder {
-    height: 250px;
-    background: #f1f5f9;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-    color: #94a3b8;
-    border: 1px dashed #cbd5e1;
-}
-
-.chart-label {
-    font-weight: 700;
-    color: #475569;
-}
-
-/* Table Styling */
+/* --- Table Styling --- */
 .admin-custom-table {
     width: 100%;
     border-collapse: collapse;
     background: white;
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
 }
 
 .admin-custom-table th, .admin-custom-table td {
@@ -120,13 +89,81 @@
     font-size: 0.85rem;
     text-transform: uppercase;
     color: #64748b;
-}
-
-.status-badge.pending {
-    background: #fef3c7;
-    color: #92400e;
-    padding: 5px 12px;
-    border-radius: 50px;
-    font-size: 0.8rem;
     font-weight: 700;
 }
+
+/* --- Status Badges --- */
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.status-badge.pending { background: #fef3c7; color: #92400e; }
+.status-badge.shipped { background: #dcfce7; color: #166534; }
+.status-badge.delivered { background: #f0fdf4; color: #15803d; }
+.status-badge.confirmed { background: #e0f2fe; color: #075985; }
+
+/* --- Manage Button --- */
+.manage-btn {
+    background-color: #334155;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* --- Modal Styling --- */
+.admin-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.admin-modal-content {
+    background: white;
+    padding: 35px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 450px;
+}
+
+.admin-modal-content label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.admin-modal-content select, .admin-modal-content input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.save-btn { background-color: #334155; color: white; border: none; padding: 12px; border-radius: 8px; flex: 2; cursor: pointer; }
+.cancel-btn { background-color: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; }
+
+/* --- Analytics Placeholder --- */
+.admin-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+.admin-chart-card { background: white; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #e2e8f0; }
+.graph-box-placeholder { height: 200px; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border: 1px dashed #cbd5e1; }

@@ -71,7 +71,7 @@
 .processing-text { color: #f39c12; } 
 .green-text { color: #27ae60; }
 
-/* --- 🚀 NEW: Info Row (Notices & Buttons) --- */
+/* --- Info Row --- */
 .info-row {
   display: flex;
   gap: 20px;
@@ -81,7 +81,7 @@
 
 .notice-board {
   flex: 2;
-  background: #fff9f0; /* Soft orange/yellow tint */
+  background: #fff9f0;
   padding: 20px;
   border-radius: 25px;
   border: 1px solid #ffeeba;
@@ -142,7 +142,7 @@
 .support { background: #e8f5e9; color: #2e7d32; }
 .support:hover { background: #c8e6c9; }
 
-/* --- 📊 Analytics Card --- */
+/* --- Analytics Card --- */
 .analytics-card {
   background: white;
   padding: 35px;
@@ -183,7 +183,9 @@
   box-shadow: 0 20px 45px rgba(0,0,0,0.08);
 }
 
+/* Specific Card Highlights */
 .track-highlight { border: 1px solid #f4d35e; }
+.order-history-card-highlight { border: 1px solid #c8e6c9; }
 .quality-card { border: 1px solid #e1bee7; }
 
 /* Icon Boxes */
@@ -200,6 +202,7 @@
 }
 
 .gold-bg { background: #f4d35e; color: #1a1a1a; }
+.green-bg { background: #e8f5e9; color: #2e7d32; }
 .blue-bg { background: #008fa0; color: white; }
 .purple-bg { background: #f3e5f5; color: #8e24aa; }
 
@@ -219,3 +222,7 @@
   justify-content: center;
   color: #ccc;
 }
+
+.green-btn { background: #f1f8f1; color: #2e7d32; }
+.purple-btn { color: #8e24aa; }
+.blue-btn { color: #008fa0; }

@@ -45,9 +45,10 @@ function PaymentHistory() {
       });
   }, []);
 
-  const viewInvoice = (id) => {
-    window.open(`/invoice/${id}`, "_blank");
-  };
+ 
+const viewInvoice = (id) => {
+  window.open(`/invoice/${id}`, "_blank");
+};
 
   if (loading) return <div className="status-msg">Loading history...</div>;
   if (error) return <div className="status-msg error-msg">{error}</div>;
@@ -86,9 +87,9 @@ function PaymentHistory() {
                       </span>
                     </td>
                     <td>
-                      <button className="view-btn" onClick={() => viewInvoice(order._id)}>
+                    <button className="view-btn" onClick={() => viewInvoice(order._id)}>
                         View Invoice
-                      </button>
+                    </button>
                     </td>
                   </tr>
                 ))

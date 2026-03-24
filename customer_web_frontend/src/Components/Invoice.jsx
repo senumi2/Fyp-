@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { FaCheckCircle, FaPrint, FaArrowLeft, FaTruck, FaFileInvoice } from "react-icons/fa";
+import { FaCheckCircle, FaPrint, FaArrowLeft, FaTruck } from "react-icons/fa";
 import "./Invoice.css";
 
 function Invoice() {
@@ -11,12 +11,8 @@ function Invoice() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
-    // Backend එකෙන් populate කරපු දත්ත ලබා ගැනීම
     fetch(`http://localhost:5000/api/orders/invoice/${id}`, {
-      headers: { 
-        "Authorization": `Bearer ${token}` 
-      }
+      headers: { "Authorization": `Bearer ${token}` }
     })
       .then((res) => {
         if (!res.ok) throw new Error("Unauthorized or Not Found");
@@ -35,19 +31,36 @@ function Invoice() {
   if (loading) return <div className="loading-screen">Generating Your Invoice...</div>;
   if (!order) return <div className="error-screen">Invoice not found or access denied.</div>;
 
+  // ✅ ලිපිනය පෙන්වන තැන Object එකක් වුණත් String එකක් වුණත් හරියට පෙන්වන ක්‍රමය
+  const renderAddress = () => {
+    // Backend එකෙන් එන shippingAddress එක Object එකක් නම්:
+    const addr = order.shippingAddress;
+    if (addr && typeof addr === 'object') {
+      return `${addr.address || ''}, ${addr.district || ''}, ${addr.province || ''} ${addr.postalCode || ''}`;
+    }
+    // එහෙම නැතිනම් පරණ විදිහට ඇඩ්‍රස් එක තිබේ නම්:
+    return order.fullAddress || order.address || "Address not available";
+  };
+
+  // ✅ පාරිභෝගිකයාගේ නම ලබා ගැනීම
+  const getCustomerName = () => {
+    if (order.shippingAddress && order.shippingAddress.warehouseName) {
+      return order.shippingAddress.warehouseName;
+    }
+    return order.userId?.fullName || order.fullName || "Customer Name";
+  };
+
   return (
     <div className="invoice-page-container">
-      {/* --- Action Buttons (ප්‍රින්ට් කරන කොට මේවා පේන්නේ නැහැ) --- */}
       <div className="no-print invoice-top-bar">
         <button className="back-home-btn" onClick={() => navigate("/")}>
           <FaArrowLeft /> Back to Shop
         </button>
         <button className="print-download-btn" onClick={() => window.print()}>
-          <FaPrint />  Download PDF
+          <FaPrint /> Download PDF
         </button>
       </div>
 
-      {/* --- Main Invoice Box --- */}
       <div className="invoice-card-box" id="print-area">
         <div className="invoice-header-section">
           <div className="company-branding">
@@ -65,26 +78,29 @@ function Invoice() {
         <hr className="invoice-hr" />
 
         <div className="invoice-info-grid">
-          {/* Shipping Address Section (Backend එකෙන් Populate වී එන දත්ත) */}
           <div className="info-block">
             <h4><FaTruck /> SHIPPING TO</h4>
             <div className="address-details">
-              <p className="customer-name"><strong>{order.warehouseName || "Customer Name"}</strong></p>
-              <p className="full-address">{order.fullAddress || order.shippingAddress}</p>
-              <p className="contact-no">Contact: {order.contactNumber || "N/A"}</p>
+              <p className="customer-name"><strong>{getCustomerName()}</strong></p>
+              
+              {/* ✅ වැදගත්ම කොටස: මෙතන දැන් Object Error එන්නේ නැහැ */}
+              <p className="full-address">{renderAddress()}</p>
+
+              <p className="contact-no">
+                Contact: {order.shippingAddress?.contactNumber || order.contactNumber || "N/A"}
+              </p>
             </div>
           </div>
 
           <div className="info-block text-right">
             <h4>PAYMENT DETAILS</h4>
             <p><strong>Method:</strong> {order.paymentMethod}</p>
-            <div className={`status-tag ${order.status?.toLowerCase()}`}>
+            <div className={`status-tag ${(order.status || "pending").toLowerCase()}`}>
                <FaCheckCircle /> {order.status}
             </div>
           </div>
         </div>
 
-        {/* --- Items Table --- */}
         <table className="invoice-items-table">
           <thead>
             <tr>
@@ -102,31 +118,24 @@ function Invoice() {
                   <p>Batch Processed Premium Product</p>
                 </div>
               </td>
-              <td className="text-center">{order.quantity}</td>
-              <td className="text-right">Rs. {(order.amount / order.quantity).toFixed(2)}</td>
-              <td className="text-right">Rs. {order.amount?.toFixed(2)}</td>
+              <td className="text-center">{order.quantity || 1}</td>
+              <td className="text-right">
+                Rs. {order.amount && order.quantity ? (order.amount / order.quantity).toLocaleString(undefined, {minimumFractionDigits: 2}) : "0.00"}
+              </td>
+              <td className="text-right">Rs. {order.amount ? order.amount.toLocaleString(undefined, {minimumFractionDigits: 2}) : "0.00"}</td>
             </tr>
           </tbody>
         </table>
 
-        {/* --- Summary & Footer --- */}
         <div className="invoice-summary-footer">
           <div className="notes-section">
             <p><strong>Notes:</strong></p>
-            <p> Thank you for your order!</p>
+            <p>Thank you for your order!</p>
           </div>
           <div className="calculation-box">
-            <div className="calc-row">
-              <span>Subtotal</span>
-              <span>Rs. {order.amount?.toFixed(2)}</span>
-            </div>
-            <div className="calc-row">
-              <span>Delivery Charges</span>
-              <span>FREE</span>
-            </div>
             <div className="calc-row grand-total-row">
               <span>TOTAL AMOUNT</span>
-              <span>Rs. {order.amount?.toFixed(2)}</span>
+              <span>Rs. {order.amount ? order.amount.toLocaleString(undefined, {minimumFractionDigits: 2}) : "0.00"}</span>
             </div>
           </div>
         </div>

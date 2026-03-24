@@ -22,7 +22,7 @@ function UserDashboard() {
     monthlyData: []
   });
 
-  const [notices, setNotices] = useState([]); // 👈 අලුත් Notices State එක
+  const [notices, setNotices] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +61,7 @@ function UserDashboard() {
           monthlyData: formattedChartData
         });
 
-        // 3. Important Notices Fetch (අලුතින් එක් කළා)
+        // 3. Important Notices Fetch
         const noticesRes = await fetch("http://localhost:5000/api/notices/all");
         const noticesData = await noticesRes.json();
         setNotices(noticesData);
@@ -82,7 +82,7 @@ function UserDashboard() {
         
         {/* Header Section */}
         <div className="dashboard-header-simple">
-          <h2>{loading ? "Loading..." : `Welcome , ${userName || "Valued Customer"}!`}</h2>
+          <h2>{loading ? "Loading..." : `Welcome, ${userName || "Valued Customer"}!`}</h2>
           <p>Real-time analytics and management for your salt supply chain.</p>
         </div>
 
@@ -106,7 +106,7 @@ function UserDashboard() {
           </div>
         </div>
 
-        {/* --- 🚀 Dynamic Notice Board & Quick Actions --- */}
+        {/* --- Info Row (Notices & Quick Actions) --- */}
         <div className="info-row">
           <div className="notice-board">
             <h4><FiBell className="bell-icon" /> Important Notices</h4>
@@ -154,6 +154,7 @@ function UserDashboard() {
 
         {/* Navigation Grid */}
         <div className="dashboard-grid">
+          {/* TRACK SHIPMENT */}
           <div className="menu-card track-highlight" onClick={() => navigate("/OrderTracking")}>
             <div className="icon-box gold-bg"><FiTruck /></div>
             <div className="card-content">
@@ -163,6 +164,17 @@ function UserDashboard() {
             <div className="arrow-btn">❯</div>
           </div>
 
+          {/* NEW: ORDER HISTORY CARD */}
+          <div className="menu-card order-history-card-highlight" onClick={() => navigate("/OrderHistory")}>
+            <div className="icon-box green-bg"><FiPackage /></div>
+            <div className="card-content">
+              <h3>ORDER HISTORY</h3>
+              <p>Review your past salt orders, quantities, and real-time delivery status.</p>
+            </div>
+            <div className="arrow-btn green-btn">❯</div>
+          </div>
+
+          {/* PAYMENT HISTORY */}
           <div className="menu-card" onClick={() => navigate("/PaymentHistory")}>
             <div className="icon-box"><FiCreditCard /></div>
             <div className="card-content">
@@ -172,6 +184,7 @@ function UserDashboard() {
             <div className="arrow-btn">❯</div>
           </div>
 
+          {/* WAREHOUSE LOCATIONS */}
           <div className="menu-card" onClick={() => navigate("/shipping_address")}>
             <div className="icon-box"><FiMapPin /></div>
             <div className="card-content">
@@ -181,6 +194,7 @@ function UserDashboard() {
             <div className="arrow-btn">❯</div>
           </div>
 
+          {/* QUALITY REPORTS */}
           <div className="menu-card quality-card" onClick={() => navigate("/QualityReports")}>
             <div className="icon-box purple-bg"><FiFileText /></div>
             <div className="card-content">
@@ -190,6 +204,7 @@ function UserDashboard() {
             <div className="arrow-btn purple-btn">❯</div>
           </div>
 
+          {/* ACCOUNT SETTINGS */}
           <div className="menu-card account-card" onClick={() => navigate("/profile")}>
             <div className="icon-box blue-bg"><FiSettings /></div>
             <div className="card-content">

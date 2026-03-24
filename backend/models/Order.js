@@ -14,13 +14,17 @@ const orderSchema = new mongoose.Schema({
     type: String,
     default: "Pending" 
   },
-  // --- පාරිභෝගිකයා තෝරාගත් ගබඩා ලිපිනය (අලුතින් එක් කළා) ---
   shippingAddress: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "ShippingAddress",
     required: true
   },
-  // --- Tracking සඳහා ඇති කොටස් (වෙනස් කර නැත) ---
+  // --- පවරන ලද රියදුරු (අලුතින් එක් කළා) ---
+  assignedDriver: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null
+  },
   truckNumber: { 
     type: String, 
     default: "Not Assigned" 
@@ -32,6 +36,9 @@ const orderSchema = new mongoose.Schema({
   estimatedDelivery: { 
     type: String, 
     default: "TBD" 
+  },
+  deliveredAt: {
+    type: Date
   },
   date: {
     type: Date,
