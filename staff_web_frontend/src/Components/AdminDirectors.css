@@ -148,6 +148,8 @@
 .edit-link { background: transparent; border: none; color: #2563eb; font-weight: 600; cursor: pointer; }
 .delete-link { background: transparent; border: none; color: #ef4444; font-weight: 600; cursor: pointer; }
 
+
+
 /* Responsive */
 @media (max-width: 1024px) {
   .directors-grid-3 { grid-template-columns: repeat(2, 1fr); }

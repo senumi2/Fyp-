@@ -3,9 +3,11 @@ const router = express.Router();
 const path = require("path");
 const multer = require("multer");
 const Product = require("../models/Product");
+
+// 🚀 පරණ විදිහටම import කරන්න. කිසිම අවුලක් වෙන්නේ නැහැ.
 const authMiddleware = require("../middleware/authMiddleware");
 
-// Controller functions (ඔයාගේ productController එකේ මේ නමින් functions තියෙන්න ඕනේ)
+// Controller functions
 const {
   createProduct,
   updateProduct,
@@ -27,7 +29,7 @@ const upload = multer({ storage });
 router.get("/", getProducts);
 router.get("/:id", getProductById);
 
-// --- 📝 Review Routes (හතරේම තිබුණු දේවල් මෙතන තියෙනවා) ---
+// --- 📝 Review Routes ---
 router.post("/:id/review", authMiddleware, async (req, res) => {
   try {
     const { rating, comment, user } = req.body;
@@ -73,8 +75,9 @@ router.delete("/:id/review/:reviewId", authMiddleware, async (req, res) => {
 });
 
 // --- 🛠️ Admin Routes ---
-router.post("/", upload.single("image"), createProduct);
-router.put("/:id", upload.single("image"), updateProduct);
-router.delete("/:id", deleteProduct);
+// මෙතන authMiddleware සහ authMiddleware.admin කියන දෙකම පාවිච්චි කරනවා
+router.post("/", authMiddleware, authMiddleware.admin, upload.single("image"), createProduct);
+router.put("/:id", authMiddleware, authMiddleware.admin, upload.single("image"), updateProduct);
+router.delete("/:id", authMiddleware, authMiddleware.admin, deleteProduct);
 
 module.exports = router;

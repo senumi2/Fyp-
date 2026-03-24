@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './AdminDashboard.css';
 
-// ඔබ සතු Components (Paths නිවැරදි බව පරීක්ෂා කරන්න)
+// ඔබ සතු Components
 import AdminInventoryManagement from './AdminInventoryManagement'; 
 import AdminHarvestManagement from './AdminHarvestManagement'; 
 import AdminExpensesFinance from './AdminExpensesFinance';
@@ -26,10 +27,7 @@ const AdminDashboard = () => {
             case 'AdminHarvestManagement': return <AdminHarvestManagement />;
             case 'AdminEqupmentUsage': return <AdminEqupmentUsage />;
             case 'AdminExpensesFinance': return <AdminExpensesFinance />;
-            
-            // --- 🚀 අලුත් Order Management View එක ---
             case 'ManageOrders': return <AdminOrderManager />;
-            
             case 'AdminPaymentHistory': return <AdminPaymentHistory />;
             case 'AdminProducts': return <AdminProducts />;
             case 'AdminDirectors': return <AdminDirectors />;
@@ -46,12 +44,7 @@ const AdminDashboard = () => {
                 <div className="sidebar-header">ADMIN DASHBOARD</div>
                 <nav className="sidebar-nav">
                     <button className={activeTab === 'ProductionVsSales' ? 'active' : ''} onClick={() => setActiveTab('ProductionVsSales')}>Production Vs Sales</button>
-                    
-                    {/* 🚀 Order Control සඳහා අලුත් Button එක */}
-                    <button className={activeTab === 'ManageOrders' ? 'active' : ''} onClick={() => setActiveTab('ManageOrders')}>
-                        Manage Orders
-                    </button>
-
+                    <button className={activeTab === 'ManageOrders' ? 'active' : ''} onClick={() => setActiveTab('ManageOrders')}>Manage Orders</button>
                     <button className={activeTab === 'AdminPondsManagement' ? 'active' : ''} onClick={() => setActiveTab('AdminPondsManagement')}>Ponds Management</button>
                     <button className={activeTab === 'AdminInventoryManagement' ? 'active' : ''} onClick={() => setActiveTab('AdminInventoryManagement')}>Inventory Management</button>
                     <button className={activeTab === 'AdminHarvestManagement' ? 'active' : ''} onClick={() => setActiveTab('AdminHarvestManagement')}>Harvest Management</button>
@@ -73,7 +66,7 @@ const AdminDashboard = () => {
     );
 };
 
-// --- 🚀 ඇත්තටම වැඩ කරන Order Manager Component එක ---
+// --- 🚀 Order Manager Component (ඔබේ පරණ Code එක එලෙසමයි) ---
 const AdminOrderManager = () => {
     const [orders, setOrders] = useState([]);
     const [drivers, setDrivers] = useState([]);
@@ -181,21 +174,69 @@ const AdminOrderManager = () => {
     );
 };
 
-// --- Production Vs Sales View Component ---
-const ProductionVsSalesView = () => (
-    <div className="admin-view-content">
-        <h2 className="view-title">Production Vs Sales Analytics</h2>
-        <div className="admin-charts-grid">
-            {['Salt', 'Jipsum', 'Agriculture Salt', 'Artemiya'].map(item => (
-                <div key={item} className="admin-chart-card">
-                    <div className="graph-box-placeholder">
-                        <span>Graph for {item}</span>
+// --- 📊 🚀 Updated Production Vs Sales View (Real Analytics) ---
+const ProductionVsSalesView = () => {
+    const [chartData, setChartData] = useState([]);
+
+    useEffect(() => {
+        const fetchAnalytics = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const res = await axios.get("http://localhost:5000/api/analytics/production-vs-sales", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                
+                const formattedData = months.map((month, index) => {
+                    const monthNum = index + 1;
+                    const sale = res.data.salesStats.find(s => s._id === monthNum);
+                    const harvest = res.data.harvestStats.find(h => h._id === monthNum);
+                    
+                    return {
+                        name: month,
+                        Sales: sale ? sale.totalQuantity : 0,
+                        Harvest: harvest ? harvest.totalHarvest : 0
+                    };
+                });
+
+                setChartData(formattedData);
+            } catch (err) {
+                console.error("Analytics fetch error:", err);
+            }
+        };
+        fetchAnalytics();
+    }, []);
+
+    return (
+        <div className="admin-view-content">
+            <h2 className="view-title">Production Vs Sales Analytics</h2>
+            <div className="admin-chart-card" style={{ height: '400px', marginBottom: '30px' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Line type="monotone" dataKey="Harvest" stroke="#3b82f6" strokeWidth={3} name="Production (Harvest)" />
+                        <Line type="monotone" dataKey="Sales" stroke="#10b981" strokeWidth={3} name="Items Sold (Sales)" />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+
+            <div className="admin-charts-grid">
+                {['Salt', 'Jipsum', 'Agriculture Salt', 'Artemiya'].map(item => (
+                    <div key={item} className="admin-chart-card">
+                        <div className="graph-box-placeholder">
+                            <span>{item} Monthly Trend</span>
+                        </div>
+                        <p className="chart-label">{item}</p>
                     </div>
-                    <p className="chart-label">{item}</p>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default AdminDashboard;

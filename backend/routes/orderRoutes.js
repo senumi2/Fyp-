@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const orderController = require("../controllers/orderController");
+
+// 🚀 අලුත් Middleware එක මෙතනට Import කළා. 
+// දැන් 'authMiddleware' කියන නම පහළ හැම තැනකම පාවිච්චි කරන්න පුළුවන්.
 const authMiddleware = require("../middleware/authMiddleware");
 
 // --- GET Routes ---

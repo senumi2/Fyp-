@@ -1,28 +1,18 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+// ප්‍රධාන Middleware function එක
+const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
 
-  //  No token
   if (!token) {
-    return res.status(401).json({ message: "No token" });
+    return res.status(401).json({ message: "No token, authorization denied" });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    /*
-      decoded object eka mehema wenna puluwan:
-      {
-        id: "userId",
-        email: "...",
-        role: "...",
-        iat: ...
-      }
-    */
-
-    //  normalize user data (old + new processes friendly)
+    
+    // User දත්ත Normalize කිරීම
     req.user = {
       id: decoded.id || decoded._id || decoded.userId,
       email: decoded.email,
@@ -31,6 +21,17 @@ module.exports = (req, res, next) => {
 
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Invalid token" });
+    return res.status(401).json({ message: "Token is not valid" });
   }
 };
+
+// Admin චෙක් එක මෙතනට අමුණනවා (පරණ routes බේරගන්න කරන උපක්‍රමය)
+authMiddleware.admin = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    res.status(403).json({ message: "Access denied. Admins only." });
+  }
+};
+
+module.exports = authMiddleware;

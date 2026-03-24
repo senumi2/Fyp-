@@ -20,6 +20,11 @@ const maintenanceRoutes = require("./routes/maintenanceRoutes");
 const tankRoutes = require("./routes/tankRoutes");
 const harvestRoutes = require("./routes/harvestRoutes");
 
+const wageRoutes = require("./routes/wageRoutes");
+const transportRoutes = require("./routes/transportRoutes");
+const maintenanceRepairLogsRoutes = require("./routes/maintenanceRepairLogsRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
+
 const noticeRoutes = require("./routes/noticeRoutes");
 
 const payhereRoutes = require("./routes/payhereRoute");
@@ -70,6 +75,10 @@ app.use('/api/stocks', stockRoutes);
 app.use("/api/tanks", tankRoutes);
 app.use("/api/harvest", harvestRoutes);
 app.use("/api/notices", noticeRoutes);
+app.use("/api/wages", wageRoutes);
+app.use("/api/transport", transportRoutes);
+app.use("/api/maintenance-repair-logs", maintenanceRepairLogsRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 // Finance API
 app.use("/api/finance", financeRoutes); 

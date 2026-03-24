@@ -165,5 +165,28 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
 }
-.admin-chart-card { background: white; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #e2e8f0; }
+
 .graph-box-placeholder { height: 200px; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border: 1px dashed #cbd5e1; }
+
+/* Real-time Analytics Card Styling */
+.admin-chart-card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
+    text-align: center;
+}
+
+.chart-label {
+    font-weight: 700;
+    color: #475569;
+    margin-top: 15px;
+}
+
+.graph-box-placeholder span {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
