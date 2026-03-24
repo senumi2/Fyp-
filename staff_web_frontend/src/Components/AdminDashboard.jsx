@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { 
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
+    PieChart, Pie, Cell 
+} from 'recharts';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import './AdminDashboard.css';
 
-// ඔබ සතු Components
+// ඔබගේ අනෙකුත් Components මෙහි Import කරන්න
 import AdminInventoryManagement from './AdminInventoryManagement'; 
 import AdminHarvestManagement from './AdminHarvestManagement'; 
 import AdminExpensesFinance from './AdminExpensesFinance';
@@ -66,170 +71,229 @@ const AdminDashboard = () => {
     );
 };
 
-// --- 🚀 Order Manager Component (ඔබේ පරණ Code එක එලෙසමයි) ---
-const AdminOrderManager = () => {
-    const [orders, setOrders] = useState([]);
-    const [drivers, setDrivers] = useState([]);
-    const [selectedOrder, setSelectedOrder] = useState(null);
-    const [status, setStatus] = useState("");
-    const [assignedDriver, setAssignedDriver] = useState("");
-    const [truckNumber, setTruckNumber] = useState("");
-
-    const fetchData = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const orderRes = await axios.get("http://localhost:5000/api/orders/all-orders-admin", {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const driverRes = await axios.get("http://localhost:5000/api/auth/drivers", {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setOrders(orderRes.data);
-            setDrivers(driverRes.data);
-        } catch (err) { console.error(err); }
-    };
-
-    useEffect(() => { fetchData(); }, []);
-
-    const handleUpdate = async (e) => {
-        e.preventDefault();
-        try {
-            const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:5000/api/orders/update-tracking/${selectedOrder._id}`, {
-                status, assignedDriver, truckNumber
-            }, { headers: { Authorization: `Bearer ${token}` } });
-            
-            alert("Order Updated Successfully!");
-            setSelectedOrder(null);
-            fetchData();
-        } catch (err) { alert("Update failed"); }
-    };
-
-    return (
-        <div className="admin-view-content">
-            <h2 className="view-title">Order & Delivery Management</h2>
-            <div className="table-container">
-                <table className="admin-custom-table">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orders.map(order => (
-                            <tr key={order._id}>
-                                <td>#{order._id.slice(-6).toUpperCase()}</td>
-                                <td>{order.userId?.fullName || 'N/A'}</td>
-                                <td>LKR {order.amount?.toLocaleString()}</td>
-                                <td><span className={`status-badge ${order.status.toLowerCase()}`}>{order.status}</span></td>
-                                <td>
-                                    <button className="manage-btn" onClick={() => {
-                                        setSelectedOrder(order);
-                                        setStatus(order.status);
-                                        setAssignedDriver(order.assignedDriver || "");
-                                        setTruckNumber(order.truckNumber || "");
-                                    }}>Manage</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            {selectedOrder && (
-                <div className="admin-modal-overlay">
-                    <div className="admin-modal-content">
-                        <h3>Update Delivery Details</h3>
-                        <form onSubmit={handleUpdate}>
-                            <label>Order Status</label>
-                            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                                <option value="Pending">Pending</option>
-                                <option value="Confirmed">Confirmed</option>
-                                <option value="Shipped">Shipped</option>
-                                <option value="Delivered">Delivered</option>
-                            </select>
-
-                            <label>Assign Driver</label>
-                            <select value={assignedDriver} onChange={(e) => setAssignedDriver(e.target.value)}>
-                                <option value="">-- Choose Driver --</option>
-                                {drivers.map(d => <option key={d._id} value={d._id}>{d.fullName}</option>)}
-                            </select>
-
-                            <label>Truck Number</label>
-                            <input type="text" value={truckNumber} onChange={(e) => setTruckNumber(e.target.value)} placeholder="Ex: WP-ABC-1234" />
-
-                            <div className="modal-actions">
-                                <button type="submit" className="save-btn">Save Changes</button>
-                                <button type="button" className="cancel-btn" onClick={() => setSelectedOrder(null)}>Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-};
-
-// --- 📊 🚀 Updated Production Vs Sales View (Real Analytics) ---
+// --- 📊 🚀 Production Vs Sales & Financial View (With Month Filter & PDF Report) ---
 const ProductionVsSalesView = () => {
     const [chartData, setChartData] = useState([]);
+    const [expenseData, setExpenseData] = useState([]);
+    const [rawExpenseStats, setRawExpenseStats] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState("All"); 
+    const [loading, setLoading] = useState(true);
+
+    const COLORS = ["#3b82f6", "#10b981", "#f59e0b"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     useEffect(() => {
         const fetchAnalytics = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get("http://localhost:5000/api/analytics/production-vs-sales", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const config = { headers: { Authorization: `Bearer ${token}` } };
 
-                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                
-                const formattedData = months.map((month, index) => {
+                const resProd = await axios.get("http://localhost:5000/api/analytics/production-vs-sales", config);
+                const formattedProdData = months.map((month, index) => {
                     const monthNum = index + 1;
-                    const sale = res.data.salesStats.find(s => s._id === monthNum);
-                    const harvest = res.data.harvestStats.find(h => h._id === monthNum);
-                    
+                    const sale = resProd.data.salesStats.find(s => s._id === monthNum);
+                    const harvest = resProd.data.harvestStats.find(h => h._id === monthNum);
                     return {
                         name: month,
                         Sales: sale ? sale.totalQuantity : 0,
                         Harvest: harvest ? harvest.totalHarvest : 0
                     };
                 });
+                setChartData(formattedProdData);
 
-                setChartData(formattedData);
+                const resFin = await axios.get("http://localhost:5000/api/analytics/financial-stats", config);
+                setRawExpenseStats(resFin.data);
+                
+                updatePieChart(resFin.data, "All");
+
+                setLoading(false);
             } catch (err) {
                 console.error("Analytics fetch error:", err);
+                setLoading(false);
             }
         };
         fetchAnalytics();
     }, []);
 
+    const updatePieChart = (data, monthLabel) => {
+        let wages = 0, transport = 0, maintenance = 0;
+
+        if (monthLabel === "All") {
+            wages = data.wageStats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+            transport = data.transportStats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+            maintenance = data.maintenanceStats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+        } else {
+            const monthNum = months.indexOf(monthLabel) + 1;
+            wages = data.wageStats.find(s => s._id === monthNum)?.total || 0;
+            transport = data.transportStats.find(s => s._id === monthNum)?.total || 0;
+            maintenance = data.maintenanceStats.find(s => s._id === monthNum)?.total || 0;
+        }
+
+        setExpenseData([
+            { name: "Wages", value: wages },
+            { name: "Transport", value: transport },
+            { name: "Maintenance", value: maintenance },
+        ]);
+    };
+
+    const handleMonthChange = (e) => {
+        const m = e.target.value;
+        setSelectedMonth(m);
+        if (rawExpenseStats) {
+            updatePieChart(rawExpenseStats, m);
+        }
+    };
+
+    // --- 📄 Report Generation Logic with Profit Calculation ---
+    const handleDownloadReport = () => {
+        const doc = new jsPDF();
+        const dateStr = new Date().toLocaleDateString();
+        const reportTitle = selectedMonth === "All" ? "Annual Financial Report - 2026" : `Monthly Financial Report - ${selectedMonth} 2026`;
+        const UNIT_PRICE = 50; // ලුණු කිලෝ එකක දළ මිල
+
+        // Header
+        doc.setFontSize(22);
+        doc.setTextColor(30, 41, 59);
+        doc.text("SENUMI HIMANADHI SALTERNS", 14, 20);
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`Generated on: ${dateStr}`, 160, 28);
+        doc.line(14, 32, 196, 32);
+
+        doc.setFontSize(14);
+        doc.setTextColor(51, 65, 85);
+        doc.text(reportTitle, 14, 42);
+
+        let tableData = [];
+        let grandTotalRev = 0;
+        let grandTotalExp = 0;
+
+        const getDataForMonth = (mName) => {
+            const mIdx = months.indexOf(mName) + 1;
+            const dRow = chartData.find(d => d.name === mName) || { Harvest: 0, Sales: 0 };
+            const w = rawExpenseStats.wageStats.find(s => s._id === mIdx)?.total || 0;
+            const t = rawExpenseStats.transportStats.find(s => s._id === mIdx)?.total || 0;
+            const m = rawExpenseStats.maintenanceStats.find(s => s._id === mIdx)?.total || 0;
+            const totalExp = w + t + m;
+            const rev = dRow.Sales * UNIT_PRICE;
+            return { harvest: dRow.Harvest, sales: dRow.Sales, rev, exp: totalExp, profit: rev - totalExp };
+        };
+
+        if (selectedMonth === "All") {
+            months.forEach(mName => {
+                const s = getDataForMonth(mName);
+                tableData.push([mName, s.harvest, s.sales, s.rev.toLocaleString(), s.exp.toLocaleString(), s.profit.toLocaleString()]);
+                grandTotalRev += s.rev;
+                grandTotalExp += s.exp;
+            });
+        } else {
+            const s = getDataForMonth(selectedMonth);
+            tableData.push([selectedMonth, s.harvest, s.sales, s.rev.toLocaleString(), s.exp.toLocaleString(), s.profit.toLocaleString()]);
+            grandTotalRev = s.rev;
+            grandTotalExp = s.exp;
+        }
+
+        doc.autoTable({
+            startY: 50,
+            head: [['Month', 'Harvest (kg)', 'Sales (kg)', 'Revenue (LKR)', 'Expenses (LKR)', 'Net Profit (LKR)']],
+            body: tableData,
+            theme: 'grid',
+            headStyles: { fillColor: [51, 65, 85], halign: 'center' },
+            columnStyles: { 3: { halign: 'right' }, 4: { halign: 'right' }, 5: { halign: 'right', fontStyle: 'bold' } }
+        });
+
+        const finalY = doc.lastAutoTable.finalY + 15;
+        doc.setFontSize(12);
+        doc.text(`Total Revenue: LKR ${grandTotalRev.toLocaleString()}`, 130, finalY);
+        doc.text(`Total Expenses: LKR ${grandTotalExp.toLocaleString()}`, 130, finalY + 10);
+        doc.setTextColor(grandTotalRev - grandTotalExp >= 0 ? [22, 101, 52] : [185, 28, 28]);
+        doc.text(`Net Profit: LKR ${(grandTotalRev - grandTotalExp).toLocaleString()}`, 130, finalY + 20);
+
+        doc.save(`${reportTitle}.pdf`);
+    };
+
+    if (loading) return <div className="admin-view-content"><p className="loading-text">Loading Real-time Analytics...</p></div>;
+
     return (
         <div className="admin-view-content">
-            <h2 className="view-title">Production Vs Sales Analytics</h2>
-            <div className="admin-chart-card" style={{ height: '400px', marginBottom: '30px' }}>
-                <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Line type="monotone" dataKey="Harvest" stroke="#3b82f6" strokeWidth={3} name="Production (Harvest)" />
-                        <Line type="monotone" dataKey="Sales" stroke="#10b981" strokeWidth={3} name="Items Sold (Sales)" />
-                    </LineChart>
-                </ResponsiveContainer>
+            <h2 className="view-title">Production & Business Analytics</h2>
+            
+            <div className="admin-charts-grid">
+                
+                {/* 1. Line Chart */}
+                <div className="admin-chart-card">
+                    <h4 className="chart-label">Annual Production vs Sales (kg)</h4>
+                    <div style={{ height: '300px', width: '100%' }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="Harvest" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} name="Harvest" />
+                                <Line type="monotone" dataKey="Sales" stroke="#10b981" strokeWidth={3} dot={{ r: 4 }} name="Sales" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* 2. Pie Chart with Filter and Download Button */}
+                <div className="admin-chart-card">
+                    <div className="chart-header">
+                        <h4 className="chart-label" style={{ margin: 0 }}>Expense Distribution</h4>
+                        <select 
+                            className="month-filter-dropdown" 
+                            value={selectedMonth} 
+                            onChange={handleMonthChange}
+                        >
+                            <option value="All">All Months</option>
+                            {months.map(m => <option key={m} value={m}>{m}</option>)}
+                        </select>
+                    </div>
+                    
+                    <div style={{ height: '280px', width: '100%' }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                    data={expenseData}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                    label={({ name, percent }) => percent > 0 ? `${name} ${(percent * 100).toFixed(0)}%` : ""}
+                                >
+                                    {expenseData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip formatter={(value) => `LKR ${value.toLocaleString()}`} />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <p className="viewing-label">
+                        Viewing: <strong>{selectedMonth === "All" ? "Yearly Summary" : selectedMonth}</strong>
+                    </p>
+
+                    {/* Download Report Button */}
+                    <button 
+                        className="manage-btn" 
+                        style={{ marginTop: '20px', width: '100%', background: '#1e293b', color: 'white' }}
+                        onClick={handleDownloadReport}
+                    >
+                        📄 Download {selectedMonth === "All" ? "Annual" : selectedMonth} Report
+                    </button>
+                </div>
             </div>
 
+            <h3 className="view-title" style={{ fontSize: '1.4rem' }}>Product Trends</h3>
             <div className="admin-charts-grid">
                 {['Salt', 'Jipsum', 'Agriculture Salt', 'Artemiya'].map(item => (
                     <div key={item} className="admin-chart-card">
                         <div className="graph-box-placeholder">
-                            <span>{item} Monthly Trend</span>
+                            <span>{item} Trend Analytics</span>
                         </div>
                         <p className="chart-label">{item}</p>
                     </div>
@@ -237,6 +301,10 @@ const ProductionVsSalesView = () => {
             </div>
         </div>
     );
+};
+
+const AdminOrderManager = () => {
+    return (<div className="admin-view-content"><h3>Order Manager Content</h3><p>Order processing logic goes here.</p></div>); 
 };
 
 export default AdminDashboard;

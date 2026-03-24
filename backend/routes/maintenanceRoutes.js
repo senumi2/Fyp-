@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const authMiddleware = require("../middleware/authMiddleware");
 
 const { 
     createMaintenance, 
@@ -8,10 +9,10 @@ const {
     deleteMaintenance 
 } = require("../controllers/maintenanceController");
 
-
-router.post("/", createMaintenance);
-router.get("/", getMaintenance);
-router.put("/:id", updateMaintenance);
-router.delete("/:id", deleteMaintenance);
+// දැන් මේ Routes වලටත් Token එක අවශ්‍යයි
+router.post("/", authMiddleware, authMiddleware.admin, createMaintenance);
+router.get("/", authMiddleware, getMaintenance);
+router.put("/:id", authMiddleware, authMiddleware.admin, updateMaintenance);
+router.delete("/:id", authMiddleware, authMiddleware.admin, deleteMaintenance);
 
 module.exports = router;

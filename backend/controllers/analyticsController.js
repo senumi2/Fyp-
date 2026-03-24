@@ -1,9 +1,12 @@
 const Order = require("../models/Order");
 const Harvest = require("../models/Harvest");
+const Wage = require("../models/Wage");
+const Transport = require("../models/Transport");
+const Maintenance = require("../models/MaintenanceRepairLogs");
 
-exports.getProductionVsSalesStats = async (req, res) => {
+// 📊 1. Production vs Sales Stats
+const getProductionVsSalesStats = async (req, res) => {
     try {
-        // 1. මාසික විකුණුම් (Sales) ලබා ගැනීම
         const salesStats = await Order.aggregate([
             {
                 $group: {
@@ -15,7 +18,6 @@ exports.getProductionVsSalesStats = async (req, res) => {
             { $sort: { "_id": 1 } }
         ]);
 
-        // 2. මාසික අස්වැන්න (Harvest) ලබා ගැනීම
         const harvestStats = await Harvest.aggregate([
             { $unwind: "$records" },
             {
@@ -33,29 +35,32 @@ exports.getProductionVsSalesStats = async (req, res) => {
     }
 };
 
-const Wage = require("../models/Wage");
-const Transport = require("../models/Transport");
-const Maintenance = require("../models/MaintenanceRepairLogs");
-
-exports.getFinancialStats = async (req, res) => {
+// 💰 2. Financial Stats (Updated with Sorting)
+const getFinancialStats = async (req, res) => {
     try {
-        // 1. මාසික වැටුප් වියදම
         const wageStats = await Wage.aggregate([
-            { $group: { _id: { $month: "$date" }, total: { $sum: "$total" } } }
+            { $group: { _id: { $month: "$date" }, total: { $sum: "$total" } } },
+            { $sort: { "_id": 1 } } // මාස පිළිවෙළට sort කරයි
         ]);
 
-        // 2. මාසික ප්‍රවාහන වියදම
         const transportStats = await Transport.aggregate([
-            { $group: { _id: { $month: "$date" }, total: { $sum: "$total" } } }
+            { $group: { _id: { $month: "$date" }, total: { $sum: "$total" } } },
+            { $sort: { "_id": 1 } }
         ]);
 
-        // 3. මාසික නඩත්තු වියදම
         const maintenanceStats = await Maintenance.aggregate([
-            { $group: { _id: { $month: "$date" }, total: { $sum: "$cost" } } }
+            { $group: { _id: { $month: "$date" }, total: { $sum: "$cost" } } },
+            { $sort: { "_id": 1 } }
         ]);
 
         res.json({ wageStats, transportStats, maintenanceStats });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
+};
+
+// 🚀 සියල්ල එකවර Export කිරීම
+module.exports = {
+    getProductionVsSalesStats,
+    getFinancialStats
 };
