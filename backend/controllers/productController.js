@@ -1,20 +1,90 @@
 const Product = require("../models/Product");
+const Stock = require("../models/Stock");
 
-// ➕ Create Product (Admin) - Updated with Quality Specs
+// 🌐 Get All Products (Public) - Auto-calculates stock from Stock transactions
+exports.getProducts = async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+
+    // එක් එක් Product එක සඳහා Inward/Outward ගණනය කර Live Stock එක ලබා ගැනීම
+    const productsWithLiveStock = await Promise.all(
+      products.map(async (product) => {
+        // Stock model එකේ itemName එක Product name එකට සමාන ඒවා සොයයි
+        const transactions = await Stock.find({ itemName: product.name });
+
+        const totalInward = transactions
+          .filter((t) => t.transactionType === "Inward")
+          .reduce((sum, t) => sum + t.quantity, 0);
+
+        const totalOutward = transactions
+          .filter((t) => t.transactionType === "Outward")
+          .reduce((sum, t) => sum + t.quantity, 0);
+
+        const liveStock = totalInward - totalOutward;
+
+        return {
+          ...product._doc,
+          stock: liveStock > 0 ? liveStock : 0, // සෘණ අගයන් පෙන්වීම වැලැක්වීමට
+        };
+      })
+    );
+
+    res.json(productsWithLiveStock);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// 🔍 Get Product By ID (Public) - Includes calculated stock
+exports.getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!require("mongoose").Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Single item stock calculation
+    const transactions = await Stock.find({ itemName: product.name });
+    const liveStock = transactions.reduce((total, t) => {
+      return t.transactionType === "Inward"
+        ? total + t.quantity
+        : total - t.quantity;
+    }, 0);
+
+    const productWithStock = {
+      ...product._doc,
+      stock: liveStock > 0 ? liveStock : 0,
+    };
+
+    res.json(productWithStock);
+  } catch (err) {
+    console.error("Get product error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ➕ Create Product (Admin) - Supports Quality Specs
 exports.createProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, purity, iodine, moisture } = req.body;
+    const { name, description, price, purity, iodine, moisture } = req.body;
+    
     if (!req.file) return res.status(400).json({ message: "Image required" });
 
     const product = new Product({
       name,
       description,
       price,
-      stock,
-      purity: purity || "98.5%", // අගයක් එව්වේ නැත්නම් default අගය ගනී
+      // stock එක manually දාන්නේ නැත, එය auto-calculate වේ
+      purity: purity || "98.5%",
       iodine: iodine || "25-30 ppm",
       moisture: moisture || "< 0.5%",
-      imageUrl: `/uploads/${req.file.filename}`
+      imageUrl: `/uploads/${req.file.filename}`,
     });
 
     await product.save();
@@ -24,16 +94,19 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// 🔄 Update Product (Admin) - Updated to handle quality specs
+// 🔄 Update Product (Admin)
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = { ...req.body };
-    
-    // රූපරාමුවක් අලුතින් upload කරොත් පමණක් path එක update කරයි
-    if (req.file) updateData.imageUrl = `/uploads/${req.file.filename}`;
 
-    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
+    if (req.file) {
+      updateData.imageUrl = `/uploads/${req.file.filename}`;
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
     res.json(updatedProduct);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -47,40 +120,6 @@ exports.deleteProduct = async (req, res) => {
     res.json({ message: "Product deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
-  }
-};
-
-// 🌐 Get All Products (Public)
-exports.getProducts = async (req, res) => {
-  try {
-    const products = await Product.find().sort({ createdAt: -1 });
-    res.json(products);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-// 🔍 Get Product By ID (Public) - Combined version for safety
-exports.getProductById = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    // Validate ObjectId (ID එකේ වැරද්දක් ඇත්දැයි බලයි)
-    if (!require("mongoose").Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid product ID" });
-    }
-
-    const product = await Product.findById(id);
-
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    res.json(product);
-
-  } catch (err) {
-    console.error("Get product error:", err);
-    res.status(500).json({ message: "Server error" });
   }
 };
 

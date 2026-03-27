@@ -11,7 +11,6 @@ const Stock = () => {
     const items = ["Salt", "Jipsum", "Artemiya", "Agriculture Salt"];
     const tableRefs = useRef({});
 
-    
     const today = new Date().toISOString().split('T')[0];
 
     const [formData, setFormData] = useState({
@@ -22,7 +21,6 @@ const Stock = () => {
         quantity: ''
     });
 
-    
     const API_URL = "http://localhost:5000/api/stocks";
 
     useEffect(() => {
@@ -61,11 +59,9 @@ const Stock = () => {
 
     const handleAdd = async (e) => {
         e.preventDefault();
-
- 
         const payload = { 
             itemName: formData.itemName,
-            transactionType: activeTab, // 'Inward' or 'Outward'
+            transactionType: activeTab,
             date: new Date(formData.date), 
             subType: formData.subType,
             quantity: Number(formData.quantity), 
@@ -73,9 +69,7 @@ const Stock = () => {
         };
 
         try {
-           
             const response = await axios.post(`${API_URL}/add`, payload);
-            
             if (response.status === 201) {
                 alert(`Record ${formData.no} added successfully!`);
                 setFormData(prev => ({ ...prev, subType: '', quantity: '' }));
@@ -83,7 +77,7 @@ const Stock = () => {
             }
         } catch (err) { 
             console.error("Error adding data:", err.response?.data || err.message);
-            alert("Error adding data. Check console for details."); 
+            alert("Error adding data."); 
         }
     };
 
@@ -91,7 +85,6 @@ const Stock = () => {
         tableRefs.current[itemName]?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // show data in the Table 
     const renderTable = (itemName) => {
         const filtered = allData.filter(d => 
             d.itemName === itemName && 
@@ -114,7 +107,7 @@ const Stock = () => {
                                 <th>REF NO</th>
                                 <th>Date</th>
                                 <th>Type</th>
-                                <th>Quantity</th>
+                                <th>Quantity (kg)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -124,7 +117,7 @@ const Stock = () => {
                                         <td><span className="ref-tag">{record.no}</span></td>
                                         <td>{new Date(record.date).toLocaleDateString()}</td>
                                         <td><span className="type-pill">{record.subType || '-'}</span></td>
-                                        <td className="qty-cell">{record.quantity}</td>
+                                        <td className="qty-cell">{record.quantity.toLocaleString()}</td>
                                     </tr>
                                 ))
                             ) : (
@@ -137,7 +130,6 @@ const Stock = () => {
         );
     };
 
-    // Graph Data Logic 
     const getChartData = (itemName) => {
         const filtered = allData.filter(d => d.itemName === itemName);
         const summary = {};
@@ -209,7 +201,7 @@ const Stock = () => {
                                     <input type="text" name="subType" value={formData.subType} onChange={handleInputChange} placeholder="Ex: Fine" />
                                 </div>
                                 <div className="form-group">
-                                    <label>Quantity</label>
+                                    <label>Quantity (kg)</label>
                                     <input type="number" name="quantity" value={formData.quantity} onChange={handleInputChange} placeholder="0" required />
                                 </div>
                                 <button type="submit" className="form-add-btn">Add Record</button>
@@ -224,27 +216,59 @@ const Stock = () => {
                     {activeTab === 'Reports' && (
                         <div className="stock-reports-container">
                             <div className="reports-top-flex">
-                                <h3>Visual Analytics</h3>
+                                <div className="title-area">
+                                    <h3>Visual Analytics</h3>
+                                    <p>Real-time stock flow and inventory balance</p>
+                                </div>
                                 <div className="report-toggle">
                                     <button className={reportType === 'Monthly' ? 'toggle-active' : ''} onClick={() => setReportType('Monthly')}>Monthly</button>
                                     <button className={reportType === 'Annually' ? 'toggle-active' : ''} onClick={() => setReportType('Annually')}>Annually</button>
                                 </div>
                             </div>
+
+                            {/* --- Summary Cards Section --- */}
+                            <div className="stock-summary-grid">
+                                {items.map(item => {
+                                    const data = allData.filter(d => d.itemName === item);
+                                    const totalIn = data.filter(d => d.transactionType === 'Inward').reduce((sum, d) => sum + d.quantity, 0);
+                                    const totalOut = data.filter(d => d.transactionType === 'Outward').reduce((sum, d) => sum + d.quantity, 0);
+                                    const balance = totalIn - totalOut;
+
+                                    return (
+                                        <div className="summary-stat-card" key={item}>
+                                            <span className="item-label">{item}</span>
+                                            <div className="stat-main">
+                                                <h4>{balance.toLocaleString()} <span>kg</span></h4>
+                                                <p>Available Stock</p>
+                                            </div>
+                                            <div className="stat-footer">
+                                                <span className="text-in">↑ {totalIn.toLocaleString()}</span>
+                                                <span className="text-out">↓ {totalOut.toLocaleString()}</span>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
                             <div className="charts-grid-container">
                                 {items.map(item => (
                                     <div className="chart-card-full" key={item}>
-                                        <h4>{item} Flow</h4>
-                                        <ResponsiveContainer width="100%" height={300}>
-                                            <LineChart data={getChartData(item)}>
-                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                                <XAxis dataKey="period" />
-                                                <YAxis />
-                                                <Tooltip />
-                                                <Legend />
-                                                <Line type="monotone" dataKey="inward" stroke="#10b981" strokeWidth={3} name="Inward" />
-                                                <Line type="monotone" dataKey="outward" stroke="#ef4444" strokeWidth={3} name="Outward" />
-                                            </LineChart>
-                                        </ResponsiveContainer>
+                                        <div className="chart-header">
+                                            <h4>{item} Flow Analysis</h4>
+                                        </div>
+                                        <div style={{ padding: '20px' }}>
+                                            <ResponsiveContainer width="100%" height={300}>
+                                                <LineChart data={getChartData(item)}>
+                                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                                                    <XAxis dataKey="period" tick={{fontSize: 12}} />
+                                                    <YAxis tick={{fontSize: 12}} />
+                                                    <Tooltip />
+                                                    <Legend />
+                                                    <Line type="monotone" dataKey="inward" stroke="#10b981" strokeWidth={3} name="Inward (kg)" dot={{ r: 4 }} />
+                                                    <Line type="monotone" dataKey="outward" stroke="#ef4444" strokeWidth={3} name="Outward (kg)" dot={{ r: 4 }} />
+                                                </LineChart>
+                                            </ResponsiveContainer>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

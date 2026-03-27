@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { 
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
+    PieChart, Pie, Cell 
+} from 'recharts';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import './ExpensesFinance.css';
 
 const ExpensesFinance = () => {
@@ -13,6 +19,16 @@ const ExpensesFinance = () => {
   const [transports, setTransports] = useState([]);
   const [maintenances, setMaintenances] = useState([]);
 
+  // Analytics States (For Profit & Loss)
+  const [chartData, setChartData] = useState([]);
+  const [expenseData, setExpenseData] = useState([]);
+  const [rawExpenseStats, setRawExpenseStats] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState("All");
+  const [loadingAnalytics, setLoadingAnalytics] = useState(false);
+
+  const COLORS = ["#3b82f6", "#10b981", "#f59e0b"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
   // Form States
   const [wageForm, setWageForm] = useState({ workerName: '', role: '', hoursWorked: '', wageRate: '', status: 'Pending' });
   const [transForm, setTransForm] = useState({ vehicle: '', route: '', fuelCost: '', maintenance: '' });
@@ -20,6 +36,7 @@ const ExpensesFinance = () => {
 
   useEffect(() => {
     fetchAllData();
+    fetchAnalytics();
   }, []);
 
   const fetchAllData = async () => {
@@ -34,6 +51,129 @@ const ExpensesFinance = () => {
     } catch (err) { 
       console.error("Error fetching data", err); 
     }
+  };
+
+  // --- 📊 Analytics Logic (Added) ---
+  const fetchAnalytics = async () => {
+    setLoadingAnalytics(true);
+    try {
+      const token = localStorage.getItem('token');
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+
+      const resProd = await axios.get("http://localhost:5000/api/analytics/production-vs-sales", config);
+      const resFin = await axios.get("http://localhost:5000/api/analytics/financial-stats", config);
+
+      const formattedProdData = months.map((month, index) => {
+        const monthNum = index + 1;
+        const sale = resProd.data.salesStats.find(s => s._id === monthNum);
+        const harvest = resProd.data.harvestStats.find(h => h._id === monthNum);
+        return {
+          name: month,
+          Sales: sale ? sale.totalQuantity : 0,
+          Harvest: harvest ? harvest.totalHarvest : 0
+        };
+      });
+
+      setChartData(formattedProdData);
+      setRawExpenseStats({ ...resFin.data, salesStats: resProd.data.salesStats });
+      updatePieChart(resFin.data, "All");
+      setLoadingAnalytics(false);
+    } catch (err) {
+      console.error("Analytics fetch error:", err);
+      setLoadingAnalytics(false);
+    }
+  };
+
+  const updatePieChart = (data, monthLabel) => {
+    let wagesTotal = 0, transportTotal = 0, maintenanceTotal = 0;
+    if (monthLabel === "All") {
+      wagesTotal = data.wageStats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+      transportTotal = data.transportStats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+      maintenanceTotal = data.maintenanceStats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+    } else {
+      const monthNum = months.indexOf(monthLabel) + 1;
+      wagesTotal = data.wageStats.find(s => s._id === monthNum)?.total || 0;
+      transportTotal = data.transportStats.find(s => s._id === monthNum)?.total || 0;
+      maintenanceTotal = data.maintenanceStats.find(s => s._id === monthNum)?.total || 0;
+    }
+    setExpenseData([
+      { name: "Wages", value: wagesTotal },
+      { name: "Transport", value: transportTotal },
+      { name: "Maintenance", value: maintenanceTotal },
+    ]);
+  };
+
+  const handleMonthChange = (e) => {
+    const m = e.target.value;
+    setSelectedMonth(m);
+    if (rawExpenseStats) updatePieChart(rawExpenseStats, m);
+  };
+
+  // --- 📄 PDF Report Logic (Exactly like AdminDashboard) ---
+  const handleDownloadReport = () => {
+    const doc = new jsPDF();
+    const dateStr = new Date().toLocaleDateString();
+    const reportTitle = selectedMonth === "All" ? "Annual Financial Report - 2026" : `Monthly Financial Report - ${selectedMonth} 2026`;
+
+    doc.setFontSize(22);
+    doc.setTextColor(30, 41, 59);
+    doc.text("SENUMI HIMANADHI SALTERNS", 14, 20);
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${dateStr}`, 160, 28);
+    doc.line(14, 32, 196, 32);
+
+    doc.setFontSize(14);
+    doc.setTextColor(51, 65, 85);
+    doc.text(reportTitle, 14, 42);
+
+    let tableData = [];
+    let grandTotalRev = 0;
+    let grandTotalExp = 0;
+
+    const getDataForMonth = (mName) => {
+      const mIdx = months.indexOf(mName) + 1;
+      const dRow = chartData.find(d => d.name === mName) || { Harvest: 0, Sales: 0 };
+      const sData = rawExpenseStats?.salesStats?.find(s => s._id === mIdx) || { totalSales: 0 };
+      const w = rawExpenseStats.wageStats.find(s => s._id === mIdx)?.total || 0;
+      const t = rawExpenseStats.transportStats.find(s => s._id === mIdx)?.total || 0;
+      const m = rawExpenseStats.maintenanceStats.find(s => s._id === mIdx)?.total || 0;
+      const totalExp = w + t + m;
+      const rev = sData.totalSales;
+      return { harvest: dRow.Harvest, salesKg: dRow.Sales, rev, exp: totalExp, profit: rev - totalExp };
+    };
+
+    if (selectedMonth === "All") {
+      months.forEach(mName => {
+        const s = getDataForMonth(mName);
+        if (s.harvest > 0 || s.salesKg > 0 || s.exp > 0 || s.rev > 0) {
+          tableData.push([mName, s.harvest, s.salesKg, s.rev.toLocaleString(), s.exp.toLocaleString(), s.profit.toLocaleString()]);
+          grandTotalRev += s.rev; grandTotalExp += s.exp;
+        }
+      });
+    } else {
+      const s = getDataForMonth(selectedMonth);
+      tableData.push([selectedMonth, s.harvest, s.salesKg, s.rev.toLocaleString(), s.exp.toLocaleString(), s.profit.toLocaleString()]);
+      grandTotalRev = s.rev; grandTotalExp = s.exp;
+    }
+
+    doc.autoTable({
+      startY: 50,
+      head: [['Month', 'Harvest (kg)', 'Sales (kg)', 'Revenue (LKR)', 'Expenses (LKR)', 'Net Profit (LKR)']],
+      body: tableData,
+      theme: 'grid',
+      headStyles: { fillColor: [51, 65, 85], halign: 'center' },
+      columnStyles: { 3: { halign: 'right' }, 4: { halign: 'right' }, 5: { halign: 'right', fontStyle: 'bold' } }
+    });
+
+    const finalY = doc.lastAutoTable.finalY + 15;
+    doc.text(`Total Revenue: LKR ${grandTotalRev.toLocaleString()}`, 130, finalY);
+    doc.text(`Total Expenses: LKR ${grandTotalExp.toLocaleString()}`, 130, finalY + 10);
+    const netProfit = grandTotalRev - grandTotalExp;
+    doc.setTextColor(netProfit >= 0 ? [22, 101, 52] : [185, 28, 28]);
+    doc.text(`Net Profit: LKR ${netProfit.toLocaleString()}`, 130, finalY + 20);
+
+    doc.save(`${reportTitle}.pdf`);
   };
 
   const handleFormSubmit = async (e, type) => {
@@ -58,6 +198,7 @@ const ExpensesFinance = () => {
       }
       resetForms();
       fetchAllData();
+      fetchAnalytics(); // Update report after entry
     } catch (err) { 
       console.error("Submission error", err);
       alert("Action failed!"); 
@@ -70,6 +211,7 @@ const ExpensesFinance = () => {
       try {
         await axios.delete(`http://localhost:5000/api/finance/${endpoint}/${id}`);
         fetchAllData();
+        fetchAnalytics(); // Update report after delete
       } catch (err) {
         console.error("Delete error", err);
       }
@@ -79,7 +221,7 @@ const ExpensesFinance = () => {
   const resetForms = () => {
     setIsEditing(false);
     setCurrentId(null);
-    setSearchTerm(""); // Tab එක මාරු කරන විට search එක reset කිරීම
+    setSearchTerm("");
     setWageForm({ workerName: '', role: '', hoursWorked: '', wageRate: '', status: 'Pending' });
     setTransForm({ vehicle: '', route: '', fuelCost: '', maintenance: '' });
     setMaintForm({ equipment: '', issue: '', cost: '', statuse: 'Pending' });
@@ -222,11 +364,59 @@ const ExpensesFinance = () => {
           </div>
         )}
         
-        {/* PROFIT TAB */}
+        {/* PROFIT TAB (UPDATED) */}
         {activeTab === 'profit' && (
           <div className="tab-pane">
-            <h2>Profit & Lost Report</h2>
-            <div className="chart-box">Graph Displaying Area...</div>
+            <h2>Profit & Lost Real-time Analytics</h2>
+            
+            {loadingAnalytics ? (
+              <p>Loading reports...</p>
+            ) : (
+              <div className="finance-report-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div className="report-card" style={{ background: '#fff', padding: '20px', borderRadius: '8px' }}>
+                  <h4>Annual Expenses vs Revenue</h4>
+                  <div style={{ height: '300px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Line type="monotone" dataKey="Harvest" stroke="#3b82f6" name="Harvest (kg)" />
+                        <Line type="monotone" dataKey="Sales" stroke="#10b981" name="Sales (kg)" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="report-card" style={{ background: '#fff', padding: '20px', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h4>Expense Distribution</h4>
+                    <select value={selectedMonth} onChange={handleMonthChange} style={{ padding: '5px' }}>
+                      <option value="All">All Months</option>
+                      {months.map(m => <option key={m} value={m}>{m}</option>)}
+                    </select>
+                  </div>
+                  <div style={{ height: '250px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie data={expenseData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                          {expenseData.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <button 
+                    onClick={handleDownloadReport}
+                    style={{ width: '100%', padding: '10px', background: '#2d3e37', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}
+                  >
+                    📄 Download Financial Report
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

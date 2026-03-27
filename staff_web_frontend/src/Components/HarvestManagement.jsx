@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import './HarvestManagement.css';
 
 const HarvestManagement = () => {
@@ -10,7 +10,6 @@ const HarvestManagement = () => {
 
     const categories = ['Salt Harvest', 'Jipsum Harvest', 'Artimiya Harvest', 'Agriculture Salt Harvest'];
 
-    
     const fetchHarvests = async () => {
         try {
             const res = await axios.get('http://localhost:5000/api/harvest');
@@ -30,20 +29,17 @@ const HarvestManagement = () => {
 
     const handleAdd = async (cat) => {
         const data = inputs[cat];
-        if (!data?.type || !data?.quantity) return alert("fill the form.");
+        if (!data?.type || !data?.quantity) return alert("කරුණාකර සියලු විස්තර ඇතුළත් කරන්න.");
         
         try {
             const response = await axios.post('http://localhost:5000/api/harvest/add', {
                 category: cat,
                 type: data.type,
-                quantity: data.quantity
+                quantity: Number(data.quantity)
             });
-            
             
             setHarvestData(response.data);
             alert("Record Added Successfully!");
-            
-            
             setInputs({ ...inputs, [cat]: { type: '', quantity: '' } });
         } catch (err) {
             alert("Error adding record");
@@ -59,68 +55,109 @@ const HarvestManagement = () => {
     };
 
     return (
-        <div className="harvest-container">
-            <div className="sidebar">
-                <div className="sidebar-header">☰</div>
-                <button className={`nav-btn ${activeTab === 'management' ? 'active' : ''}`} onClick={() => setActiveTab('management')}>Management</button>
-                <button className={`nav-btn ${activeTab === 'tracking' ? 'active' : ''}`} onClick={() => setActiveTab('tracking')}>Harvest Tracking</button>
-                <button className={`nav-btn ${activeTab === 'prediction' ? 'active' : ''}`} onClick={() => setActiveTab('prediction')}>Harvest Prediction</button>
-            </div>
+        <div className="harvest-app-wrapper">
+            <aside className="harvest-sidebar">
+                <div className="sidebar-logo">SALTERN ERP</div>
+                <nav className="harvest-nav">
+                    <button className={activeTab === 'management' ? 'active' : ''} onClick={() => setActiveTab('management')}>📋 Management</button>
+                    <button className={activeTab === 'tracking' ? 'active' : ''} onClick={() => setActiveTab('tracking')}>📈 Harvest Tracking</button>
+                    <button className={activeTab === 'prediction' ? 'active' : ''} onClick={() => setActiveTab('prediction')}>🔮 Harvest Prediction</button>
+                </nav>
+            </aside>
 
-            <div className="main-content">
+            <div className="harvest-main">
                 {activeTab === 'management' && (
-                    <div className="section management-bg">
-                        <h3>Harvest Management</h3>
-                        {categories.map(cat => (
-                            <div key={cat} className="harvest-block">
-                                <p className="cat-title">{cat}</p>
-                                <table className="harvest-table">
-                                    <thead>
-                                        <tr><th>NO.</th><th>Date</th><th>Type</th><th>Quantity</th></tr>
-                                    </thead>
-                                    <tbody>
-                                       
-                                        {harvestData.find(h => h.category === cat)?.records.slice().reverse().map((r, i, arr) => (
-                                            <tr key={i}>
-                                                <td>{arr.length - i}</td>
-                                                <td>{new Date(r.date).toLocaleDateString()}</td>
-                                                <td>{r.type}</td>
-                                                <td>{r.quantity}</td>
-                                            </tr>
-                                        ))}
-                                        
-                                        <tr className="input-row">
-                                            <td>+</td>
-                                            <td>{new Date().toLocaleDateString()}</td>
-                                            <td><input type="text" value={inputs[cat]?.type || ''} placeholder="Type" onChange={e => handleInput(cat, 'type', e.target.value)} /></td>
-                                            <td><input type="number" value={inputs[cat]?.quantity || ''} placeholder="Qty" onChange={e => handleInput(cat, 'quantity', e.target.value)} /></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div className="btn-group">
-                                    <button className="action-btn" onClick={() => handleAdd(cat)}>Add</button>
-                                    <button className="action-btn" onClick={() => handleAdd(cat)}>Update</button>
+                    <div className="harvest-section management-view fade-in">
+                        <header className="section-header">
+                            <h2>Harvest Management</h2>
+                            <p>Daily production records & management</p>
+                        </header>
+
+                        <div className="harvest-blocks-container">
+                            {categories.map(cat => (
+                                <div key={cat} className="harvest-block-card">
+                                    <div className="block-header">
+                                        <p className="cat-title">{cat}</p>
+                                    </div>
+                                    <div className="table-container">
+                                        <table className="harvest-table-custom">
+                                            <thead>
+                                                <tr>
+                                                    <th width="10%">NO.</th>
+                                                    <th width="30%">Date</th>
+                                                    <th width="30%">Type</th>
+                                                    <th width="30%">Quantity (kg)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {harvestData.find(h => h.category === cat)?.records.slice().reverse().map((r, i, arr) => (
+                                                    <tr key={i}>
+                                                        <td>{arr.length - i}</td>
+                                                        <td>{new Date(r.date).toLocaleDateString()}</td>
+                                                        <td><span className="type-pill">{r.type}</span></td>
+                                                        <td className="qty-val">{r.quantity.toLocaleString()}</td>
+                                                    </tr>
+                                                ))}
+                                                
+                                                <tr className="input-row-highlight">
+                                                    <td className="add-icon">+</td>
+                                                    <td>{new Date().toLocaleDateString()}</td>
+                                                    <td>
+                                                        <input 
+                                                            type="text" 
+                                                            value={inputs[cat]?.type || ''} 
+                                                            placeholder="Enter Type" 
+                                                            onChange={e => handleInput(cat, 'type', e.target.value)} 
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input 
+                                                            type="number" 
+                                                            value={inputs[cat]?.quantity || ''} 
+                                                            placeholder="Qty" 
+                                                            onChange={e => handleInput(cat, 'quantity', e.target.value)} 
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className="btn-footer">
+                                        <button className="btn-save" onClick={() => handleAdd(cat)}>Add Record</button>
+                                        <button className="btn-update" onClick={() => handleAdd(cat)}>Update</button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 )}
 
                 {activeTab === 'tracking' && (
-                    <div className="section tracking-bg">
-                        <h3>Harvest Tracking</h3>
-                        <div className="chart-grid">
+                    <div className="harvest-section tracking-view fade-in">
+                        <header className="section-header">
+                            <h2>Production Analytics</h2>
+                            <p>Visual trends for each harvest category</p>
+                        </header>
+                        <div className="analytics-grid">
                             {categories.map(cat => (
-                                <div key={cat} className="chart-box">
-                                    <p>{cat}</p>
-                                    <ResponsiveContainer width="100%" height={180}>
-                                        <LineChart data={getChartData(cat)}>
-                                            <CartesianGrid strokeDasharray="3 3" />
+                                <div key={cat} className="chart-card-custom">
+                                    <div className="chart-header">
+                                        <h4>{cat} Analysis</h4>
+                                    </div>
+                                    <ResponsiveContainer width="100%" height={200}>
+                                        <AreaChart data={getChartData(cat)}>
+                                            <defs>
+                                                <linearGradient id={`color${cat}`} x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.2}/>
+                                                    <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
+                                                </linearGradient>
+                                            </defs>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                                             <XAxis dataKey="date" hide />
                                             <YAxis />
                                             <Tooltip />
-                                            <Line type="monotone" dataKey="qty" stroke="#0000ff" strokeWidth={2} dot={{ r: 4 }} />
-                                        </LineChart>
+                                            <Area type="monotone" dataKey="qty" stroke="#4f46e5" fillOpacity={1} fill={`url(#color${cat})`} strokeWidth={2} />
+                                        </AreaChart>
                                     </ResponsiveContainer>
                                 </div>
                             ))}

@@ -1,111 +1,218 @@
-.harvest-container {
-     display: flex; 
-     height: 100vh; 
-     font-family: sans-serif; 
-    }
-
-.sidebar {
-     width: 220px;
-     background: #d1d5db;
-     padding: 20px;
+:root {
+     --sidebar-bg: #1e293b;
+     --main-bg: #f1f5f9;
+     --accent: #4f46e5;
+     --text-dark: #334155;
+ }
+ 
+ .harvest-app-wrapper {
+     display: flex;
+     min-height: 100vh;
+     background: var(--main-bg);
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ }
+ 
+ /* Sidebar Styling */
+ .harvest-sidebar {
+     width: 250px;
+     background: var(--sidebar-bg);
+     color: white;
+     padding: 25px;
+     position: sticky;
+     top: 0;
+     height: 100vh;
+ }
+ 
+ .sidebar-logo {
+     font-size: 1.5rem;
+     font-weight: 800;
+     color: #818cf8;
+     margin-bottom: 40px;
+     letter-spacing: 1px;
+ }
+ 
+ .harvest-nav {
      display: flex;
      flex-direction: column;
-     gap: 10px;
-     border-right: 1px solid #999; 
-    }
-
-.sidebar-header {
-     font-size: 24px;
-      margin-bottom: 20px; 
-    }
-
-.nav-btn {
-      padding: 12px;
-      background: #9ca3af; 
-      border: none; 
-      font-weight: bold; 
-      cursor: pointer;
-      text-align: left;
-     }
-
-.nav-btn.active {
-     background: #6b7280;
+     gap: 12px;
+ }
+ 
+ .harvest-nav button {
+     background: transparent;
+     border: none;
+     color: #94a3b8;
+     padding: 12px 18px;
+     text-align: left;
+     border-radius: 8px;
+     cursor: pointer;
+     font-weight: 600;
+     transition: 0.3s;
+ }
+ 
+ .harvest-nav button.active {
+     background: #334155;
      color: white;
-     }
-
-.main-content {
+ }
+ 
+ /* Main Content Area */
+ .harvest-main {
      flex: 1;
-      overflow-y: auto; 
-    }
-
-.section { 
-    padding: 30px; 
-    min-height: 100%;
+     padding: 40px;
+     overflow-y: auto;
  }
-
-.management-bg {
-     background-color: #a3b1a2; 
-    } 
-
-.tracking-bg {
-     background-color: #cbd5e1; 
-    }
-
-.harvest-block {
+ 
+ .section-header {
+     margin-bottom: 35px;
+ }
+ 
+ .section-header h2 {
+     color: var(--text-dark);
+     font-size: 2rem;
+     margin: 0;
+ }
+ 
+ .section-header p {
+     color: #64748b;
+     margin: 5px 0 0 0;
+ }
+ 
+ /* Management Blocks */
+ .harvest-block-card {
+     background: white;
+     border-radius: 12px;
+     padding: 25px;
      margin-bottom: 30px;
-     }
-
-.cat-title { 
-    font-weight: bold; 
-    margin-bottom: 8px;
+     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
  }
-
-.harvest-table {
+ 
+ .cat-title {
+     font-weight: 700;
+     font-size: 1.2rem;
+     color: var(--text-dark);
+     margin-bottom: 15px;
+     border-left: 4px solid var(--accent);
+     padding-left: 12px;
+ }
+ 
+ /* Table Styling */
+ .table-container {
+     overflow-x: auto;
+ }
+ 
+ .harvest-table-custom {
      width: 100%;
-      max-width: 650px; 
-      border-collapse: collapse;
-       background: #bdc7c7; 
-    }
-
-.harvest-table th, .harvest-table td {
-     border: 1px solid #555;
-      padding: 8px; text-align: center;
-       font-size: 14px; 
-    }
-
-.input-row { 
-    background: #d1dadd; 
-}
-
-.input-row input {
+     border-collapse: collapse;
+     margin-top: 10px;
+ }
+ 
+ .harvest-table-custom th {
+     background: #f8fafc;
+     padding: 12px;
+     text-align: left;
+     font-size: 0.85rem;
+     color: #64748b;
+     border-bottom: 2px solid #e2e8f0;
+ }
+ 
+ .harvest-table-custom td {
+     padding: 12px;
+     border-bottom: 1px solid #f1f5f9;
+     font-size: 0.95rem;
+     color: var(--text-dark);
+ }
+ 
+ .type-pill {
+     background: #eef2ff;
+     color: #4338ca;
+     padding: 4px 10px;
+     border-radius: 6px;
+     font-size: 0.8rem;
+     font-weight: 600;
+ }
+ 
+ .qty-val {
+     font-weight: 700;
+ }
+ 
+ /* Input Row Styles */
+ .input-row-highlight {
+     background: #fdfdfd;
+ }
+ 
+ .input-row-highlight td {
+     padding-top: 20px;
+ }
+ 
+ .input-row-highlight input {
      width: 90%;
-      background: transparent; 
-      border: 1px solid #888;
-       padding: 4px;
-     }
-
-.btn-group {
+     padding: 8px 12px;
+     border: 1px solid #cbd5e1;
+     border-radius: 6px;
+     outline: none;
+ }
+ 
+ .input-row-highlight input:focus {
+     border-color: var(--accent);
+ }
+ 
+ .add-icon {
+     font-size: 1.5rem;
+     color: var(--accent);
+     font-weight: bold;
+     text-align: center;
+ }
+ 
+ /* Buttons */
+ .btn-footer {
      display: flex;
-      gap: 5px;
-       margin-top: 8px;
-     }
-
-.action-btn { 
-    padding: 4px 15px; 
-    background: #d1d5db;
-     border: 1px solid #777;
-      cursor: pointer; font-size: 12px;
-     }
-
-.chart-grid {
-     display: grid; 
-     grid-template-columns: 1fr 1fr; 
-     gap: 20px; 
-    }
-
-.chart-box { 
-    background: white;
-    padding: 15px;
-    border-radius: 5px; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-    }
+     gap: 10px;
+     margin-top: 20px;
+ }
+ 
+ .btn-save {
+     background: var(--accent);
+     color: white;
+     border: none;
+     padding: 8px 20px;
+     border-radius: 6px;
+     cursor: pointer;
+     font-weight: 600;
+ }
+ 
+ .btn-update {
+     background: white;
+     color: var(--accent);
+     border: 1px solid var(--accent);
+     padding: 8px 20px;
+     border-radius: 6px;
+     cursor: pointer;
+     font-weight: 600;
+ }
+ 
+ /* Tracking/Analytics Styles */
+ .analytics-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+     gap: 25px;
+ }
+ 
+ .chart-card-custom {
+     background: white;
+     padding: 20px;
+     border-radius: 12px;
+     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .chart-header h4 {
+     margin: 0 0 15px 0;
+     color: var(--text-dark);
+ }
+ 
+ .fade-in {
+     animation: fadeIn 0.4s ease-in;
+ }
+ 
+ @keyframes fadeIn {
+     from { opacity: 0; transform: translateY(5px); }
+     to { opacity: 1; transform: translateY(0); }
+ }
