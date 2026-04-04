@@ -46,50 +46,62 @@ function Events() {
   const displayedEvents = showAll ? events : events.slice(0, 3);
 
   return (
-    <section className="events" id="events">
+    <section className="creative-events-section" id="events">
       <div className="events-container">
-        <h2 className="section-title">Events & Activities</h2>
-        <p className="section-subtitle">Discover our upcoming events and community activities</p>
+        <header className="events-header">
+          <h2 className="section-title">Events & Activities</h2>
+          <div className="title-bar"></div>
+          <p className="section-subtitle">Experience the culture and community at our salterns</p>
+        </header>
 
         <div className="event-grid">
-          {displayedEvents.map((event) => (
-            <div key={event._id} className="event-card">
-              <div className="event-image-wrapper">
-                <img
-                  src={`http://localhost:5000${event.imageUrl}`}
-                  alt={event.title}
-                  className="event-img"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://via.placeholder.com/280x180?text=Event+Image";
-                  }}
-                />
-              </div>
-              <div className="event-content">
-                <h3>{event.title}</h3>
-                <p className="event-description">{event.description}</p>
-                <div className="event-footer">
-                  <span className="event-date">
-                    📅 {new Date(event.date).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'short', 
-                      day: 'numeric' 
-                    })}
-                  </span>
+          {displayedEvents.map((event) => {
+            const eventDate = new Date(event.date);
+            const day = eventDate.getDate();
+            const month = eventDate.toLocaleString('default', { month: 'short' });
+
+            return (
+              <div key={event._id} className="modern-event-card">
+                <div className="event-image-wrapper">
+                  {/* Modern Date Badge Overlay */}
+                  <div className="date-badge">
+                    <span className="day">{day}</span>
+                    <span className="month">{month}</span>
+                  </div>
+                  
+                  <img
+                    src={`http://localhost:5000${event.imageUrl}`}
+                    alt={event.title}
+                    className="event-img"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://via.placeholder.com/600x400?text=Event+Coming+Soon";
+                    }}
+                  />
+                  <div className="img-overlay"></div>
+                </div>
+
+                <div className="event-content">
+                  <h3 className="event-title">{event.title}</h3>
+                  <p className="event-description">{event.description}</p>
+                  
+                  
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {events.length > 3 && (
           <div className="btn-wrapper">
             <button
-              className="modern-view-btn" 
+              className="premium-view-btn" 
               onClick={() => setShowAll(!showAll)}
             >
-              <span>{showAll ? "Show Less" : "Explore Events"}</span>
-              <i className="btn-icon">{showAll ? "▲" : "➔"}</i>
+              <span className="btn-text">{showAll ? "Show Less" : "Explore All Events"}</span>
+              <span className="btn-icon-circle">
+                {showAll ? "↑" : "→"}
+              </span>
             </button>
           </div>
         )}

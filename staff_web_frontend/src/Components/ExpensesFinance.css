@@ -80,28 +80,56 @@
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  font-size: large;
+  height: 40px;
 }
 
-/* Search Bar */
+.add-btn:hover {
+  background: #2d3e37;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Search Container - මෙහිදී width එක 100% කර justify-content භාවිතා කර දකුණට කරන ලදී */
 .search-container {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 15px;
+  justify-content: flex-end; /* දකුණු පසට පෙළගස්වයි */
+  width: 100%; 
+  margin-bottom: 20px;
+  padding-right: 5px; /* දකුණු කෙළවරටම ඇලීම වැලැක්වීමට */
 }
 
+
 .search-bar {
-  padding: 10px 15px;
-  width: 300px;
-  border-radius: 20px;
-  border: 1px solid #999;
-  background: #d1d9d5;
+  padding: 10px 20px;
+  width: 320px;
+  border-radius: 12px; /* මදක් වටකුරු පෙනුමක් */
+  border: 8px solid #1e2b26; 
+  background-color: #f0fdf4; 
+  color: #1a1a1a; 
+  font-size: 15px;
+  font-weight: 500;
   outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Search Bar එක Click කළ විට (Focus) වෙනස් වන ආකාරය */
+.search-bar:focus {
+  border-color: #2e643c; 
+  background-color: #ffffff; /* සම්පූර්ණ සුදු පැහැයට හැරේ */
+  width: 380px; /* පළල මදක් වැඩි වේ */
+  box-shadow: 0 6px 15px rgba(46, 100, 60, 0.2);
+}
+/* Placeholder වර්ණය වෙනස් කිරීම */
+.search-bar::placeholder {
+  color: #888;
+  font-style: italic;
 }
 
 /* Tables */
 .table-container {
   background: white;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }

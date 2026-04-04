@@ -13,14 +13,7 @@ exports.getAllTanks = async (req, res) => {
 // 2. Create a new Tank
 exports.createTank = async (req, res) => {
     try {
-        const newTank = new Tank({
-            type: req.body.type,
-            capacity: req.body.capacity,
-            totalPonds: req.body.totalPonds,
-            location: req.body.location,
-            salinityRecords: [],
-            weatherRecords: []
-        });
+        const newTank = new Tank(req.body);
         const savedTank = await newTank.save();
         res.status(201).json(savedTank);
     } catch (err) {
@@ -28,120 +21,80 @@ exports.createTank = async (req, res) => {
     }
 };
 
-// 3. Add or Update Salinity Record (FOR TODAY ONLY)
+// 3. Add or Update Salinity Record with Status Logic
 exports.addSalinity = async (req, res) => {
     try {
         const { level, process } = req.body;
         const tankId = req.params.id;
 
-        // අද දවසේ ආරම්භය සහ අවසානය සකස් කිරීම
+        // Auto Status Logic based on Baumé scale (Be')
+        let status = 'Stable';
+        if (level >= 24) status = 'Ready to Move';
+        if (level > 28) status = 'High';
+
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
-
         const endOfToday = new Date();
         endOfToday.setHours(23, 59, 59, 999);
 
-        // අද දිනයට අදාළ record එකක් තිබේදැයි බැලීම
-        const tank = await Tank.findOne({
-            _id: tankId,
-            "salinityRecords.date": { $gte: startOfToday, $lte: endOfToday }
-        });
+        const tank = await Tank.findById(tankId);
+        if (!tank) return res.status(404).json({ message: "Tank not found" });
 
-        let updatedTank;
+        const todayRecordIndex = tank.salinityRecords.findIndex(r => r.date >= startOfToday && r.date <= endOfToday);
 
-        if (tank) {
-            // අද දවසේ record එකක් තිබේ නම්, එය UPDATE කිරීම
-            updatedTank = await Tank.findOneAndUpdate(
-                { 
-                    _id: tankId, 
-                    "salinityRecords.date": { $gte: startOfToday, $lte: endOfToday } 
-                },
-                { 
-                    $set: { 
-                        "salinityRecords.$.level": level, 
-                        "salinityRecords.$.process": process 
-                    } 
-                },
-                { new: true }
-            );
+        if (todayRecordIndex > -1) {
+            tank.salinityRecords[todayRecordIndex].level = level;
+            tank.salinityRecords[todayRecordIndex].process = process;
+            tank.salinityRecords[todayRecordIndex].status = status;
         } else {
-            // අද දවසේ record එකක් නැත්නම්, අලුතින් ඇතුළත් (PUSH) කිරීම
-            updatedTank = await Tank.findByIdAndUpdate(
-                tankId,
-                { 
-                    $push: { 
-                        salinityRecords: { 
-                            date: new Date(), // Automatic Current Date
-                            level, 
-                            process 
-                        } 
-                    } 
-                },
-                { new: true }
-            );
+            tank.salinityRecords.push({ level, process, status });
         }
 
-        res.status(200).json(updatedTank);
+        tank.currentSalinity = level;
+        await tank.save();
+        res.status(200).json(tank);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 };
 
-// 4. Update existing salinity record (සාමාන්‍ය update එකක් අවශ්‍ය නම් පමණක්)
-exports.updateSalinity = async (req, res) => {
+// 4. Add Maintenance Log
+exports.addMaintenance = async (req, res) => {
     try {
-        const { tankId, recordId } = req.params;
-        const { level, process } = req.body;
-
-        const updatedTank = await Tank.findOneAndUpdate(
-            { _id: tankId, "salinityRecords._id": recordId },
-            { 
-                $set: { 
-                    "salinityRecords.$.level": level, 
-                    "salinityRecords.$.process": process 
-                } 
-            },
+        const { task, performedBy, description } = req.body;
+        const tank = await Tank.findByIdAndUpdate(
+            req.params.id,
+            { $push: { maintenanceLogs: { task, performedBy, description } } },
             { new: true }
         );
-        res.status(200).json(updatedTank);
+        res.status(200).json(tank);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 };
 
-// Add or Update Weather for TODAY only
+// 5. Add or Update Weather
 exports.addOrUpdateWeather = async (req, res) => {
     try {
-        const { status } = req.body; // Weather status (Rainy, Sunny, etc.)
-        const tankId = req.params.id;
-
+        const { status } = req.body;
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
         const endOfToday = new Date();
         endOfToday.setHours(23, 59, 59, 999);
 
-        const tank = await Tank.findOne({
-            _id: tankId,
-            "weatherRecords.date": { $gte: startOfToday, $lte: endOfToday }
-        });
+        const tank = await Tank.findOne({ _id: req.params.id, "weatherRecords.date": { $gte: startOfToday, $lte: endOfToday } });
 
-        let updatedTank;
+        let updated;
         if (tank) {
-            // අද දිනට තිබේ නම් Update කරන්න
-            updatedTank = await Tank.findOneAndUpdate(
-                { _id: tankId, "weatherRecords.date": { $gte: startOfToday, $lte: endOfToday } },
+            updated = await Tank.findOneAndUpdate(
+                { _id: req.params.id, "weatherRecords.date": { $gte: startOfToday, $lte: endOfToday } },
                 { $set: { "weatherRecords.$.status": status } },
                 { new: true }
             );
         } else {
-            // නැතිනම් අලුතින් ඇතුළත් කරන්න
-            updatedTank = await Tank.findByIdAndUpdate(
-                tankId,
-                { $push: { weatherRecords: { date: new Date(), status } } },
-                { new: true }
-            );
+            updated = await Tank.findByIdAndUpdate(req.params.id, { $push: { weatherRecords: { date: new Date(), status } } }, { new: true });
         }
-        res.status(200).json(updatedTank);
+        res.status(200).json(updated);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

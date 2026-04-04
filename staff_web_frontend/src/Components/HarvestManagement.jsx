@@ -10,6 +10,7 @@ const HarvestManagement = () => {
 
     const categories = ['Salt Harvest', 'Jipsum Harvest', 'Artimiya Harvest', 'Agriculture Salt Harvest'];
 
+    // දත්ත ලබා ගැනීම
     const fetchHarvests = async () => {
         try {
             const res = await axios.get('http://localhost:5000/api/harvest');
@@ -23,10 +24,15 @@ const HarvestManagement = () => {
         fetchHarvests();
     }, []);
 
+    // Input handle කිරීම
     const handleInput = (cat, field, val) => {
-        setInputs({ ...inputs, [cat]: { ...inputs[cat], [field]: val } });
+        setInputs({ 
+            ...inputs, 
+            [cat]: { ...inputs[cat], [field]: val } 
+        });
     };
 
+    // දත්ත ඇතුළත් කිරීම
     const handleAdd = async (cat) => {
         const data = inputs[cat];
         if (!data?.type || !data?.quantity) return alert("කරුණාකර සියලු විස්තර ඇතුළත් කරන්න.");
@@ -38,11 +44,18 @@ const HarvestManagement = () => {
                 quantity: Number(data.quantity)
             });
             
+            // Backend එකෙන් ලැබෙන අලුත් data list එක update කිරීම
             setHarvestData(response.data);
             alert("Record Added Successfully!");
-            setInputs({ ...inputs, [cat]: { type: '', quantity: '' } });
+            
+            // Input fields clear කිරීම
+            setInputs({ 
+                ...inputs, 
+                [cat]: { type: '', quantity: '' } 
+            });
         } catch (err) {
             alert("Error adding record");
+            console.error(err);
         }
     };
 
@@ -74,60 +87,67 @@ const HarvestManagement = () => {
                         </header>
 
                         <div className="harvest-blocks-container">
-                            {categories.map(cat => (
-                                <div key={cat} className="harvest-block-card">
-                                    <div className="block-header">
-                                        <p className="cat-title">{cat}</p>
-                                    </div>
-                                    <div className="table-container">
-                                        <table className="harvest-table-custom">
-                                            <thead>
-                                                <tr>
-                                                    <th width="10%">NO.</th>
-                                                    <th width="30%">Date</th>
-                                                    <th width="30%">Type</th>
-                                                    <th width="30%">Quantity (kg)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {harvestData.find(h => h.category === cat)?.records.slice().reverse().map((r, i, arr) => (
-                                                    <tr key={i}>
-                                                        <td>{arr.length - i}</td>
-                                                        <td>{new Date(r.date).toLocaleDateString()}</td>
-                                                        <td><span className="type-pill">{r.type}</span></td>
-                                                        <td className="qty-val">{r.quantity.toLocaleString()}</td>
+                            {categories.map(cat => {
+                                const categoryObj = harvestData.find(h => h.category === cat);
+                                const records = categoryObj ? [...categoryObj.records].reverse() : [];
+
+                                return (
+                                    <div key={cat} className="harvest-block-card">
+                                        <div className="block-header">
+                                            <p className="cat-title">{cat}</p>
+                                        </div>
+                                        <div className="table-container">
+                                            <table className="harvest-table-custom">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="10%">NO.</th>
+                                                        <th width="30%">Date</th>
+                                                        <th width="30%">Type</th>
+                                                        <th width="30%">Quantity (kg)</th>
                                                     </tr>
-                                                ))}
-                                                
-                                                <tr className="input-row-highlight">
-                                                    <td className="add-icon">+</td>
-                                                    <td>{new Date().toLocaleDateString()}</td>
-                                                    <td>
-                                                        <input 
-                                                            type="text" 
-                                                            value={inputs[cat]?.type || ''} 
-                                                            placeholder="Enter Type" 
-                                                            onChange={e => handleInput(cat, 'type', e.target.value)} 
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <input 
-                                                            type="number" 
-                                                            value={inputs[cat]?.quantity || ''} 
-                                                            placeholder="Qty" 
-                                                            onChange={e => handleInput(cat, 'quantity', e.target.value)} 
-                                                        />
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {records.map((r, i) => (
+                                                        <tr key={r._id || i}>
+                                                            <td>{records.length - i}</td>
+                                                            <td>{new Date(r.date).toLocaleDateString()}</td>
+                                                            <td><span className="type-pill">{r.type}</span></td>
+                                                            <td className="qty-val">{r.quantity.toLocaleString()}</td>
+                                                        </tr>
+                                                    ))}
+                                                    
+                                                    <tr className="input-row-highlight">
+                                                        <td className="add-icon">+</td>
+                                                        <td style={{color: '#94a3b8', fontSize: '0.85rem'}}>
+                                                            {new Date().toLocaleDateString()} (Today)
+                                                        </td>
+                                                        <td>
+                                                            <input 
+                                                                type="text" 
+                                                                value={inputs[cat]?.type || ''} 
+                                                                placeholder="Enter Type" 
+                                                                onChange={e => handleInput(cat, 'type', e.target.value)} 
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <input 
+                                                                type="number" 
+                                                                value={inputs[cat]?.quantity || ''} 
+                                                                placeholder="Qty" 
+                                                                onChange={e => handleInput(cat, 'quantity', e.target.value)} 
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div className="btn-footer">
+                                            <button className="btn-save" onClick={() => handleAdd(cat)}>Add Record</button>
+                                            <button className="btn-update" onClick={() => handleAdd(cat)}>Update List</button>
+                                        </div>
                                     </div>
-                                    <div className="btn-footer">
-                                        <button className="btn-save" onClick={() => handleAdd(cat)}>Add Record</button>
-                                        <button className="btn-update" onClick={() => handleAdd(cat)}>Update</button>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
                 )}
@@ -147,7 +167,7 @@ const HarvestManagement = () => {
                                     <ResponsiveContainer width="100%" height={200}>
                                         <AreaChart data={getChartData(cat)}>
                                             <defs>
-                                                <linearGradient id={`color${cat}`} x1="0" y1="0" x2="0" y2="1">
+                                                <linearGradient id={`color${cat.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
                                                     <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.2}/>
                                                     <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
                                                 </linearGradient>
@@ -156,7 +176,14 @@ const HarvestManagement = () => {
                                             <XAxis dataKey="date" hide />
                                             <YAxis />
                                             <Tooltip />
-                                            <Area type="monotone" dataKey="qty" stroke="#4f46e5" fillOpacity={1} fill={`url(#color${cat})`} strokeWidth={2} />
+                                            <Area 
+                                                type="monotone" 
+                                                dataKey="qty" 
+                                                stroke="#4f46e5" 
+                                                fillOpacity={1} 
+                                                fill={`url(#color${cat.replace(/\s+/g, '')})`} 
+                                                strokeWidth={2} 
+                                            />
                                         </AreaChart>
                                     </ResponsiveContainer>
                                 </div>
