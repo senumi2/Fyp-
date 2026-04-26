@@ -128,3 +128,15 @@ exports.markAsDelivered = async (req, res) => {
     res.status(500).json({ message: "Update failed", error: err.message });
   }
 };
+
+
+exports.getAllOrdersForAdmin = async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate("userId", "name email") // Customer ගේ නම සහ Email එක ගමු
+      .sort({ date: -1 }); // අලුත්ම ගනුදෙනු උඩට එන ලෙස
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching payment history" });
+  }
+};

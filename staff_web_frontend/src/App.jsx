@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./Components/Navbar";
 import Hero from "./Components/Hero";
@@ -15,6 +15,7 @@ import Profile from "./Pages/Profile";
 import StaffLogin from "./Components/StaffLogin";
 import AdminDashboard from "./Components/AdminDashboard";
 import DriverDashboard from "./Pages/DriverDashboard";
+import ManageOrders from "./Pages/ManageOrders";
 
 import EqupmentUsage from "./Components/EqupmentUsage";
 import InventoryManagement from "./Components/InventoryManagement";
@@ -29,6 +30,27 @@ import Maintenance from "./Pages/Maintenance";
 import "./App.css";
 
 function App() {
+
+  const location = useLocation();
+
+  // Footer එක පෙන්වන්න අවශ්‍ය නැති පිටුවල Paths මෙහි ඇතුළත් කරන්න
+  const excludeFooterPaths = [
+    "/login", 
+    "/register", 
+    "/adminDashboard", 
+    "/driverDashboard",
+    "/equpmentUsage",
+    "/inventoryManagement",
+    "/pondsManagement",
+    "/harvestManagement",
+    "/expensesFinance",
+    "/admin/directors"
+  ];
+
+  // දැනට තිබෙන path එක exclude list එකේ නැතිනම් පමණක් Footer එක පෙන්වන්න
+  const shouldShowFooter = !excludeFooterPaths.includes(location.pathname);
+
+
   return (
     <>
       <Navbar />
@@ -41,7 +63,6 @@ function App() {
             <>
               <Hero />
               <About />
-              <StaffLogin />
               <Events />
               <Reports />
               <Directors />
@@ -74,13 +95,14 @@ function App() {
         <Route path="/pondsManagement" element={<PondsManagement />} />
         <Route path="/harvestManagement" element={<HarvestManagement />} />
         <Route path="/expensesFinance" element={<ExpensesFinance />} />
+        <Route path="/manageOrders" element={<ManageOrders />} />
 
         {/* --- 🚀 Driver Dashboard Route --- */}
         <Route path="/driverDashboard" element={<DriverDashboard />} />
         
       </Routes>
 
-      <Footer />
+      {shouldShowFooter && <Footer />}
     </>
   );
 }

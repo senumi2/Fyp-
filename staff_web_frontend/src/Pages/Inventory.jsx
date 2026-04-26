@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { Toaster, toast } from 'react-hot-toast';
 import "./Inventory.css";
 
 const Inventory = () => { 
@@ -10,17 +11,16 @@ const Inventory = () => {
     const [selectedId, setSelectedId] = useState(null);
     const [formData, setFormData] = useState({ items: '', quantity: '' });
 
-    // Fetch function eka separate kara
     const fetchInventory = useCallback(async () => {
         try {
             const res = await axios.get(`http://localhost:5000/api/inventory?search=${search}`);
             setItems(res.data);
         } catch (err) {
             console.error("Fetch Error:", err);
+            toast.error("Failed to load inventory");
         }
     }, [search]);
 
-    // Search trigger wenna
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             fetchInventory();
@@ -33,13 +33,15 @@ const Inventory = () => {
         try {
             if (isEdit) {
                 await axios.put(`http://localhost:5000/api/inventory/${selectedId}`, formData);
+                toast.success("Item updated successfully!");
             } else {
                 await axios.post("http://localhost:5000/api/inventory", formData);
+                toast.success("Item added successfully!");
             }
             fetchInventory();
             closeModal();
         } catch (err) {
-            alert("Error saving data");
+            toast.error("Error saving data");
         }
     };
 
@@ -56,79 +58,117 @@ const Inventory = () => {
         setFormData({ items: '', quantity: '' });
     };
 
+    const handleDelete = async (id) => {
+        if (window.confirm("Are you sure you want to delete this item?")) {
+            try {
+                await axios.delete(`http://localhost:5000/api/inventory/${id}`);
+                toast.success("Item deleted");
+                fetchInventory();
+            } catch (err) {
+                toast.error("Delete failed");
+            }
+        }
+    };
+
     return (
-        <div className="page-container">
-            <div className="header-row">
-                <h2>Manage Equipments</h2>
-                <div className="search-container">
-                    <span>🔍</span>
-                    <input 
-                        type="text" 
-                        placeholder="Search items..." 
-                        value={search}
-                        /* Mehi onChange eka check karanna */
-                        onChange={(e) => setSearch(e.target.value)}
-                        autoFocus
-                    />
+        <div className="inventory-page-wrapper">
+            <Toaster position="top-right" />
+            <div className="inventory-container">
+                <header className="inventory-header">
+                    <div className="title-section">
+                        <h2>Equipment Inventory</h2>
+                        <p>Track and manage your equipment assets</p>
+                    </div>
+                    <div className="header-actions">
+                        <div className="professional-search">
+                            <span className="search-icon">🔍</span>
+                            <input 
+                                type="text" 
+                                placeholder="Search inventory..." 
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
+                        <button className="main-add-btn" onClick={() => setIsModalOpen(true)}>
+                            <span className="plus-icon">+</span> Add New Item
+                        </button>
+                    </div>
+                </header>
+
+                <div className="table-card">
+                    <table className="modern-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Date Added</th>
+                                <th>Item Description</th>
+                                <th>Quantity</th>
+                                <th className="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {items.length > 0 ? (
+                                items.map((item, index) => (
+                                    <tr key={item._id}>
+                                        <td><span className="index-badge">{index + 1}</span></td>
+                                        <td>{new Date(item.createdAt).toLocaleDateString()}</td>
+                                        <td className="item-name-cell">{item.items}</td>
+                                        <td>
+                                            <span className={`qty-tag ${item.quantity < 5 ? 'low' : ''}`}>
+                                                {item.quantity} units
+                                            </span>
+                                        </td>
+                                        <td className="action-cell">
+                                            <button className="btn-icon edit" onClick={() => openEditModal(item)} title="Edit">
+                                                Edit
+                                            </button>
+                                            <button className="btn-icon delete" onClick={() => handleDelete(item._id)} title="Delete">
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="5" className="empty-state">No equipment found matching your search.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-
-            <table className="table-section">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Date</th>
-                        <th>Items</th>
-                        <th>Quantity</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {items.map((item, index) => (
-                        <tr key={item._id}>
-                            <td>{index + 1}</td>
-                            <td>{new Date(item.createdAt).toLocaleDateString()}</td>
-                            <td>{item.items}</td>
-                            <td>{item.quantity}</td>
-                            <td>
-                                <button className="edit-btn" onClick={() => openEditModal(item)}>Edit</button>
-                                <button className="delete-btn" onClick={() => {
-                                    if(window.confirm("Delete?")) {
-                                        axios.delete(`http://localhost:5000/api/inventory/${item._id}`).then(() => fetchInventory());
-                                    }
-                                }}>Delete</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <div className="button-group">
-                <button className="action-btn add-btn" onClick={() => setIsModalOpen(true)}>Add New</button>
             </div>
 
             {isModalOpen && (
                 <div className="modal-overlay">
-                    <div className="modal-box">
-                        <h3>{isEdit ? "Update" : "Add New"}</h3>
+                    <div className="modal-box animated-slide-in">
+                        <div className="modal-header">
+                            <h3>{isEdit ? "Update Equipment" : "Add New Equipment"}</h3>
+                            <button className="close-x" onClick={closeModal}>&times;</button>
+                        </div>
                         <form onSubmit={handleSubmit}>
-                            <input 
-                                type="text" 
-                                placeholder="Item Name" 
-                                value={formData.items}
-                                onChange={(e) => setFormData({...formData, items: e.target.value})}
-                                required
-                            />
-                            <input 
-                                type="number" 
-                                placeholder="Quantity" 
-                                value={formData.quantity}
-                                onChange={(e) => setFormData({...formData, quantity: e.target.value})}
-                                required
-                            />
-                            <div className="modal-buttons">
-                                <button type="submit" className="save-btn">Save</button>
-                                <button type="button" className="cancel-btn" onClick={closeModal}>Cancel</button>
+                            <div className="form-group">
+                                <label>Equipment Name</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="Ex: Salt Grinder, Shovel" 
+                                    value={formData.items}
+                                    onChange={(e) => setFormData({...formData, items: e.target.value})}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Quantity Available</label>
+                                <input 
+                                    type="number" 
+                                    placeholder="Enter amount" 
+                                    value={formData.quantity}
+                                    onChange={(e) => setFormData({...formData, quantity: e.target.value})}
+                                    required
+                                />
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="secondary-btn" onClick={closeModal}>Cancel</button>
+                                <button type="submit" className="primary-btn">{isEdit ? "Save Changes" : "Confirm Add"}</button>
                             </div>
                         </form>
                     </div>

@@ -14,4 +14,6 @@ router.delete("/:id", authMiddleware, orderController.deleteOrder);
 router.put("/update-tracking/:id", authMiddleware, orderController.updateOrderTracking);
 router.put("/mark-delivered/:id", authMiddleware, orderController.markAsDelivered);
 
+router.get("/all-payments", authMiddleware, orderController.getAllOrdersForAdmin);
+
 module.exports = router;

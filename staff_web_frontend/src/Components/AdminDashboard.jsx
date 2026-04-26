@@ -20,6 +20,7 @@ import AdminDirectors from './AdminDirectors';
 import AdminReports from '../Pages/AdminReports';
 import AdminEvents from './AdminEvents';
 import AdminStaffRegisterAccess from '../Pages/AdminStaffRegisterAccess';
+import OrderManager from '../Pages/ManageOrders';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('ProductionVsSales');
@@ -32,7 +33,7 @@ const AdminDashboard = () => {
             case 'AdminHarvestManagement': return <AdminHarvestManagement />;
             case 'AdminEqupmentUsage': return <AdminEqupmentUsage />;
             case 'AdminExpensesFinance': return <AdminExpensesFinance />;
-            case 'ManageOrders': return <AdminOrderManager />;
+            case 'ManageOrders': return <OrderManager />;
             case 'AdminPaymentHistory': return <AdminPaymentHistory />;
             case 'AdminProducts': return <AdminProducts />;
             case 'AdminDirectors': return <AdminDirectors />;
@@ -315,9 +316,6 @@ const ProductionVsSalesView = () => {
     );
 };
 
-// Placeholder for Order Manager
-const AdminOrderManager = () => {
-    return (<div className="admin-view-content"><h3>Order Manager Content</h3><p>Order processing logic goes here.</p></div>); 
-};
+
 
 export default AdminDashboard;

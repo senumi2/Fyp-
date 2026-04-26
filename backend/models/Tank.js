@@ -15,6 +15,8 @@ const TankSchema = new mongoose.Schema({
     maintenanceLogs: [{
         date: { type: Date, default: Date.now },
         task: String, // Desilting, Bund Repair
+        startDate: String, 
+        endDate: String,
         performedBy: String,
         description: String
     }],

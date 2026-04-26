@@ -24,7 +24,7 @@ const Register = () => {
       const res = await axios.post('http://localhost:5000/api/auth/register', formData);
       
       // ✅ Register සාර්ථක නම් Alert එක පෙන්වන්න
-      alert("Registration Successful!");
+      alert("Registration submitted! Please wait for Admin approval before logging in.ion Successful!");
 
       // ✅ Auto-login: Backend එකෙන් එවන Token එක localStorage එකට දාන්න
       if (res.data.token) {
@@ -81,7 +81,7 @@ const Register = () => {
           <div className="password-wrapper">
           <input 
               type={showPassword ? "text" : "password"} 
-              name="onfirmPassword" 
+              name="confirmPassword" 
               placeholder="Confirm Password" 
               onChange={handleChange} 
               required 

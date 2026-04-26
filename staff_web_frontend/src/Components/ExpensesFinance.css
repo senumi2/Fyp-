@@ -98,19 +98,36 @@
   padding-right: 5px; /* දකුණු කෙළවරටම ඇලීම වැලැක්වීමට */
 }
 
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
 
 .search-bar {
-  padding: 10px 20px;
-  width: 320px;
+  padding: 10px 20px 10px 45px;
+  width: 400px;
   border-radius: 12px; /* මදක් වටකුරු පෙනුමක් */
-  border: 8px solid #1e2b26; 
-  background-color: #f0fdf4; 
+  border: 4px solid #1e2b26; 
+  background-color: #cef9db; 
   color: #1a1a1a; 
   font-size: 15px;
   font-weight: 500;
   outline: none;
   transition: all 0.3s ease;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon-svg {
+  position: absolute;
+  left: 15px; /* වම් පැත්තේ සිට දුර */
+  top: 50%; /* උසින් හරියටම මැදට */
+  transform: translateY(-50%); /* අයිකනය හරියටම center කිරීමට මෙය අත්‍යවශ්‍යයි */
+  pointer-events: none; /* අයිකනය මත ක්ලික් කිරීමෙන් බාධාවක් නොවීමට */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8; /* අයිකනය වැඩිපුර තදින් පෙනේ නම් මෙය 1 දක්වා වැඩි කරන්න */
 }
 
 /* Search Bar එක Click කළ විට (Focus) වෙනස් වන ආකාරය */

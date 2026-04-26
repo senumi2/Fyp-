@@ -22,7 +22,11 @@ const userSchema = new mongoose.Schema(
     jobRole: { 
       type: String, 
       required: true,
-      enum: ['Admin', 'Ponds Management', 'Inventory Management', 'Harvest Management', 'Equipment Usage', 'Expenses & Finance']
+      enum: ['Admin', 'Ponds Management', 'Inventory Management', 'Harvest Management', 'Equipment Usage', 'Expenses & Finance','Driver']
+    },
+    isApproved: {
+      type: Boolean,
+      default: false // මුලින්ම register වෙද්දී false වේ
     },
 
     //  profile image path

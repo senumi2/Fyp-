@@ -13,23 +13,20 @@ const Login = () => {
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       
-      // 1. Token එක සහ Role එක localStorage එකේ Save කිරීම
+      // 1. Token එක Save කිරීම
       localStorage.setItem('token', res.data.token);
-      localStorage.setItem('role', res.data.user.role); 
+
+      // 2. ගැටලුව විසඳීම: Backend එකෙන් එන්නේ jobRole මිස role නොවේ.
+      // එය lowercase කර සේව් කිරීම StaffLogin සමඟ ගැලපීමට අත්‍යවශ්‍යයි.
+      if (res.data.user && res.data.user.jobRole) {
+        const role = res.data.user.jobRole.toLowerCase();
+        localStorage.setItem('role', role); 
+      }
 
       alert("Login Successful! Welcome " + (res.data.user.fullName || ""));
 
-      // 2. Role එක අනුව අදාළ Dashboard එකට යොමු කිරීම (Redirect)
-      const userRole = res.data.user.role;
-
-      if (userRole === 'admin') {
-        navigate('/adminDashboard');
-      } else if (userRole === 'driver') {
-        navigate('/driverDashboard');
-      } else {
-        // සාමාන්‍ය පාරිභෝගිකයෙකු නම් Profile එකට හෝ Home එකට
-        navigate('/profile'); 
-      }
+      // 3. Home Page එකට යොමු කිරීම
+      navigate('/'); 
 
     } catch (err) {
       alert(err.response?.data?.msg || "Login Failed. Please check your credentials.");
@@ -42,24 +39,34 @@ const Login = () => {
         <h2>Welcome Back</h2>
         <p>Login to your Saltern Management Account</p>
         <form onSubmit={handleLogin}>
-          <input 
-            type="email" 
-            placeholder="Email Address" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
-          />
-          <input 
-            type="password" 
-            placeholder="Password" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
+          <div className="input-group">
+            <input 
+              type="email" 
+              placeholder="Email Address" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+            />
+          </div>
+          <div className="input-group">
+            <input 
+              type="password" 
+              placeholder="Password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+          </div>
           <button type="submit" className="auth-btn">Login</button>
         </form>
-        <p style={{marginTop: '15px', fontSize: '12px', color: '#fff'}}>
-          Don't have an account? <span onClick={() => navigate('/register')} style={{cursor:'pointer', color:'#fdbb2d', fontWeight: 'bold'}}>Register Here</span>
+        <p style={{ marginTop: '20px', fontSize: '13px', color: '#fff' }}>
+          Don't have an account? 
+          <span 
+            onClick={() => navigate('/register')} 
+            style={{ cursor: 'pointer', color: '#fdbb2d', fontWeight: 'bold', marginLeft: '5px' }}
+          >
+            Register Here
+          </span>
         </p>
       </div>
     </div>

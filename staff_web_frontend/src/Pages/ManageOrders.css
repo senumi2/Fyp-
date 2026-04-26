@@ -1,0 +1,31 @@
+
+.manage-orders-container { padding: 40px; background: #f4f7f6; min-height: 100vh; }
+.manage-header h1 { color: #2d3436; margin-bottom: 5px; }
+
+.modern-glass-card { background: white; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; }
+
+.manage-table { width: 100%; border-collapse: collapse; }
+.manage-table th { padding: 18px; background: #f8fafc; color: #64748b; font-size: 0.85rem; text-align: left; border-bottom: 2px solid #edf2f7; }
+.manage-table td { padding: 18px; border-bottom: 1px solid #edf2f7; font-size: 0.95rem; }
+
+.btn-expand { background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 1.1rem; }
+
+.row-expanded { background: #f0f7ff; }
+.order-details-box { padding: 20px; background: #ffffff; border: 1px dashed #3b82f6; border-radius: 10px; margin: 10px; }
+.detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; font-size: 0.9rem; }
+
+.status-pill { padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }
+.status-pill.pending { background: #fff9db; color: #f08c00; }
+.status-pill.dispatched { background: #e7f5ff; color: #1c7ed6; }
+.status-pill.delivered { background: #ebfbee; color: #2f9e44; }
+
+.btn-action.assign { background: #3b82f6; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+.btn-action.assign:hover { background: #2563eb; }
+
+/* Modal Styles */
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; }
+.modal-box { background: white; padding: 30px; border-radius: 20px; width: 450px; position: relative; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-box form label { display: block; margin: 15px 0 5px; font-weight: 600; font-size: 0.9rem; }
+.modal-box input, .modal-box select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; }
+.confirm-btn { width: 100%; padding: 15px; background: #10b981; color: white; border: none; border-radius: 10px; margin-top: 25px; font-weight: bold; cursor: pointer; }

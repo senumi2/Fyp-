@@ -1,143 +1,196 @@
-/* Unique Wrapper Scoping */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --sidebar-bg: #0f172a;
+    --sidebar-hover: #1e293b;
+    --accent-blue: #3b82f6;
+    --bg-light: #f8fafc;
+    --text-main: #1e293b;
+    --white: #ffffff;
+}
+
 .ponds-admin-wrapper {
     display: flex;
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
-    --ponds-sidebar-bg: #1e293bf0;
-    --ponds-accent: #2563eb;
+    background-color: var(--bg-light);
 }
 
-/* Sidebar Fix - Using Unique Class Names */
+/* --- SIDEBAR --- */
 .ponds-sidebar {
-    width: 75px; 
-    background-color: var(--ponds-sidebar-bg); 
-    padding: 30px 0;
+    width: 75px;
+    background-color: var(--sidebar-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
     position: sticky;
-    top: 70px; /* Adjust based on your main Navbar height */
-    z-index: 50; /* Ensure it stays below main Navbar */
+    top: 0;
     height: 100vh;
-    border-right: 1px solid rgba(255,255,255,0.05);
+    padding: 25px 0;
+    z-index: 100;
 }
 
 .ponds-sidebar-header {
-    color: white;
     font-size: 24px;
+    color: var(--accent-blue);
     margin-bottom: 40px;
+    font-weight: bold;
 }
 
 .ponds-nav-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     width: 100%;
+    align-items: center;
 }
 
 .ponds-nav-btn {
     position: relative;
     background: transparent;
     border: none;
-    color: #94a3b8;
-    padding: 15px 0;
+    padding: 15px;
     cursor: pointer;
-    width: 100%;
+    border-radius: 12px;
+    transition: 0.3s;
     display: flex;
     justify-content: center;
-    transition: 0.3s;
 }
 
-.ponds-icon { font-size: 1.5rem; }
+.ponds-icon { font-size: 22px; color: #94a3b8; }
 
-/* Floating Label (Tooltip) */
+.ponds-nav-btn:hover, .ponds-nav-btn.active {
+    background-color: rgba(59, 130, 246, 0.15);
+}
+
+.ponds-nav-btn:hover .ponds-icon, .ponds-nav-btn.active .ponds-icon {
+    color: var(--accent-blue);
+}
+
 .ponds-tooltip {
     position: absolute;
     left: 85px;
-    background: #0f172a;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1e293b;
     color: white;
     padding: 8px 15px;
     border-radius: 8px;
-    font-size: 0.85rem;
+    font-size: 13px;
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-10px);
     transition: 0.3s ease;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
 }
 
 .ponds-nav-btn:hover .ponds-tooltip {
     opacity: 1;
     visibility: visible;
-    transform: translateX(0);
+    left: 75px;
 }
 
-.ponds-nav-btn.active {
-    color: var(--ponds-accent);
-    border-right: 4px solid var(--ponds-accent);
-}
-
-.ponds-nav-btn:hover .ponds-icon {
-    color: white;
-}
-
-/* Main Content Area */
-.ponds-main-content {
-    flex: 1;
-    background: #f8fafc;
-}
-
-.ponds-section-tank, .ponds-section-salinity, .ponds-section-prediction {
-    padding: 40px;
-}
-
-/* Tank Form */
-.ponds-tank-form {
-    background: rgb(176, 100, 70);
-    padding: 25px;
-    border-radius: 12px;
-    margin-bottom: 30px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    color: black;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.ponds-tank-form input {
-    padding: 10px 15px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    outline: none;
-    color: black;
-
-}
-
-/* Table Style */
-.ponds-table-style {
+/* --- SEARCH BAR (Right aligned, under topic) --- */
+.admin-header-flex {
+    display: block;
     width: 100%;
-    border-collapse: collapse;
-    background: white;
+    margin-bottom: 25px;
+}
+
+.admin-header-flex h3 {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.admin-search {
+    display: block;
+    margin-left: auto;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    padding: 10px 16px;
+    width: 220px;
+    border: 1px solid #f0e7e2;
+    color: black;
     border-radius: 12px;
-    overflow: hidden;
+    background: var(--white);
+    outline: none;
+    font-size: 13.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.04);
 }
 
-.ponds-table-style th, .ponds-table-style td {
-    border-bottom: 1px solid #f1f5f9;
-    padding: 15px;
-    text-align: left;
+.admin-search::placeholder {
+    color: #b89496;
 }
 
-.ponds-table-style th {
-    background: #f8fafc;
-    color: #64748b;
-    font-size: 0.8rem;
-    text-transform: uppercase;
+
+
+.admin-search:focus {
+    border-color: var(--accent-blue);
+    width: 260px;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
 }
 
-/* Buttons */
-.ponds-add-btn { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
-.ponds-edit-mini { background: #f59e0b; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; margin-right: 5px; }
-.ponds-delete-mini { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
-.ponds-cancel-btn { background: #94a3b8; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+/* --- ANALYTICS (2 charts per row) --- */
+.admin-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Meken thama row ekakata 2k enne */
+    gap: 25px;
+}
+
+.chart-wrapper-admin {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* --- OTHER STYLES (No changes) --- */
+.ponds-main-content { flex: 1; padding: 40px; }
+.ponds-tank-form {
+    background: var(--white); padding: 30px; border-radius: 16px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px; margin-bottom: 40px; border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.ponds-tank-form input{
+    color: black;
+}
+.ponds-add-btn { background-color: var(--accent-blue); color: white; border-radius: 8px; cursor: pointer; border:none; padding:10px; font-weight:600; }
+.ponds-table-style { width: 100%; background: var(--white); border-radius: 16px; border-collapse: collapse; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+.ponds-table-style th, .ponds-table-style td { padding: 15px 20px; text-align: left; border-bottom: 1px solid #f1f5f9; }
+.admin-view-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+.view-block { background: var(--white); padding: 20px; border-radius: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.view-badge { background: #eff6ff; color: #1d4ed8; font-size: 12px; padding: 5px 12px; border-radius: 20px; font-weight: 600; }
+
+.ponds-edit-mini{
+    background-color: #1b9468;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    border:none;
+    padding:5px 10px;
+    font-weight:600;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.ponds-edit-mini :hover {
+    background-color: #157b5b;
+}
+
+.ponds-delete-mini{
+    background-color: #ef4444;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    border:none;
+    padding:5px 10px;
+    font-weight:600;
+    font-size: 12px;
+}
+
+.ponds-delete-mini:hover {
+    background-color: #dc2626;
+}

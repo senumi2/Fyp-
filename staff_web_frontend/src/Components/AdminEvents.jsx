@@ -83,7 +83,7 @@ function AdminEvents() {
               </div>
               <div className="input-group">
                 <label className="custom-file-upload">
-                  <span>{form.image ? "✓ Image Selected" : "Upload Banner Image"}</span>
+                  <span>{form.image ? "✓ Image Selected" : "Upload  Image"}</span>
                   <input type="file" onChange={e => setForm({...form, image:e.target.files[0]})} required />
                 </label>
               </div>
@@ -106,7 +106,7 @@ function AdminEvents() {
                 <div className="premium-event-card" key={event._id}>
                   <div className="card-top">
                     {event.imageUrl ? (
-                      <img src={event.imageUrl} alt={event.title} />
+                     <img src={`http://localhost:5000${event.imageUrl}`} alt={event.title} />
                     ) : (
                       <div className="placeholder-art">No Image</div>
                     )}

@@ -1,3 +1,32 @@
 html {
     scroll-behavior: smooth;
   }
+
+
+  /* App.css - සම්පූර්ණ layout එක පාලනය කරයි */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column; /* Navbar එක උඩින් තබා අනෙක්වා පහළට ගනී */
+  min-height: 100vh;
+}
+
+/* Navbar එකට අදාළ පොදු ඉඩ */
+.navbar {
+  height: 50px;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}

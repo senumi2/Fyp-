@@ -78,8 +78,8 @@
 }
 
 .delete-btn {
-    background-color: #ba2c2a; /* Red */
-    color: white;
+    background-color: #b1787749; /* Red */
+    color: rgb(181, 23, 23);
     border: none;
     padding: 8px 16px;
     cursor: pointer;
@@ -164,7 +164,7 @@
     border: none;
     font-size: 18px;
     cursor: pointer;
-    color: red;
+    color: rgba(255, 0, 0, 0.696);
 }
 
 .add-btn {

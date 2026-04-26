@@ -157,7 +157,7 @@ function AdminProducts() {
                     <tr key={p._id}>
                       <td>
                         <div className="table-img-box">
-                          <img src={`http://localhost:5000${p.image}`} alt={p.name} />
+                        <img src={`http://localhost:5000${p.imageUrl}`} alt={p.name} />
                         </div>
                       </td>
                       <td>

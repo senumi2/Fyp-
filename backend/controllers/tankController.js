@@ -61,10 +61,10 @@ exports.addSalinity = async (req, res) => {
 // 4. Add Maintenance Log
 exports.addMaintenance = async (req, res) => {
     try {
-        const { task, performedBy, description } = req.body;
+        const { task, startDate, endDate, description} = req.body;
         const tank = await Tank.findByIdAndUpdate(
             req.params.id,
-            { $push: { maintenanceLogs: { task, performedBy, description } } },
+            { $push: { maintenanceLogs: { task,startDate, endDate, description } } },
             { new: true }
         );
         res.status(200).json(tank);
@@ -72,6 +72,68 @@ exports.addMaintenance = async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 };
+
+
+
+// 1. Delete Today's Salinity Record
+exports.deleteSalinityRecord = async (req, res) => {
+    try {
+        const { tankId, recordId } = req.params;
+        const tank = await Tank.findById(tankId);
+        
+        // Record eka hoyaganna
+        const record = tank.salinityRecords.id(recordId);
+        const recordDate = new Date(record.date).toDateString();
+        const today = new Date().toDateString();
+
+        // Check if it's today's record
+        if (recordDate !== today) {
+            return res.status(403).json({ message: "You can only delete today's records." });
+        }
+
+        tank.salinityRecords.pull(recordId);
+        
+        // Current salinity update karanna (antima record ekata)
+        const lastRecord = tank.salinityRecords[tank.salinityRecords.length - 1];
+        tank.currentSalinity = lastRecord ? lastRecord.level : 0;
+
+        await tank.save();
+        res.status(200).json(tank);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// 2. Update Today's Salinity Record
+exports.updateSalinityRecord = async (req, res) => {
+    try {
+        const { tankId, recordId } = req.params;
+        const { level } = req.body;
+        
+        const tank = await Tank.findById(tankId);
+        const record = tank.salinityRecords.id(recordId);
+        
+        if (new Date(record.date).toDateString() !== new Date().toDateString()) {
+            return res.status(403).json({ message: "Only today's records can be edited." });
+        }
+
+        record.level = level;
+        // Status eka ayeth calculate karanawa update wenna
+        let status = 'Stable';
+        if (level >= 24) status = 'Ready to Move';
+        if (level > 28) status = 'High';
+        record.status = status;
+        
+        tank.currentSalinity = level;
+        await tank.save();
+        res.status(200).json(tank);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+
+
 
 // 5. Add or Update Weather
 exports.addOrUpdateWeather = async (req, res) => {

@@ -84,7 +84,7 @@ function AdminDirectors() {
               <div className="form-main-inputs">
                 <div className="input-group-modern">
                   <label>Full Name</label>
-                  <input value={form.name} placeholder="e.g. Senumi Himanadhi"
+                  <input value={form.name} placeholder="e.g. Saman Perera"
                     onChange={e => setForm({ ...form, name: e.target.value })} required />
                 </div>
                 <div className="input-group-modern">

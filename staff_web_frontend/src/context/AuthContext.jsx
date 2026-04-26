@@ -5,6 +5,7 @@ export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [loading, setLoading] = useState(true);
 
   // 🔄 Load user from localStorage on refresh
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }) => {
   const login = (data) => {
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
+    setToken(data.token);
     setUser(data.user); // 🔥 re-render all components
   };
 
@@ -31,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout }}>
       {!loading && children}
     </AuthContext.Provider>
   );

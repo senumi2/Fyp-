@@ -4,33 +4,45 @@ import './StaffLogin.css';
 
 const StaffLogin = () => {
   const navigate = useNavigate();
+  // localStorage එකෙන් ගන්නා විට lowercase බව තහවුරු කරගන්න
+  const userRole = localStorage.getItem('role')?.toLowerCase();
 
   const menuItems = [
-    { id: 1, title: 'Admin', path: '/adminDashboard' },
-    { id: 2, title: 'Ponds', path: '/pondsManagement' },
-    { id: 3, title: 'Harvest Management', path: '/harvestManagement' },
-    { id: 4, title: 'Equipment Usage', path: '/equpmentUsage' },
-    { id: 5, title: 'Inventory Storage', path: '/inventoryManagement' },
-    { id: 6, title: 'Expenses & Finance', path: '/expensesFinance' },
-    // --- 🚀 රියදුරු සඳහා අලුතින් එක් කළ Card එක ---
-    { id: 7, title: 'Delivery Tasks', path: '/driverDashboard' },
+    { id: 1, title: 'Admin Panel', path: '/adminDashboard', role: 'admin' },
+    { id: 2, title: 'Ponds Management', path: '/pondsManagement', role: 'ponds management' },
+    { id: 3, title: 'Harvesting', path: '/harvestManagement', role: 'harvest management' },
+    { id: 4, title: 'Equipment', path: '/equpmentUsage', role: 'equipment usage' },
+    { id: 5, title: 'Inventory', path: '/inventoryManagement', role: 'inventory management' },
+    { id: 6, title: 'Finance', path: '/expensesFinance', role: 'expenses & finance' },
+    { id: 7, title: 'Deliveries', path: '/driverDashboard', role: 'driver' },
   ];
 
   return (
     <div className="staff-container">
       <div className="card-grid">
-        {menuItems.map((item) => (
-          <div 
-            key={item.id} 
-            className="menu-card" 
-            onClick={() => navigate(item.path)}
-          >
-            <div className="inner-card">
-              {/* මෙතනදී Driver Card එකට විතරක් වෙනස් පාටක් හෝ icon එකක් වුණත් පස්සේ දාන්න පුළුවන් */}
-              <span className="card-text">{item.title}</span>
+        {menuItems.map((item) => {
+          // මෙහිදී ඔබ ඉල්ලූ පරිදි Admin ට වුවද Unlock වන්නේ ඔහුගේම Card එක පමණි
+          const isDisabled = userRole !== item.role;
+
+          return (
+            <div 
+              key={item.id} 
+              className={`menu-card ${isDisabled ? 'disabled-card' : ''}`} 
+              onClick={() => !isDisabled && navigate(item.path)}
+              style={{
+                filter: isDisabled ? 'blur(2px)' : 'none',
+                opacity: isDisabled ? 0.6 : 1,
+                cursor: isDisabled ? 'not-allowed' : 'pointer',
+                pointerEvents: isDisabled ? 'none' : 'auto'
+              }}
+            >
+              <div className="inner-card">
+                <span className="card-text">{item.title}</span>
+                {isDisabled && <span className="locked-tag">Locked</span>}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

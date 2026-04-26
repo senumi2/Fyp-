@@ -1,0 +1,309 @@
+/* =========================================
+   HARVEST MANAGEMENT - SCOPED CSS (FULL)
+   (Does not affect Main Admin Sidebar)
+   ========================================= */
+
+/* Main Wrapper for the entire component */
+.harvest-main-wrapper {
+    display: flex;
+    background-color: #F4F7F6;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- HARVEST MINI SIDEBAR (Isolated) --- */
+.harvest-sidebar-mini {
+    width: 70px;
+    background: #006D5B; /* Teal Green */
+    color: white;
+    padding: 30px 0;
+    position: absolute;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 999;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.harvest-mini-logo {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+    cursor: default;
+}
+
+.harvest-mini-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.harvest-mini-nav button {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.harvest-mini-nav button:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.harvest-mini-nav button.active {
+    background: #FFCC00; /* Yellow */
+    color: #006D5B;
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* --- UNIT TOGGLE (Centered in Nav) --- */
+.h-unit-toggle {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.h-unit-toggle span {
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+}
+
+.h-unit-toggle span.h-active-u {
+    color: #FFCC00;
+}
+
+.h-divider {
+    width: 30px;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 5px 0;
+}
+
+/* Custom Styled Toggle Switch */
+.h-switch {
+    position: relative;
+    width: 32px;
+    height: 18px;
+}
+
+.h-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.h-slider.h-round {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #333;
+    border-radius: 20px;
+    transition: .4s;
+}
+
+.h-slider.h-round:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s;
+}
+
+.h-switch input:checked + .h-slider {
+    background-color: #FFCC00;
+}
+
+.h-switch input:checked + .h-slider:before {
+    transform: translateX(14px);
+}
+
+/* --- CONTENT AREA (Isolated) --- */
+.harvest-content-area {
+    margin-left: 70px; /* Width of the mini sidebar */
+    padding: 40px;
+    width: calc(100% - 70px);
+}
+
+.h-dashboard-header {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.h-stat-box {
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+    transition: transform 0.3s ease;
+}
+
+.h-stat-box:hover { transform: translateY(-5px); }
+
+.h-yellow { background: #FFCC00; color: #006D5B; }
+.h-persian { background: #00A693; color: white; }
+.h-teal { background: #006D5B; color: white; }
+
+.h-stat-box span { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; opacity: 0.8; }
+.h-stat-box h2 { font-size: 2rem; font-weight: 800; margin-top: 8px; }
+
+/* SEARCH BAR */
+.h-search-container {
+    margin-bottom: 30px;
+}
+
+.h-admin-search {
+    width: 100%;
+    max-width: 400px;
+    padding: 14px 20px;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    background: white;
+    color: black;
+    font-size: 0.95rem;
+    outline: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    transition: 0.3s;
+}
+
+.h-admin-search:focus {
+    border-color: #00A693;
+    box-shadow: 0 4px 15px rgba(0,166,147,0.1);
+}
+
+/* TABLES */
+.h-table-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 40px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+}
+
+.h-table-card h3 {
+    color: #006D5B;
+    margin-bottom: 25px;
+    font-size: 1.2rem;
+    border-left: 5px solid #FFCC00;
+    padding-left: 15px;
+}
+
+.h-table-wrapper { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 16px; background: #f8f9fa; color: #006D5B; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+td { padding: 16px; border-bottom: 1px solid #f1f1f1; font-size: 0.95rem; }
+
+.h-type-tag {
+    background: #e8f6f4;
+    color: #00A693;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.h-bold { font-weight: 800; color: #006D5B; }
+
+/* CATEGORY PILLS */
+.h-category-nav {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.h-nav-pill {
+    padding: 10px 20px;
+    background: white;
+    border-radius: 30px;
+    border: 1px solid #00A693;
+    text-decoration: none;
+    color: #006D5B;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.h-nav-pill:hover {
+    background: #00A693;
+    color: white;
+}
+
+/* CHARTS */
+.h-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.h-chart-card {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+.h-chart-card h4 {
+    margin-bottom: 20px;
+    color: #2C3E50;
+    font-weight: 700;
+}
+
+/* ANIMATIONS */
+.h-fade-in {
+    animation: hFade 0.5s ease-out forwards;
+}
+
+@keyframes hFade {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* LOADER */
+.loader-box {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.spin {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #eee;
+    border-top-color: #00A693;
+    border-radius: 50%;
+    animation: rot 1s linear infinite;
+}
+
+@keyframes rot { to { transform: rotate(360deg); } }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .harvest-sidebar-mini { width: 60px; }
+    .harvest-content-area { margin-left: 60px; padding: 20px; width: calc(100% - 60px); }
+    .h-chart-grid { grid-template-columns: 1fr; }
+}

@@ -18,8 +18,7 @@ function Navbar() {
       <div className="nav-left">
         <NavLink className="nav-link" to="/">Home</NavLink>
         <NavLink className="nav-link" to="/about">About Us</NavLink>
-        {/* User කෙනෙක් නැති වෙලාවට විතරක් Staff Login පෙන්වන්න පුළුවන් */}
-        {!user && <NavLink className="nav-link" to="/staff">Staff Login</NavLink>}
+        {user && <NavLink className="nav-link" to="/staff">Staff Login</NavLink>}
       </div>
 
       <div className="nav-right">

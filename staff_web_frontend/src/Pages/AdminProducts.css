@@ -69,7 +69,7 @@
 .input-group label { font-size: 0.75rem; font-weight: 800; color: var(--text-grey); text-transform: uppercase; }
 
 .input-group input, .input-group textarea {
-  padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #fcfdfe; transition: 0.3s; font-family: inherit;
+  padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #fcfdfe; transition: 0.3s; font-family: inherit;color: black;
 }
 .input-group textarea { height: 90px; resize: none; }
 .input-group input:focus { border-color: var(--saltern-light); outline: none; box-shadow: 0 0 0 4px rgba(0, 187, 249, 0.1); }
