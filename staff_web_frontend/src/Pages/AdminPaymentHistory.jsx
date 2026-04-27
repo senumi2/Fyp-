@@ -4,7 +4,7 @@ import "./AdminPaymentHistory.css";
 
 function AdminPaymentHistory() {
   const { token } = useContext(AuthContext);
-  const [payments, setPayments] = useState([]);
+  const [payments, setPayments] = useState([]); // Default empty array
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,35 +17,42 @@ function AdminPaymentHistory() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        setPayments(data);
+        
+        // Essential: Check if data is array
+        if (Array.isArray(data)) {
+            setPayments(data);
+        } else {
+            setPayments([]);
+        }
       } catch (err) {
         console.error("Error fetching payments:", err);
+        setPayments([]); 
       }
     };
-    fetchPayments();
+    if(token) fetchPayments();
   }, [token]);
 
-  // --- Filtering Logic ---
-  const filteredPayments = payments.filter((p) => {
+  // Safe filtering logic
+  const filteredPayments = Array.isArray(payments) ? payments.filter((p) => {
+    const nameMatch = p.userId?.name?.toLowerCase() || "";
+    const idMatch = p._id || "";
+    
     const matchesSearch = 
-      p.userId?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p._id.includes(searchTerm);
+      nameMatch.includes(searchTerm.toLowerCase()) ||
+      idMatch.includes(searchTerm);
     const matchesStatus = statusFilter === "All" || p.status === statusFilter;
     return matchesSearch && matchesStatus;
-  });
+  }) : [];
 
-  // --- Pagination Logic ---
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentPayments = filteredPayments.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredPayments.length / itemsPerPage) || 1;
 
-  // --- Summary Calculations ---
-  const totalRevenue = payments.reduce((sum, p) => p.status === "Paid" ? sum + p.amount : sum, 0);
-  const successCount = payments.filter(p => p.status === "Paid").length;
-  const pendingCount = payments.filter(p => p.status === "Pending").length;
+  const totalRevenue = Array.isArray(payments) ? payments.reduce((sum, p) => p.status === "Paid" ? sum + p.amount : sum, 0) : 0;
+  const successCount = Array.isArray(payments) ? payments.filter(p => p.status === "Paid").length : 0;
+  const pendingCount = Array.isArray(payments) ? payments.filter(p => p.status === "Pending").length : 0;
 
-  // --- CSV Export Function ---
   const exportToCSV = () => {
     const headers = ["Order ID,Customer,Email,Date,Method,Amount,Status\n"];
     const rows = filteredPayments.map(p => 
@@ -63,37 +70,29 @@ function AdminPaymentHistory() {
     <div className="admin-payments-page">
       <div className="overlay-gradient"></div>
       <div className="content-wrapper">
-        
         <header className="header-creative">
           <div className="header-text">
             <h1>Financial Insights</h1>
             <p>Comprehensive overview of saltern revenue & transactions</p>
           </div>
-          <button className="btn-export" onClick={exportToCSV}>
-            📥 Export CSV Report
-          </button>
+          <button className="btn-export" onClick={exportToCSV}>📥 Export CSV Report</button>
         </header>
 
-        {/* --- Summary Cards --- */}
         <section className="summary-cards-grid">
           <div className="stat-card">
             <span className="stat-label">Total Revenue</span>
             <h2 className="stat-val">Rs. {totalRevenue.toLocaleString()}</h2>
-            <div className="stat-indicator up">↑ Active Sales</div>
           </div>
           <div className="stat-card">
             <span className="stat-label">Successful Payments</span>
             <h2 className="stat-val">{successCount}</h2>
-            <div className="stat-indicator success">✓ Verified</div>
           </div>
           <div className="stat-card">
             <span className="stat-label">Pending Orders</span>
             <h2 className="stat-val">{pendingCount}</h2>
-            <div className="stat-indicator warning">⚠ Awaiting Action</div>
           </div>
         </section>
 
-        {/* --- Advanced Filters --- */}
         <section className="filter-bar-container modern-glass-card">
           <input 
             type="text" 
@@ -109,7 +108,6 @@ function AdminPaymentHistory() {
           </select>
         </section>
 
-        {/* --- Financial Table --- */}
         <section className="table-section-creative modern-glass-card">
           <table className="payment-history-table">
             <thead>
@@ -117,7 +115,6 @@ function AdminPaymentHistory() {
                 <th>Order ID</th>
                 <th>Customer Name</th>
                 <th>Date</th>
-                <th>Payment Method</th>
                 <th>Amount</th>
                 <th>Status</th>
               </tr>
@@ -133,7 +130,6 @@ function AdminPaymentHistory() {
                     </div>
                   </td>
                   <td>{new Date(p.date).toLocaleString()}</td>
-                  <td><span className="method-pill">{p.paymentMethod}</span></td>
                   <td className="amount-bold">Rs. {p.amount.toLocaleString()}</td>
                   <td><span className={`status-pill ${p.status.toLowerCase()}`}>{p.status}</span></td>
                 </tr>
@@ -141,7 +137,6 @@ function AdminPaymentHistory() {
             </tbody>
           </table>
 
-          {/* --- Pagination Controls --- */}
           <div className="pagination-footer">
             <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
             <span>Page {currentPage} of {totalPages}</span>

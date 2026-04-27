@@ -44,7 +44,9 @@ function App() {
     "/pondsManagement",
     "/harvestManagement",
     "/expensesFinance",
-    "/admin/directors"
+    "/admin/directors",
+    "/staff",
+    "/profile"
   ];
 
   // දැනට තිබෙන path එක exclude list එකේ නැතිනම් පමණක් Footer එක පෙන්වන්න

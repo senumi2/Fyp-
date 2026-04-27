@@ -1,40 +1,52 @@
-
+/* AdminDashboard.css */
 
 /* --- Base Container --- */
 .admin-container {
     display: flex;
-    min-height: 100vh;
+    width: 100%;
+    margin-top: 50px; /* Navbar එකේ උසට සමාන ඉඩක් ඉහළින් තැබීමෙන් Gap එක නැති වේ */
+    min-height: calc(100vh - 50px);
     background-color: #f8fafc;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* --- Sidebar Styling --- */
 .admin-sidebar {
     width: 280px;
-    background-color: #4b7274ea;
-    padding: 30px 20px;
-    border-right: 1px solid #94a3b8;
+    min-width: 280px;
+    background-color: #4b7274ea; /* ඔබේ වර්ණය */
+    padding: 20px;
     display: flex;
     flex-direction: column;
+    height: calc(100vh - 50px);
+    position: fixed; /* Sidebar එක ස්ථාවරව තැබීමට */
+    top: 50px;
+    left: 0;
+    border-right: 1px solid #94a3b8;
+    z-index: 100;
+    overflow-y: auto; 
+    scrollbar-width: thin;
 }
 
+/* කළු තීරුව/Header කොටස */
 .sidebar-header {
     font-size: 1.2rem;
     font-weight: 800;
     color: #1e293b;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     text-align: center;
-    letter-spacing: 1px;
+    background: rgba(0, 0, 0, 0.1); /* කළු තීරුවක් වැනි පෙනුම */
+    padding: 15px;
+    border-radius: 8px;
 }
 
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .sidebar-nav button {
-    padding: 16px 20px;
+    padding: 14px 18px;
     background-color: #94a3b8;
     color: #1e293b;
     border: none;
@@ -43,249 +55,69 @@
     font-weight: 600;
     text-align: left;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: 0.2s;
 }
 
-.sidebar-nav button:hover {
-    background-color: #64748b;
-    color: white;
-}
-
-.sidebar-nav button.active {
+.sidebar-nav button:hover, .sidebar-nav button.active {
     background-color: #334155;
     color: white;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 /* --- Content Area --- */
 .admin-main-content {
     flex: 1;
+    margin-left: 280px; /* Sidebar එකේ පළලට සමාන ඉඩක් වමෙන් තැබීම */
     padding: 40px;
-    overflow-y: auto;
+    background-color: #f8fafc;
+    min-height: calc(100vh - 50px);
 }
 
-.view-title {
-    font-size: 1.8rem;
-    color: #0f172a;
-    margin-bottom: 30px;
-    font-weight: 700;
-}
+/* අනෙක් සියලුම Table, Status Badges, Charts styles පෙර තිබූ ලෙසම තබා ගන්න */
+.view-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 30px; }
+.admin-charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; }
 
-/* --- Table Styling --- */
-.table-container {
+.admin-chart-card { 
     background: white;
-    border-radius: 12px;
-    padding: 10px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-}
-
-.admin-custom-table {
+    padding: 25px;
+    border-radius: 16px; 
+    height: 450px; 
     width: 100%;
-    border-collapse: collapse;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
 }
 
-.admin-custom-table th, .admin-custom-table td {
-    padding: 18px;
-    text-align: left;
-    border-bottom: 1px solid #f1f5f9;
+.chart-wrapper {
+    width: 100%;
+    height: 300px; /* මෙහිදී chart එකට අවශ්‍ය උස ලබා දෙන්න */
+    min-height: 300px;
+    display: block;
 }
 
-.admin-custom-table th {
-    background: #f8fafc;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    color: #64748b;
-    font-weight: 700;
-}
 
-/* --- Status Badges --- */
-.status-badge {
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    display: inline-block;
-}
-.status-badge.pending { background: #fef3c7; color: #92400e; }
-.status-badge.shipped { background: #dcfce7; color: #166534; }
-.status-badge.delivered { background: #f0fdf4; color: #15803d; }
-.status-badge.confirmed { background: #e0f2fe; color: #075985; }
-
-/* --- Manage Button --- */
-.manage-btn {
-    background-color: #334155;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.2s;
-}
-
-.manage-btn:hover {
-    background-color: #1e293b;
-}
-
-/* --- Analytics & Charts Styling --- */
-.admin-charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 25px;
-    margin-bottom: 40px;
+.chart-wrapper {
+    width: 100%;
+    height: 350px;
+    min-height: 300px;
+    margin-top: 15px;
+    display: block;
 }
 
 .admin-chart-card {
-    background: white;
-    padding: 25px;
-    border-radius: 16px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
-    display: flex;
-    height: 400px;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.3s ease;
+    min-height: 400px;
 }
 
-.admin-chart-card:hover {
-    transform: translateY(-5px);
-}
-
-.chart-label {
-    font-weight: 700;
-    color: #1e293b;
-    margin-bottom: 20px;
-    font-size: 1.1rem;
-}
-
-/* Placeholder boxes for other trends */
-.graph-box-placeholder {
-    height: 180px;
-    width: 100%;
-    background: #f1f5f9;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-    border: 1px dashed #cbd5e1;
-}
-
-.graph-box-placeholder span {
-    color: #94a3b8;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-/* --- Modal Styling --- */
-.admin-modal-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(4px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
-
-.admin-modal-content {
-    background: white;
-    padding: 35px;
-    border-radius: 16px;
-    width: 100%;
-    max-width: 450px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.admin-modal-content h3 {
-    margin-bottom: 20px;
-    color: #1e293b;
-}
-
-.admin-modal-content label {
-    display: block;
-    margin-top: 15px;
-    font-weight: 600;
-    color: #475569;
-}
-
-.admin-modal-content select, .admin-modal-content input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-}
-
-.modal-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 30px;
-}
-
-.save-btn { background-color: #334155; color: white; border: none; padding: 12px; border-radius: 8px; flex: 2; cursor: pointer; font-weight: 600; }
-.cancel-btn { background-color: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; flex: 1; cursor: pointer; font-weight: 600; }
-
-
-/* --- Month Filter Dropdown Styling --- */
-
-.month-filter-dropdown {
-    padding: 8px 15px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #1e293b;
-    background-color: #f8fafc;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    outline: none;
-}
-
-.month-filter-dropdown:hover {
-    border-color: #94a3b8;
-    background-color: #fff;
-}
-
-.month-filter-dropdown:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-/* Chart එකේ Header එක සහ Dropdown එක එක පේළියට තියාගන්න */
-.chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-/* Pie Chart එක ඇතුළේ තියෙන විස්තරය */
-.viewing-label {
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-top: 15px;
-    font-weight: 500;
-}
-
-.viewing-label strong {
-    color: #3b82f6;
-}
-
-
-/* Responsive Adjustments */
+/* Responsive */
 @media (max-width: 1024px) {
-    .admin-sidebar { width: 220px; }
-    .admin-charts-grid { grid-template-columns: 1fr; }
+    .admin-sidebar { width: 220px; min-width: 220px; }
+    .admin-main-content { margin-left: 220px; }
 }
 
 @media (max-width: 768px) {
-    .admin-container { flex-direction: column; }
-    .admin-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #94a3b8; }
-    .admin-main-content { padding: 20px; }
+    .admin-container { flex-direction: column; margin-top: 50px; }
+    .admin-sidebar { position: static; width: 100%; height: auto; }
+    .admin-main-content { margin-left: 0; padding: 20px; }
 }

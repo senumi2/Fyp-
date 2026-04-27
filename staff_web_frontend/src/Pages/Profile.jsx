@@ -1,34 +1,42 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar"; // Path එක නිවැරදිදැයි බලන්න
+import { useNavigate } from "react-router-dom";
+import { 
+  FaHistory, FaLock, FaUserEdit, 
+  FaCalendarAlt, FaPhone, FaCamera, FaGlobe, FaIdBadge 
+} from "react-icons/fa";
+import axios from "axios";
 import "./Profile.css";
 
 function Profile() {
   const [user, setUser] = useState({});
+  const [activeTab, setActiveTab] = useState("general");
   const [editMode, setEditMode] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+  
+  // වැදගත්: මෙතන localStorage එකේ නම පරීක්ෂා කරන්න
   const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("role") || "Staff Member";
 
   const loadProfile = async () => {
+    if (!token) {
+        console.error("No token found!");
+        return;
+    }
     try {
-      const res = await fetch("http://localhost:5000/api/profile", {
+      const res = await axios.get("http://localhost:5000/api/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
-      setUser(data);
+      setUser(res.data);
     } catch (err) {
-      console.error("Error loading profile:", err);
+      console.error("Profile Fetch Error:", err.response?.data || err.message);
     }
   };
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+  useEffect(() => { loadProfile(); }, [token]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -39,84 +47,163 @@ function Profile() {
   };
 
   const handleSave = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("fullName", user.fullName);
     formData.append("contact", user.contact);
     if (image) formData.append("image", image);
 
     try {
-      const res = await fetch("http://localhost:5000/api/profile", {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+      await axios.put("http://localhost:5000/api/profile", formData, {
+        headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data"
+        },
       });
-
-      if (res.ok) {
-        const updatedUser = await res.json();
-        setUser(updatedUser);
-        setEditMode(false);
-        setPreview(null);
-        setImage(null);
-        alert("Profile updated successfully!");
-      }
+      setEditMode(false);
+      setPreview(null);
+      setImage(null);
+      alert("Profile Updated Successfully!");
+      loadProfile(); // දත්ත refresh කරන්න
     } catch (err) {
-      alert("Error saving profile");
+      alert("Failed to update profile.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="profile-layout">
-      <Sidebar /> {/* Sidebar එක මෙහිදී පමණක් පෙන්වයි */}
-      
-      <div className="profile-content">
-        <h2>My Profile</h2>
-        <div className="avatar-section">
-          <div className="avatar">
-            {preview ? (
-              <img src={preview} alt="preview" />
-            ) : user.profileImage ? (
-              <img src={`http://localhost:5000${user.profileImage}`} alt="profile" />
-            ) : (
-              <div className="avatar-placeholder">👤</div>
-            )}
+    <div className="profile-wrapper">
+      <header className="profile-header-nav">
+        <button className="back-circle-btn" onClick={() => navigate(-1)}>←</button>
+        <div className="header-info">
+            <span className="portal-tag">{userRole.toUpperCase()} PORTAL</span>
+            <h1 className="header-user-name">{user.fullName || "User Profile"}</h1>
+        </div>
+        <div className="account-status">
+            <span className="status-indicator-active"></span> System Verified
+        </div>
+      </header>
+
+      <div className="profile-layout-grid">
+        <aside className="profile-sidebar-card">
+          <div className="profile-img-container">
+            <img 
+              src={preview || (user.profileImage ? `http://localhost:5000${user.profileImage}` : "https://via.placeholder.com/150")} 
+              alt="Profile" 
+            />
             {editMode && (
-              <label className="change-photo-label">
-                Change Photo
-                <input type="file" accept="image/*" hidden onChange={handleImageChange} />
+              <label className="upload-overlay">
+                <FaCamera />
+                <input type="file" hidden onChange={handleImageChange} accept="image/*" />
               </label>
             )}
           </div>
-        </div>
 
-        <div className="profile-details">
-          <div className="input-group">
-            <label>Full Name</label>
-            <input name="fullName" value={user.fullName || ""} onChange={handleChange} disabled={!editMode} />
-          </div>
-          <div className="input-group">
-            <label>Email</label>
-            <input value={user.email || ""} disabled className="disabled-input" />
-          </div>
-          <div className="input-group">
-            <label>Contact</label>
-            <input name="contact" value={user.contact || ""} onChange={handleChange} disabled={!editMode} />
-          </div>
-          <div className="input-group">
-            <label>Designation</label>
-            <input value={user.jobRole || ""} disabled className="disabled-input" />
+          <div className="user-meta">
+            <h3>{user.fullName}</h3>
+            <span className="role-badge-main">{user.jobRole || userRole}</span>
           </div>
 
-          <div className="profile-actions">
-            {!editMode ? (
-              <button className="edit-btn" onClick={() => setEditMode(true)}>Edit Profile</button>
-            ) : (
-              <div className="btn-group">
-                <button className="save-btn" onClick={handleSave}>Save Changes</button>
-                <button className="cancel-btn" onClick={() => { setEditMode(false); loadProfile(); }}>Cancel</button>
+          <nav className="profile-tabs">
+            <button className={activeTab === "general" ? "active" : ""} onClick={() => setActiveTab("general")}>
+              <FaUserEdit /> Account Information
+            </button>
+            <button className={activeTab === "security" ? "active" : ""} onClick={() => setActiveTab("security")}>
+              <FaLock /> Security Settings
+            </button>
+            <button className={activeTab === "activity" ? "active" : ""} onClick={() => setActiveTab("activity")}>
+              <FaHistory /> Login Activity
+            </button>
+          </nav>
+        </aside>
+
+        <main className="profile-main-content">
+          <section className="summary-cards">
+            <div className="s-card info-gradient">
+              <div className="card-icon"><FaIdBadge /></div>
+              <div className="card-data">
+                <small>Full Name</small>
+                <h4>{user.fullName || "Not Set"}</h4>
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+            <div className="s-card date-gradient">
+              <div className="card-icon"><FaCalendarAlt /></div>
+              <div className="card-data">
+                <small>Join Date</small>
+                <h4>{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '2025-09-12'}</h4>
+              </div>
+            </div>
+            <div className="s-card location-gradient">
+              <div className="card-icon"><FaGlobe /></div>
+              <div className="card-data">
+                <small>Current Region</small>
+                <h4>Hambantota, Sri Lanka</h4>
+              </div>
+            </div>
+          </section>
+
+          {activeTab === "general" && (
+            <div className="content-card animate-fade">
+              <div className="card-header-actions">
+                <h3>Personal Account Details</h3>
+                <button className="edit-action-btn" onClick={() => setEditMode(!editMode)}>
+                  {editMode ? "Cancel" : "Modify Profile"}
+                </button>
+              </div>
+
+              <div className="form-grid">
+                <div className="form-input full-width">
+                  <label>Display Name</label>
+                  <input 
+                    value={user.fullName || ""} 
+                    onChange={(e) => setUser({...user, fullName: e.target.value})}
+                    disabled={!editMode} 
+                  />
+                </div>
+                <div className="form-input full-width">
+                  <label>Mobile Number</label>
+                  <input 
+                    value={user.contact || ""} 
+                    onChange={(e) => setUser({...user, contact: e.target.value})}
+                    disabled={!editMode} 
+                  />
+                </div>
+              </div>
+              
+              {editMode && (
+                <button className="primary-save-btn" onClick={handleSave} disabled={loading}>
+                  {loading ? "Saving..." : "Update Work Profile"}
+                </button>
+              )}
+            </div>
+          )}
+
+          {activeTab === "security" && (
+            <div className="content-card animate-fade">
+                <h3>Account Password</h3>
+                <p className="sub-desc">Update your password to keep your account safe.</p>
+                <div className="security-form">
+                    <div className="form-input"><label>Old Password</label><input type="password" /></div>
+                    <div className="form-input"><label>New Password</label><input type="password" /></div>
+                    <button className="primary-save-btn">Change Password</button>
+                </div>
+            </div>
+          )}
+
+          {activeTab === "activity" && (
+            <div className="content-card animate-fade">
+                <h3>Recent Login Sessions</h3>
+                <div className="log-item">
+                    <div className="log-icon-box">💻</div>
+                    <div className="log-info">
+                        <strong>Chrome on Windows</strong>
+                        <p>Active Session • Deniyaya, SL</p>
+                    </div>
+                </div>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );

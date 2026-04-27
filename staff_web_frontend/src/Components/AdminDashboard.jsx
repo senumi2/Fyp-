@@ -72,7 +72,6 @@ const AdminDashboard = () => {
     );
 };
 
-// --- 📊 Production Vs Sales & Financial View (UPDATED) ---
 const ProductionVsSalesView = () => {
     const [chartData, setChartData] = useState([]);
     const [expenseData, setExpenseData] = useState([]);
@@ -89,12 +88,14 @@ const ProductionVsSalesView = () => {
                 const token = localStorage.getItem('token');
                 const config = { headers: { Authorization: `Bearer ${token}` } };
 
-                // 1. Production vs Sales Data
                 const resProd = await axios.get("http://localhost:5000/api/analytics/production-vs-sales", config);
+                const salesArr = Array.isArray(resProd.data.salesStats) ? resProd.data.salesStats : [];
+                const harvestArr = Array.isArray(resProd.data.harvestStats) ? resProd.data.harvestStats : [];
+
                 const formattedProdData = months.map((month, index) => {
                     const monthNum = index + 1;
-                    const sale = resProd.data.salesStats.find(s => s._id === monthNum);
-                    const harvest = resProd.data.harvestStats.find(h => h._id === monthNum);
+                    const sale = salesArr.find(s => s._id === monthNum);
+                    const harvest = harvestArr.find(h => h._id === monthNum);
                     return {
                         name: month,
                         Sales: sale ? sale.totalQuantity : 0,
@@ -103,13 +104,10 @@ const ProductionVsSalesView = () => {
                 });
                 setChartData(formattedProdData);
 
-                // 2. Financial Stats Data
                 const resFin = await axios.get("http://localhost:5000/api/analytics/financial-stats", config);
-                
-                // සැබෑ විකුණුම් මුදල (salesStats) Financial state එකට සම්බන්ධ කිරීම
                 setRawExpenseStats({
                     ...resFin.data,
-                    salesStats: resProd.data.salesStats
+                    salesStats: salesArr
                 });
                 
                 updatePieChart(resFin.data, "All");
@@ -147,7 +145,6 @@ const ProductionVsSalesView = () => {
         if (rawExpenseStats) updatePieChart(rawExpenseStats, m);
     };
 
-    // --- 📄 Report Generation Logic (Using Actual Order.amount) ---
     const handleDownloadReport = () => {
         const doc = new jsPDF();
         const dateStr = new Date().toLocaleDateString();
@@ -172,54 +169,27 @@ const ProductionVsSalesView = () => {
         const getDataForMonth = (mName) => {
             const mIdx = months.indexOf(mName) + 1;
             const dRow = chartData.find(d => d.name === mName) || { Harvest: 0, Sales: 0 };
-            
-            // Backend එකෙන් එන සැබෑ විකුණුම් මුදල (Amount) ලබා ගැනීම
             const sData = rawExpenseStats?.salesStats?.find(s => s._id === mIdx) || { totalSales: 0 };
-            
             const w = rawExpenseStats.wageStats.find(s => s._id === mIdx)?.total || 0;
             const t = rawExpenseStats.transportStats.find(s => s._id === mIdx)?.total || 0;
             const m = rawExpenseStats.maintenanceStats.find(s => s._id === mIdx)?.total || 0;
-            
             const totalExp = w + t + m;
-            const rev = sData.totalSales; // සැබෑ ආදායම (Order amount වල එකතුව)
-
-            return { 
-                harvest: dRow.Harvest, 
-                salesKg: dRow.Sales, 
-                rev: rev, 
-                exp: totalExp, 
-                profit: rev - totalExp 
-            };
+            const rev = sData.totalSales;
+            return { harvest: dRow.Harvest, salesKg: dRow.Sales, rev: rev, exp: totalExp, profit: rev - totalExp };
         };
 
         if (selectedMonth === "All") {
             months.forEach(mName => {
                 const s = getDataForMonth(mName);
                 if (s.harvest > 0 || s.salesKg > 0 || s.exp > 0 || s.rev > 0) {
-                    tableData.push([
-                        mName, 
-                        s.harvest, 
-                        s.salesKg, 
-                        s.rev.toLocaleString(), 
-                        s.exp.toLocaleString(), 
-                        s.profit.toLocaleString()
-                    ]);
-                    grandTotalRev += s.rev;
-                    grandTotalExp += s.exp;
+                    tableData.push([mName, s.harvest, s.salesKg, s.rev.toLocaleString(), s.exp.toLocaleString(), s.profit.toLocaleString()]);
+                    grandTotalRev += s.rev; grandTotalExp += s.exp;
                 }
             });
         } else {
             const s = getDataForMonth(selectedMonth);
-            tableData.push([
-                selectedMonth, 
-                s.harvest, 
-                s.salesKg, 
-                s.rev.toLocaleString(), 
-                s.exp.toLocaleString(), 
-                s.profit.toLocaleString()
-            ]);
-            grandTotalRev = s.rev;
-            grandTotalExp = s.exp;
+            tableData.push([selectedMonth, s.harvest, s.salesKg, s.rev.toLocaleString(), s.exp.toLocaleString(), s.profit.toLocaleString()]);
+            grandTotalRev = s.rev; grandTotalExp = s.exp;
         }
 
         doc.autoTable({
@@ -236,11 +206,9 @@ const ProductionVsSalesView = () => {
         doc.setTextColor(0);
         doc.text(`Total Revenue: LKR ${grandTotalRev.toLocaleString()}`, 130, finalY);
         doc.text(`Total Expenses: LKR ${grandTotalExp.toLocaleString()}`, 130, finalY + 10);
-        
         const netProfit = grandTotalRev - grandTotalExp;
         doc.setTextColor(netProfit >= 0 ? [22, 101, 52] : [185, 28, 28]);
         doc.text(`Net Profit: LKR ${netProfit.toLocaleString()}`, 130, finalY + 20);
-
         doc.save(`${reportTitle}.pdf`);
     };
 
@@ -253,7 +221,7 @@ const ProductionVsSalesView = () => {
             <div className="admin-charts-grid">
                 <div className="admin-chart-card">
                     <h4 className="chart-label">Annual Production vs Sales (kg)</h4>
-                    <div style={{ height: '300px', width: '100%' }}>
+                    <div className="chart-wrapper"> {/* Added wrapper to prevent error */}
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -315,7 +283,5 @@ const ProductionVsSalesView = () => {
         </div>
     );
 };
-
-
 
 export default AdminDashboard;
