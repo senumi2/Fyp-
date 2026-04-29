@@ -5,14 +5,14 @@ import "./AdminReports.css";
 function AdminReports() {
   const { token } = useContext(AuthContext);
   const [reports, setReports] = useState([]);
-  const [form, setForm] = useState({ title: "", image: null });
+  const [form, setForm] = useState({ title: "", image: null, pdf: null });
   const [editingId, setEditingId] = useState(null);
 
   const fetchReports = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/reports");
       const data = await res.json();
-      setReports(data);
+      if (Array.isArray(data)) setReports(data);
     } catch (err) {
       console.error("Error fetching reports:", err);
     }
@@ -22,76 +22,110 @@ function AdminReports() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // FormData නිවැරදිව සකස් කිරීම
     const data = new FormData();
     data.append("title", form.title);
     if (form.image) data.append("image", form.image);
+    if (form.pdf) data.append("pdf", form.pdf);
 
     const url = editingId 
       ? `http://localhost:5000/api/reports/${editingId}` 
       : "http://localhost:5000/api/reports";
     const method = editingId ? "PUT" : "POST";
 
-    await fetch(url, {
-      method,
-      headers: { Authorization: `Bearer ${token}` },
-      body: data
-    });
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: { 
+          'Authorization': `Bearer ${token}` 
+          // සටහන: මෙතන Content-Type දාන්න එපා (FormData නිසා Browser එකම දාගනී)
+        },
+        body: data
+      });
 
-    setForm({ title: "", image: null });
-    setEditingId(null);
-    fetchReports();
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(editingId ? "Report updated!" : "Report uploaded!");
+        setForm({ title: "", image: null, pdf: null });
+        setEditingId(null);
+        fetchReports();
+      } else {
+        // 400 හෝ 401 error එක මොකක්ද කියලා මෙතනින් බලාගන්න පුළුවන්
+        alert(`Error: ${result.message || "Something went wrong"}`);
+        if (response.status === 401) console.error("Session expired. Please re-login.");
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      alert("Network error. Please try again.");
+    }
   };
 
   const handleEdit = (report) => {
-    setForm({ title: report.title, image: null });
+    setForm({ title: report.title, image: null, pdf: null });
     setEditingId(report._id);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this report?")) return;
-    await fetch(`http://localhost:5000/api/reports/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    fetchReports();
+    if (!window.confirm("Are you sure?")) return;
+    try {
+      const response = await fetch(`http://localhost:5000/api/reports/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (response.ok) fetchReports();
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
   };
 
   return (
     <div className="admin-reports-wrapper">
       <header className="reports-header-main">
         <h2>{editingId ? "Update Report" : "System Reports"}</h2>
-        <p>Manage and view all documentation from here</p>
+        <p>Upload a cover image and the corresponding PDF document</p>
       </header>
 
-      {/* Modern Compact Form */}
       <section className="report-form-section">
         <form onSubmit={handleSubmit} className="report-form-inline">
           <div className="report-field">
             <label>Report Title</label>
             <input 
               type="text" 
-              placeholder="Enter report title..." 
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })} 
               required 
             />
           </div>
+          
           <div className="report-field">
-            <label>Upload File / Image</label>
+            <label>Cover Image (Thumbnail)</label>
             <input 
               type="file" 
-              className="file-input-box"
+              accept="image/*"
               onChange={(e) => setForm({ ...form, image: e.target.files[0] })} 
               required={!editingId}
             />
           </div>
+
+          <div className="report-field">
+            <label>PDF Document</label>
+            <input 
+              type="file" 
+              accept=".pdf"
+              onChange={(e) => setForm({ ...form, pdf: e.target.files[0] })} 
+              required={!editingId}
+            />
+          </div>
+
           <div className="form-actions">
             <button type="submit" className={`report-btn ${editingId ? 'update-btn' : 'add-btn'}`}>
-              {editingId ? "Save Changes" : "Upload"}
+              {editingId ? "Save Changes" : "Upload Report"}
             </button>
             {editingId && (
-              <button type="button" className="cancel-btn-alt" onClick={() => { setEditingId(null); setForm({ title: "", image: null }); }}>
+              <button type="button" className="cancel-btn-alt" onClick={() => { setEditingId(null); setForm({ title: "", image: null, pdf: null }); }}>
                 Cancel
               </button>
             )}
@@ -99,16 +133,19 @@ function AdminReports() {
         </form>
       </section>
 
-      {/* Grid - 3 Items Per Row */}
       <div className="reports-grid-admin">
         {reports.map((report) => (
           <div key={report._id} className="report-item-card">
-            {/* Clickable Area to View Report */}
-            <a href={`http://localhost:5000${report.imageUrl}`} target="_blank" rel="noopener noreferrer" className="report-click-area">
+            <a 
+              href={`http://localhost:5000${report.pdfUrl}`} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="report-click-area"
+            >
               <div className="report-thumb">
                 <img src={`http://localhost:5000${report.imageUrl}`} alt={report.title} />
                 <div className="view-overlay-text">
-                   <span>VIEW FULL REPORT</span>
+                    <span>OPEN PDF</span>
                 </div>
               </div>
             </a>

@@ -1,74 +1,163 @@
 .footer {
-    background-color: #315b60;
-    color: white;
-    padding: 40px 20px;
-    font-family: Arial;
-  }
-  
+  background-color: #1a3a3d; /* Darker, more professional teal */
+  color: #e2e8f0;
+  padding: 60px 20px 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: auto;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 40px;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-title {
+  color: #ffffff;
+  margin-bottom: 25px;
+  font-size: 20px;
+  font-weight: 700;
+  position: relative;
+}
+
+.footer-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 40px;
+  height: 2px;
+  background-color: #28666e;
+}
+
+.footer-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 15px;
+  opacity: 0.8;
+}
+
+.info-row, .contact-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.footer-icon {
+  color: #28666e;
+  font-size: 16px;
+}
+
+.footer-column a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.footer-column a:hover {
+  color: #ffffff;
+  padding-left: 5px;
+}
+
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.social-icons a {
+  color: #ffffff;
+  font-size: 24px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #28666e;
+  transform: translateY(-5px);
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.bottom-content {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.bottom-links {
+  display: flex;
+  gap: 20px;
+}
+
+.bottom-links a {
+  color: #94a3b8;
+  text-decoration: none;
+}
+
+.bottom-links a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .footer-container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1100px;
-    margin: auto;
+    grid-template-columns: 1fr;
+    text-align: center;
   }
-  
-  .footer-column {
-    display: flex;
+  .footer-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .info-row, .contact-row, .social-icons {
+    justify-content: center;
+  }
+  .bottom-content {
     flex-direction: column;
-    gap: 10px;
   }
-  
-  .footer-column h3 {
-    margin-bottom: 10px;
-    font-size: 18px;
-  }
-  
-  .footer-column a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-  }
-  
-  .footer-column a:hover {
-    text-decoration: underline;
-  }
-  
-  .center {
-    text-align: center;
-  }
-  
-  .contact-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: center;
-  }
-  
-  .icon {
-    font-size: 18px;
-  }
-  
-  .social-icons {
-    margin-top: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-  }
-  
-  .social-icons img {
-    width: 28px;
-    height: 28px;
-    cursor: pointer;
-  }
-  
-  .social-icons img:hover {
-    opacity: 0.7;
-  }
-  
-  .footer-bottom {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 13px;
-    opacity: 0.8;
-  }
-  
+}
+
+/* Link එකක් ලෙස පෙනෙන ලෙස Button එක සකස් කිරීම */
+.scroll-link {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  font-size: 14px;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.scroll-link:hover {
+  color: #ffffff;
+  padding-left: 5px;
+}
+
+/* Footer Title හා අනෙකුත් Styling පවතින පරිදිම තබන්න */

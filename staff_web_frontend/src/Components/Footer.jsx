@@ -1,58 +1,71 @@
+import React from "react";
+import { FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 import "./Footer.css";
 
 function Footer() {
+  // පිටුවේ අදාළ ස්ථානයට මෘදු ලෙස ගමන් කිරීමේ function එක
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="footer-container">
-
-        {/* Left Section */}
-        <div className="footer-column">
-          <h3>National Salt Limited</h3>
-          <p>Mahawe­liyaya, Hambantota</p>
-          <p>Sri Lanka</p>
+        
+        {/* About Section */}
+        <div className="footer-column about">
+          <h3 className="footer-title">National Salt Limited</h3>
+          <div className="info-row">
+            <FaMapMarkerAlt className="footer-icon" />
+            <p>Mahaweliyaya, Hambantota, Sri Lanka</p>
+          </div>
+          <p className="footer-desc">
+            The leading salt supplier in Sri Lanka, committed to purity and excellence in every grain.
+          </p>
         </div>
 
-        {/* Middle Section */}
+        {/* Contact Section */}
         <div className="footer-column center">
-          <h3>Contact</h3>
-
-          <div className="contact-row">
-            <span className="icon">✉️</span>
-            <a href="mailto:info@lankasalt.lk">info@lankasalt.lk</a>
-          </div>
-
-          <div className="contact-row">
-            <span className="icon">📞</span>
-            <a href="tel:+945269632">+94 526 9632</a>
+          <h3 className="footer-title">Contact Us</h3>
+          <div className="contact-links">
+            <div className="contact-row">
+              <FaEnvelope className="footer-icon" />
+              <a href="mailto:info@lankasalt.lk">info@lankasalt.lk</a>
+            </div>
+            <div className="contact-row">
+              <FaPhoneAlt className="footer-icon" />
+              <a href="tel:+945269632">+94 526 9632</a>
+            </div>
           </div>
 
           <div className="social-icons">
-            <a href="https://facebook.com" target="_blank">  
-              <img src="/fb.png" alt="Facebook" />
-            </a>
-
-            <a href="https://instagram.com" target="_blank">
-              <img src="/insta.png" alt="Instagram" />
-            </a>
-
-            <a href="https://twitter.com" target="_blank">
-              <img src="/twitter.png" alt="Twitter" />
-            </a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer"><FaFacebook /></a>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer"><FaInstagram /></a>
+            <a href="https://twitter.com" target="_blank" rel="noreferrer"><FaTwitter /></a>
           </div>
         </div>
 
-        {/* Right Section */}
-        <div className="footer-column">
-          <h3>Quick Links</h3>
-
-          <a href="/events">Events</a>
-          <a href="/reports">Reports</a>
-          <a href="/board">Board</a>
+        {/* Right Section - Quick Links (Smooth Scroll Enabled) */}
+        <div className="footer-column links">
+          <h3 className="footer-title">Quick Links</h3>
+          <nav className="footer-nav">
+            {/* මෙහි href="#" දී onClick හරහා function එක call කරන්න */}
+            <button className="scroll-link" onClick={() => scrollToSection("events-section")}>Upcoming Events</button>
+            <button className="scroll-link" onClick={() => scrollToSection("reports-section")}>Official Reports</button>
+            <button className="scroll-link" onClick={() => scrollToSection("board-section")}>Board of Directors</button>
+          </nav>
         </div>
       </div>
 
       <div className="footer-bottom">
-        © National Salt Limited. All rights reserved.
+        <div className="bottom-content">
+          <span>© {new Date().getFullYear()} National Salt Limited. All rights reserved.</span>
+          <div className="bottom-links">
+          </div>
+        </div>
       </div>
     </footer>
   );

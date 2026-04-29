@@ -11,7 +11,7 @@ import Directors from "./Components/Directors";
 import Footer from "./components/Footer";
 import UserDashboard from "./Components/UserDashboard"; 
 import Invoice from "./Components/Invoice";
-import Cart from "./Components/Cart"  
+import Cart from "./Components/Cart";
 import CartIcon from "./Components/CartIcon";
 
 import Login from "./pages/Login";
@@ -22,6 +22,7 @@ import OrderTracking from "./Pages/orderTracking";
 import PaymentHistory from "./Pages/PaymentHistory";
 import Payment from "./Pages/Payment";
 import OrderHistory from "./Pages/OrderHistory";
+import QualityReports from "./Pages/QualityReports"; 
 
 import "./App.css";
 import AddProduct from "./Pages/AddProduct";
@@ -30,22 +31,34 @@ import Profile from "./Pages/Profile";
 function App() {
   const location = useLocation();
 
-  
+  // Footer එක සැඟවිය යුතු Routes
   const hideFooterRoutes = [
-       "/login",
-        "/register", 
-        "/shipping_address", 
-        "/OrderTracking", 
-        "/PaymentHistory", 
-        "/profile",
-        "/dashboard"
-      ];
-  const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
+    "/login",
+    "/register", 
+    "/shipping_address", 
+    "/OrderTracking", 
+    "/PaymentHistory", 
+    "/profile",
+    "/dashboard",
+    "/payment",
+    "/QualityReports"
+  ];
+
+  // Navbar එක සහ CartIcon එක සැඟවිය යුතු Routes
+  const hideNavbarRoutes = ["/login", "/register"];
+
+  const shouldHideFooter = 
+    hideFooterRoutes.includes(location.pathname) || 
+    location.pathname.startsWith("/product/") || 
+    location.pathname.startsWith("/invoice/");
+
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   return (
     <> 
-      <Navbar />
-      <CartIcon />
+      {/* Login සහ Register වලදී Navbar සහ CartIcon නොපෙන්වයි */}
+      {!shouldHideNavbar && <Navbar />}
+      {!shouldHideNavbar && <CartIcon />}
 
       <Routes>
         <Route 
@@ -76,7 +89,7 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/invoice/:id" element={<Invoice />} />
         <Route path="/OrderHistory" element={<OrderHistory />} />
-
+        <Route path="/QualityReports" element={<QualityReports />} />
       </Routes>
 
       {!shouldHideFooter && <Footer />}

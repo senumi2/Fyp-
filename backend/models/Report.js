@@ -1,14 +1,8 @@
-const mongoose = require("mongoose");
-
+const mongoose = require('mongoose');
 const reportSchema = new mongoose.Schema({
-  title: { 
-    type: String, 
-    required: true 
-  },
-  imageUrl: { 
-    type: String, 
-    required: true 
-  }
-});
+  title: String,
+  imageUrl: String,
+  pdfUrl: String, // මෙම පේළිය අනිවාර්යයි
+}, { timestamps: true });
 
-module.exports = mongoose.model("Report", reportSchema);
+module.exports = mongoose.model('Report', reportSchema);

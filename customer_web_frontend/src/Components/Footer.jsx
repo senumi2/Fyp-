@@ -1,7 +1,6 @@
 import React from "react";
 import { HashLink as Link } from "react-router-hash-link";
-import fbImg from "../images/fb.jpg";
-import instaImg from "../images/insta.jpg";
+import { FaFacebookF, FaInstagram, FaTwitter, FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 import "./Footer.css";
 
 function Footer() {
@@ -9,55 +8,53 @@ function Footer() {
     <footer className="footer">
       <div className="footer-container">
         
-        
+        {/* About Section */}
         <div className="footer-column about-section">
           <h3 className="footer-logo">National Salt <span>Limited</span></h3>
           <p className="address-text">
-            Mahaweiliyaya, Hambantota<br />
-            Sri Lanka
+            <FaMapMarkerAlt className="inline-icon" /> Mahaweiliyaya, Hambantota,<br />
+            Sri Lanka.
           </p>
+          <div className="social-links">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="social-icon">
+              <FaFacebookF />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="social-icon">
+              <FaInstagram />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="social-icon">
+              <FaTwitter />
+            </a>
+          </div>
         </div>
 
-        
+        {/* Quick Links Section */}
+        <div className="footer-column links-section">
+          <h3>Quick Links</h3>
+          <nav className="footer-nav">
+            <Link smooth to="/#products">Our Products</Link>
+            <Link smooth to="/#events">Upcoming Events</Link>
+            <Link smooth to="/#directors">Board of Directors</Link>
+          </nav>
+        </div>
+
+        {/* Contact Section */}
         <div className="footer-column contact-section">
           <h3>Contact Us</h3>
           <div className="contact-links">
             <a href="mailto:info@lankasalt.lk" className="contact-item">
-              <span className="icon">✉️</span> info@lankasalt.lk
+              <FaEnvelope className="icon" /> info@lankasalt.lk
             </a>
             <a href="tel:+945269632" className="contact-item">
-              <span className="icon">📞</span> +94 526 9632
+              <FaPhoneAlt className="icon" /> +94 47 526 9632
             </a>
           </div>
-          
-          <div className="social-links">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
-              <img src={fbImg} alt="FB" />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
-              <img src={instaImg} alt="Insta" />
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter">
-              <img src="/twitter.png" alt="Twitter" />
-            </a>
-          </div>
-        </div>
-
-
-        <div className="footer-column links-section">
-          <h3>Quick Links</h3>
-          <nav className="footer-nav">
-           
-            <Link smooth to="/#products">Products</Link>
-            <Link smooth to="/#events">Events</Link>
-            <Link smooth to="/#directors">Directors</Link>
-          </nav>
         </div>
 
       </div>
 
       <div className="footer-bottom">
-        <p>© {new Date().getFullYear()} National Salt Limited. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} National Salt Limited. Developed with Excellence.</p>
       </div>
     </footer>
   );

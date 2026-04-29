@@ -1,82 +1,180 @@
-/* Full background */
+/* මුළු පිටුවේ පසුබිම - Deep Sea Gradient */
 .login-page {
-    height: 100vh;
-    width: 100%;
-    background: linear-gradient(180deg, #033F63, #ffffff);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Login box */
+  height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at center, #004b87 0%, #002a5c 60%, #001f3f 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Poppins', sans-serif; /* වඩාත් professional පෙනුමක් සඳහා */
+}
+
+/* පාවෙන ජල බින්දු (Realistic Water Drops in Background) */
+.bg-drop {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(2px);
+  border-radius: 51% 49% 48% 52% / 62% 37% 63% 38%;
+  box-shadow: 
+    inset 10px 10px 20px rgba(0,0,0,0.05), 
+    15px 25px 20px rgba(0,0,0,0.1), 
+    inset -10px -10px 15px rgba(255,255,255,0.3);
+}
+
+.drop-1 { width: 150px; height: 150px; top: 10%; left: 10%; animation: float 8s infinite ease-in-out; }
+.drop-2 { width: 200px; height: 200px; bottom: 10%; right: 10%; animation: float 12s infinite ease-in-out reverse; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(10deg); }
+}
+
+/* Login Box - Glassmorphism Effect */
+.login-box {
+  width: 400px;
+  padding: 50px 40px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  z-index: 10;
+  animation: fadeIn 0.8s ease;
+}
+
+/* Login Header & Arrow Section */
+.login-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.back-home-arrow {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  font-size: 26px;
+  color: #0096D6;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.back-home-arrow:hover {
+  color: #F1FAEE;
+  transform: translateX(-5px);
+}
+
+.login-header h2 {
+  color: #F1FAEE;
+  font-size: 26px;
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.underline {
+  width: 50px;
+  height: 4px;
+  background: #0096D6;
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+/* Inputs Styling */
+.input-group {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.login-input {
+  width: 100%;
+  box-sizing: border-box; /* Padding නිසා size එක වෙනස් වීම වැළැක්වීමට */
+  padding: 14px 20px;
+  background: rgba(241, 250, 238, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #F1FAEE;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.login-input::placeholder {
+  color: rgba(241, 250, 238, 0.6);
+}
+
+.login-input:focus {
+  background: rgba(241, 250, 238, 0.15);
+  border-color: #0096D6;
+  box-shadow: 0 0 15px rgba(0, 150, 214, 0.3);
+}
+
+/* Button - Professional Salt/Cyan Style */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: #0096D6;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 150, 214, 0.4);
+}
+
+.login-btn:hover {
+  background: #F1FAEE;
+  color: #001F3F;
+  transform: translateY(-2px);
+}
+
+.login-btn:active {
+  transform: scale(0.98);
+}
+
+/* Links Styling */
+.links {
+  margin-top: 25px;
+  font-size: 14px;
+  color: #F1FAEE;
+}
+
+.links a {
+  color: #0096D6;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.links a:hover {
+  color: #F1FAEE;
+  text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
   .login-box {
-    width: 380px;
-    padding: 45px;
-    box-shadow: 0px 0px 30px rgba(227,228,237,0.37);
-    border-radius: 30px;
-    backdrop-filter: blur(30px);
-    text-align: center;
-    border: 2px solid rgba(255,255,255,0.18);
-    background: transparent;
-    background-color: #647F89;
+    width: 90%;
+    padding: 30px 20px;
   }
-  
-  .login-box h2 {
-    margin-bottom: 30px;
-    font-size: 26px;
+  .login-header h2 {
+    font-size: 22px;
   }
-  
-  /* Inputs */
-  .login-input {
-    width: 100%;
-    height: 42px;
-    margin-bottom: 15px;
-    border: none;
-    background-color: #e0e0e0;
-    padding-left: 10px;
-    font-size: 15px;
-    border-radius: 4px;
-  }
-  
-  .login-input:focus {
-    outline: none;
-  }
-  
-  /* Button */
-  .login-btn {
-    width: 100%;
-    height: 42px;
-    background: linear-gradient(180deg,#546c75, #ffffff) ;
-    border: 1px solid #1c1c1c;
-    margin-top: 10px;
-    cursor: pointer;
-    font-size: 15px;
-  }
-  
-  .login-btn:hover {
-    background: rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Remember me checkbox */
-  .remember-row {
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    gap: 8px;
-    margin-top: 12px;
-  }
-  
-  .links {
-    margin-top: 20px;
-    font-size: 14px;
-  }
-  
-  .links a {
-    color: #0a2952;
-    text-decoration: none;
-  }
-  
-  .links a:hover {
-    text-decoration: underline;
-  }
-  
+}

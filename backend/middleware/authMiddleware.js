@@ -5,36 +5,30 @@ const authMiddleware = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    console.log("❌ No token provided in headers");
     return res.status(401).json({ message: "No token provided" });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // බහුලව භාවිතා වන ID වර්ග සියල්ලම මෙතන පරීක්ෂා කරනවා
-    const userId = decoded.id || decoded._id || decoded.userId;
-
-    if (!userId) {
-      console.log("❌ Token verified but no User ID found in payload");
-      return res.status(401).json({ message: "Invalid token payload" });
-    }
-
+    // මෙහිදී decoded.role සහ decoded.jobRole යන දෙකම පරීක්ෂා කරයි
     req.user = {
-      id: userId,
+      id: decoded.id || decoded._id || decoded.userId,
       email: decoded.email,
-      role: decoded.role
+      role: decoded.role || decoded.jobRole 
     };
-    
+
     next();
   } catch (err) {
-    console.log("❌ JWT Verification Failed:", err.message);
+    console.error("Auth Middleware Error:", err.message);
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
 
+// Admin Role එක පරීක්ෂා කිරීමට
 authMiddleware.admin = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
+  // role එක lowercase කර "admin" ද කියා පරීක්ෂා කිරීම වඩාත් ආරක්ෂිතයි
+  if (req.user && req.user.role && req.user.role.toLowerCase().trim() === "admin") {
     next();
   } else {
     res.status(403).json({ message: "Access denied. Admin only." });

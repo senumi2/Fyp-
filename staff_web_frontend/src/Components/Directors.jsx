@@ -33,7 +33,7 @@ function Directors() {
   if (directors.length === 0) return null;
 
   return (
-    <section className="creative-directors-section" id="directors">
+    <section className="creative-directors-section"id="board-section">
       <div className="modern-container-full">
         <header className="section-header">
           <span className="sub-title">OUR LEADERSHIP</span>

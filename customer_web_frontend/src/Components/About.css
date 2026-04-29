@@ -1,111 +1,155 @@
-.story {
+/* Navbar.css */
+
+/* Fonts ආනයනය කිරීම (පොදුවේ භාවිතා වන නිසා) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.navbar {
   display: flex;
-  align-items: center; 
   justify-content: space-between;
-  padding: 100px 8%; 
-  background-color: #ffffff;
-  min-height: 80vh; 
-  gap: 60px; 
-  overflow: hidden;
-}
-
-.story-left {
-  flex: 1.2;
-  text-align: justify;
-  line-height: 1.8; 
-}
-
-.story-left h2 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin-bottom: 25px;
-  position: relative;
-  display: inline-block;
-}
-
-
-.story-left h2::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -8px;
-  width: 60px;
-  height: 5px;
-  background: #2979ff;
-  border-radius: 10px;
-}
-
-.story-left p {
-  font-size: 1.05rem;
-  color: #444;
-  margin-bottom: 20px;
-  font-weight: 400;
-}
-
-.story-img {
-  flex: 0.8;
+  align-items: center;
   width: 100%;
-  max-width: 550px;
-  height: 450px;
-  object-fit: cover;
-  border-radius: 30px; 
-  box-shadow: 25px 25px 0px rgba(41, 121, 255, 0.05), 
-              0 20px 40px rgba(0,0,0,0.1); 
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-}
-
-.story-img:hover {
-  transform: scale(1.03) translateY(-10px);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-}
-
-
-
-.animate {
-  opacity: 0;
-  filter: blur(5px); 
-  transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), 
-              transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
-              filter 1.2s ease;
-}
-
-.slide-left {
-  transform: translateX(-80px); 
-}
-
-.slide-right {
-  transform: translateX(80px);
-}
-
-.animate.show {
-  opacity: 1;
-  filter: blur(0);
-  transform: translateX(0);
-}
-
-/* Mobile Responsive */
-@media (max-width: 1024px) {
-  .story {
-    flex-direction: column;
-    padding: 60px 5%;
-    text-align: center;
-  }
+  height: 55px; /* මදක් උස වැඩි කළා පෙනුම ලස්සන වීමට */
+  padding: 0 40px;
+  background: linear-gradient(90deg, #FEDC97, #B4D2B1, #28666E);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
   
-  .story-left {
-    margin-right: 0;
-    text-align: center;
-  }
+  /* Refresh කිරීමේදී Navbar එක Smooth ලෙස මතු වීමට */
+  animation: slideDown 0.6s ease-out forwards;
+}
 
-  .story-left h2::after {
-    left: 50%;
-    transform: translateX(-50%);
+/* උඩ සිට පහළට එන Smooth Animation එක */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
   }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
-  .story-img {
-    width: 100%;
-    height: 350px;
-    margin-top: 30px;
-    margin-right: 0;
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  margin-right: 35px;
+  color: #010101;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* ලින්ක් එක යටින් එන ඉර (Hover Effect) */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #010101;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after, 
+.nav-link.active::after {
+  width: 100%;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+/* User Profile Section */
+.user-profile-nav {
+  display: flex;
+  align-items: center;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 25px;
+  transition: background 0.3s ease;
+}
+
+.user-profile-nav:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Buttons Styling */
+.login-btn-navi, 
+.profile-btn-navi, 
+.logout-btn-navi {
+  margin-left: 15px;
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Login Button */
+.login-btn-navi {
+  background-color: #010101;
+  color: #ffffff;
+}
+
+.login-btn-navi:hover {
+  background-color: #333333;
+  transform: translateY(-2px);
+}
+
+/* Profile Button */
+.profile-btn-navi {
+  background-color: #ffffff;
+  color: #28666E;
+  border: 1px solid #28666E;
+}
+
+.profile-btn-navi:hover {
+  background-color: #28666E;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Logout Button */
+.logout-btn-navi {
+  background-color: #d9534f;
+  color: #ffffff;
+}
+
+.logout-btn-navi:hover {
+  background-color: #c9302c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive (Mobile) */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+  }
+  .nav-link {
+    margin-right: 15px;
+    font-size: 13px;
+  }
+  .nav-user-name {
+    display: none; /* Mobile වලදී නම නැතිව icon එක පමණක් පෙන්වීමට */
   }
 }

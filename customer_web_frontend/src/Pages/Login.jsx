@@ -29,26 +29,42 @@ function Login() {
 
   return (
     <div className="login-page">
+      <div className="bg-drop drop-1"></div>
+      <div className="bg-drop drop-2"></div>
+
       <div className="login-box">
-        <h2>Member Login</h2>
+        <div className="login-header">
+          {/* Back to Home Arrow */}
+          <Link to="/" className="back-home-arrow" title="Back to Home">
+            &larr;
+          </Link>
+          <h2>Member Login</h2>
+          <div className="underline"></div>
+        </div>
 
-        <input type="email" placeholder="Email"
-          className="login-input"
-          onChange={e => setEmail(e.target.value)}
-        />
+        <div className="input-group">
+          <input type="email" placeholder="Email Address"
+            className="login-input"
+            onChange={e => setEmail(e.target.value)}
+          />
+        </div>
 
-        <input type="password" placeholder="Password"
-          className="login-input"
-          onChange={e => setPassword(e.target.value)}
-        />
+        <div className="input-group">
+          <input type="password" placeholder="Password"
+            className="login-input"
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
 
         <button className="login-btn" onClick={handleLogin}>
           Sign In
         </button>
 
-        <p>
-          Don't have account? <Link to="/register">Register</Link>
-        </p>
+        <div className="links">
+          <p>
+            Don't have an account? <Link to="/register">Register</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

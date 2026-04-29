@@ -1,125 +1,149 @@
-.contact-page{
-    padding: 40px;
-    background: #f5f7fa;
+.contact-page {
+  padding: 40px;
+  background: #f5f7fa;
 }
 
-.contact-container{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    max-width: 1200px;
-    margin: auto;
+.contact-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
 }
 
-/*left side form*/
+/* --- Left Side Container --- */
 .contact-container-left {
-    width: 420px;              /* left side width */
-    border: 1px solid #ccc;
-    font-family: Arial, sans-serif;
-  }
-  
-  .contact-header {
-    background-color: #7ea6a8;
-    color: #ffffff;
-    text-align: center;
-    padding: 15px;
-    font-size: 20px;
-    font-weight: 500;
-  }
-  
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  .contact-box {
-    border: 1px solid #ccc;
-    padding: 30px 20px;
-    text-align: center;
-    background-color: #ffffff;
-  }
-  
-  .contact-box.light {
-    background-color: #e6efef;
-  }
-  
-  .icon {
-    font-size: 30px;
-    margin-bottom: 10px;
-  }
-  
-  .contact-box h4 {
-    margin: 10px 0;
-    font-size: 16px;
-    font-weight: 600;
-  }
-  
-  .contact-box p {
-    font-size: 14px;
-    color: #333;
-    line-height: 1.5;
-  }
-  
-  .link {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
-  .closed {
-    margin-top: 8px;
-    font-weight: 500;
-  }
-  
-
-/*Right side form*/
-.contact-form{
-    flex: 1 1 50%;
-    background: #fff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  width: 420px;
+  border: 1px solid #ccc;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  height: fit-content; /* අමතර හිස් ඉඩක් ගැනීම වළක්වයි */
 }
 
-.contact-form h2{
-    margin-bottom: 20px;
-    color: #333;
+.contact-header {
+  background-color: #7ea6a8;
+  color: #ffffff;
+  text-align: center;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: 500;
 }
 
-.contact-form label{
-    display: block;
-    margin-top: 12px;
-    font-weight: bold;
-    color: #444;
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.contact-box {
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: 25px 15px;
+  text-align: center;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* දකුණු පැත්තේ ඇති කොටුවල දකුණු border එක අයින් කිරීම */
+.contact-box:nth-child(even) {
+  border-right: none;
+}
+
+/* යටම පේළියේ කොටු දෙකේ යට border එක අයින් කිරීම */
+.contact-box:nth-last-child(-n+2) {
+  border-bottom: none;
+}
+
+.contact-box.light {
+  background-color: #e6efef;
+}
+
+.icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.contact-box h4 {
+  margin: 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.contact-box p {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.closed {
+  margin-top: 8px !important;
+  font-weight: 500;
+}
+
+/* --- Right Side Form --- */
+.contact-form {
+  flex: 1 1 50%;
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.contact-form h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.contact-form label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+  color: #444;
 }
 
 .contact-form input,
-.contact-form textarea{
-    width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
+.contact-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  box-sizing: border-box; /* Padding නිසා කොටුව පිටතට යාම වළක්වයි */
 }
 
-.contact-form textarea{
-    resize: none;
-    height: 120px;
+.contact-form textarea {
+  resize: none;
+  height: 120px;
 }
 
-.contact-form button{
-    margin-top: 15px;
-    width: 100%;
-    padding: 12px;
-    background: #7ea6a8;
-    border: none;
-    border-radius: 6px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
+.contact-form button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: #7ea6a8;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.contact-form button:hover{
-    background: #546c75;
+.contact-form button:hover {
+  background: #546c75;
+}
+
+/* Responsive (Mobile) */
+@media (max-width: 768px) {
+  .contact-container-left {
+      width: 100%;
+  }
 }

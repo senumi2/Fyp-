@@ -56,7 +56,7 @@ function OrderTracking() {
       <div className="tracking-wrapper">
         <div className="order-list-container">
           <div className="list-header">
-            <button className="back-dash-btn" onClick={() => navigate("/UserDashboard")}>
+            <button className="back-dash-btn" onClick={() => navigate("/dashboard")}>
               <FiArrowLeft /> Dashboard
             </button>
             <h2>My Salt Orders</h2>

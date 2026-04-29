@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// 1. User Register (Updated with First-User-is-Admin Logic)
+// 1. User Register (Updated with Customer-Specific Logic)
 exports.register = async (req, res) => {
   try {
     const { fullName, email, contact, jobRole, password } = req.body;
@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: "User already exists" });
 
-    // --- NEW LOGIC: Check if this is the very first user ---
+    // --- Check if this is the very first user ---
     const userCount = await User.countDocuments();
     const isFirstUser = userCount === 0;
 
@@ -19,13 +19,28 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // --- LOGIC FOR CUSTOMER VS STAFF ---
+    // 1. පලවෙනි user නම් Admin වෙනවා (Approved).
+    // 2. එවන role එක "Customer" නම් එයා auto Approved වෙනවා (Approval ඕනේ නෑ).
+    // 3. වෙනත් Staff role එකක් (Driver, Inventory, etc.) නම් Approval ඕනේ (False).
+    let approvalStatus = false;
+    let finalRole = jobRole;
+
+    if (isFirstUser) {
+      approvalStatus = true;
+      finalRole = "Admin";
+    } else if (jobRole === "Customer") {
+      approvalStatus = true; // Customer ලාට approval අවශ්‍ය නැත
+    } else {
+      approvalStatus = false; // අනෙකුත් Staff roles සඳහා approval අවශ්‍යයි
+    }
+
     user = new User({ 
       fullName, 
       email, 
       contact, 
-      // Idirikala ayata "Pending" / Palaweniya "Approved"
-      isApproved: isFirstUser ? true : false, 
-      jobRole: isFirstUser ? "Admin" : jobRole, // Palaweniyawa auto "Admin" karanawa
+      isApproved: approvalStatus, 
+      jobRole: finalRole, 
       password: hashedPassword 
     });
 
@@ -34,7 +49,7 @@ exports.register = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, role: user.jobRole }, 
       process.env.JWT_SECRET, 
-      { expiresIn: '1h' }
+      { expiresIn: '2d' }
     );
 
     res.status(201).json({ 
@@ -70,7 +85,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, role: user.jobRole }, 
       process.env.JWT_SECRET, 
-      { expiresIn: '1h' }
+      { expiresIn: '2d' }
     );
 
     res.json({ 

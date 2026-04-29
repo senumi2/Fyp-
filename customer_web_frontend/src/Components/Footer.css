@@ -1,114 +1,133 @@
 .footer {
-  background-color: #315b60;
+  background-color: #1a3c40; /* තද පැහැයක් ලබා දී ඇත */
   color: #ffffff;
-  padding: 60px 20px 20px;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding: 70px 20px 30px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 40px;
-  padding-bottom: 40px;
+  grid-template-columns: 1.5fr 1fr 1fr; /* Layout එක වඩාත් සමබර කර ඇත */
+  gap: 50px;
+  padding-bottom: 50px;
 }
 
 .footer-column h3 {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  margin-bottom: 20px;
-  position: relative;
+  margin-bottom: 25px;
+  color: #f4f4f4;
 }
 
-
 .footer-logo {
-  font-size: 1.5rem !important;
-  letter-spacing: 1px;
+  font-size: 1.7rem !important;
+  font-weight: 700;
+  margin-bottom: 15px !important;
+  color: #fff;
 }
 
 .footer-logo span {
   font-weight: 300;
-  opacity: 0.8;
+  color: #20ad96; /* Limited යන කොටසට වෙනස් වර්ණයක් */
 }
 
 .address-text {
-  line-height: 1.6;
+  line-height: 1.8;
   font-size: 15px;
-  opacity: 0.9;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+.inline-icon {
+  margin-right: 8px;
+  color: #20ad96;
 }
 
 /* Links and Navigation */
 .footer-nav, .contact-links {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
 }
 
 .footer-column a {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   font-size: 15px;
   transition: all 0.3s ease;
-  width: fit-content;
+  display: flex;
+  align-items: center;
 }
 
 .footer-column a:hover {
-  color: #ffffff;
-  transform: translateX(8px);
-  opacity: 1;
+  color: #20ad96;
+  transform: translateX(5px);
 }
 
 /* Contact Items */
-.contact-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.contact-item .icon {
+  margin-right: 12px;
+  font-size: 1.1rem;
+  color: #20ad96;
 }
 
-/* Social Icons */
+/* Social Icons (Professional Look) */
 .social-links {
   display: flex;
   gap: 15px;
-  margin-top: 20px;
 }
 
-.social-links img {
-  width: 32px;
-  height: 32px;
-  filter: brightness(0) invert(1); /* Icons සුදු පැහැ ගැන්වීමට */
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.social-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: white !important;
+  transition: all 0.4s ease;
 }
 
-.social-links img:hover {
-  transform: translateY(-5px) scale(1.1);
+.social-icon:hover {
+  background: #20ad96;
+  transform: translateY(-5px) !important;
 }
-
 
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 25px;
+  padding-top: 30px;
   text-align: center;
   font-size: 14px;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 /* Responsive */
+@media (max-width: 992px) {
+  .footer-container {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+  }
+}
+
 @media (max-width: 768px) {
   .footer {
     text-align: center;
-    padding: 40px 20px 20px;
   }
 
   .footer-column {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-  }
-
-  .footer-column a:hover {
-    transform: translateY(-2px);
   }
 
   .footer-nav, .social-links, .contact-links {
     align-items: center;
+  }
+
+  .footer-column a:hover {
+    transform: scale(1.05);
   }
 }

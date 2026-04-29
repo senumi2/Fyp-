@@ -22,7 +22,8 @@ const userSchema = new mongoose.Schema(
     jobRole: { 
       type: String, 
       required: true,
-      enum: ['Admin', 'Ponds Management', 'Inventory Management', 'Harvest Management', 'Equipment Usage', 'Expenses & Finance','Driver']
+      enum: ['Admin', 'Ponds Management', 'Inventory Management', 'Harvest Management', 'Equipment Usage', 'Expenses & Finance','Driver',  'Customer'],
+      default: 'Customer'
     },
     isApproved: {
       type: Boolean,

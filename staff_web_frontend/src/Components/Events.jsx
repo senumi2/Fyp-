@@ -46,7 +46,8 @@ function Events() {
   const displayedEvents = showAll ? events : events.slice(0, 3);
 
   return (
-    <section className="creative-events-section" id="events">
+    // 🟢 Footer එකේ ඇති ලින්ක් එකට ගැළපෙන පරිදි id="events-section" එක් කළා
+    <section className="creative-events-section" id="events-section">
       <div className="events-container">
         <header className="events-header">
           <h2 className="section-title">Events & Activities</h2>
@@ -84,8 +85,6 @@ function Events() {
                 <div className="event-content">
                   <h3 className="event-title">{event.title}</h3>
                   <p className="event-description">{event.description}</p>
-                  
-                  
                 </div>
               </div>
             );
