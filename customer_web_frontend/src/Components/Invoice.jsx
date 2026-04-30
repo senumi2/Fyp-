@@ -53,8 +53,8 @@ function Invoice() {
   return (
     <div className="invoice-page-container">
       <div className="no-print invoice-top-bar">
-        <button className="back-home-btn" onClick={() => navigate("/")}>
-          <FaArrowLeft /> Back to Shop
+        <button className="back-home-btn" onClick={() => navigate("/dashboard")}>
+          <FaArrowLeft /> Back 
         </button>
         <button className="print-download-btn" onClick={() => window.print()}>
           <FaPrint /> Download PDF

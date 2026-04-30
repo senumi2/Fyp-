@@ -20,6 +20,7 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [review, setReview] = useState({ rating: 5, comment: "" });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/products/${id}`)
@@ -27,34 +28,54 @@ function ProductDetail() {
         if (!res.ok) throw new Error("Product not found");
         return res.json();
       })
-      .then(data => setProduct(data))
-      .catch(err => console.error(err));
+      .then(data => {
+        setProduct(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   }, [id]);
 
-  if (!product) return <div className="loading-container">Loading Product...</div>;
-
-  // 🛒 Add to Cart Logic
-  const addToCart = () => {
+  // 🛒 Add to Cart Logic (Database + LocalStorage)
+  const addToCart = async () => {
     const currentQty = quantity < 1 ? 1 : quantity;
     const cartItem = { 
-      id: product._id, 
+      productId: product._id, 
       name: product.name, 
       price: product.price, 
       image: product.imageUrl, 
       qty: currentQty 
     };
 
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const isExist = existingCart.find((item) => item.id === product._id);
-
-    if (isExist) {
-      isExist.qty += currentQty;
-    } else {
-      existingCart.push(cartItem);
+    // 1. Database එකට යැවීම (User ලොග් වී ඇත්නම් පමණි)
+    if (user) {
+      try {
+        await fetch("http://localhost:5000/api/cart/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: user._id || user.id, ...cartItem })
+        });
+      } catch (err) { 
+        console.error("Database Error:", err); 
+      }
     }
 
-    localStorage.setItem("cart", JSON.stringify(existingCart));
-    setQuantity(currentQty); 
+    // 2. Local Storage එක update කිරීම (සැමවිටම සිදු වේ)
+    const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existIndex = localCart.findIndex(i => i.productId === product._id);
+    
+    if (existIndex > -1) {
+      localCart[existIndex].qty += currentQty;
+    } else {
+      localCart.push(cartItem);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(localCart));
+
+    // 🔔 CartIcon එකට පණිවිඩයක් යැවීම
+    window.dispatchEvent(new Event("cartUpdated"));
     alert("Product added to cart!");
   };
 
@@ -98,6 +119,9 @@ function ProductDetail() {
     } catch (err) { console.error(err); }
   };
 
+  if (loading) return <div className="loading-container">Loading Product...</div>;
+  if (!product) return <div className="loading-container">Product not found.</div>;
+
   return (
     <div className="product-page">
       <div className="product-top-section">
@@ -110,14 +134,13 @@ function ProductDetail() {
           <p className="price-tag">Rs. {product.price.toLocaleString()}</p>
           <p className="description-text">{product.description}</p>
           
-          {/* --- 🚀 Inventory Alert (Real-time Stock Status) --- */}
           <div className="stock-container">
             <p className={`stock-info ${product.stock < 50 ? "low-stock" : ""}`}>
               Available Stock: {product.stock} kg
             </p>
             {product.stock > 0 && product.stock < 50 && (
               <div className="stock-alert">
-                <FiAlertCircle /> <span>Low stock! Order soon to avoid delays.</span>
+                <FiAlertCircle /> <span>Low stock! Order soon.</span>
               </div>
             )}
             {product.stock <= 0 && (
@@ -127,22 +150,13 @@ function ProductDetail() {
             )}
           </div>
 
-          {/* --- 🛡️ Product Quality Specs --- */}
+          {/* Quality Specs */}
           <div className="quality-specs-box">
              <h4><FiShield /> Quality Specifications</h4>
              <div className="specs-grid">
-                <div className="spec-item">
-                  <span>Purity (NaCl)</span>
-                  <strong>{product.purity || "98.5%"}</strong>
-                </div>
-                <div className="spec-item">
-                  <span>Iodine Content</span>
-                  <strong>{product.iodine || "25-30 ppm"}</strong>
-                </div>
-                <div className="spec-item">
-                  <span>Moisture</span>
-                  <strong>{product.moisture || "< 0.5%"}</strong>
-                </div>
+                <div className="spec-item"><span>Purity</span><strong>{product.purity || "98.5%"}</strong></div>
+                <div className="spec-item"><span>Iodine</span><strong>{product.iodine || "25-30 ppm"}</strong></div>
+                <div className="spec-item"><span>Moisture</span><strong>{product.moisture || "< 0.5%"}</strong></div>
              </div>
           </div>
 
@@ -159,16 +173,10 @@ function ProductDetail() {
                   setQuantity(0);
                 } else {
                   const numVal = parseInt(val);
-                  if (numVal > product.stock) {
-                    setQuantity(product.stock);
-                  } else {
-                    setQuantity(numVal);
-                  }
+                  setQuantity(numVal > product.stock ? product.stock : numVal);
                 }
               }}
-              onBlur={() => {
-                if (quantity < 1) setQuantity(1);
-              }}
+              onBlur={() => { if (quantity < 1) setQuantity(1); }}
               className="custom-qty-input"
             />
           </div>
@@ -186,12 +194,9 @@ function ProductDetail() {
 
       <hr className="section-divider" />
 
-      {/* --- Feedback Area --- */}
+      {/* Feedbacks */}
       <div className="feedback-area">
-        <div className="title-row">
-          <FiMessageSquare /> <h3>Customer Feedbacks</h3>
-        </div>
-
+        <div className="title-row"><FiMessageSquare /> <h3>Customer Feedbacks</h3></div>
         <div className="feedbacks-grid">
           {product.reviews && product.reviews.length > 0 ? (
             product.reviews.map((r) => (
@@ -202,27 +207,18 @@ function ProductDetail() {
                     <strong>{r.user}</strong>
                     <div className="star-display">
                       {[...Array(5)].map((_, index) => (
-                        <FiStar
-                          key={index}
-                          size={14}
-                          color={index + 1 <= r.rating ? "#ffc107" : "#e4e5e9"}
-                          fill={index + 1 <= r.rating ? "#ffc107" : "none"}
-                        />
+                        <FiStar key={index} size={14} color={index + 1 <= r.rating ? "#ffc107" : "#e4e5e9"} fill={index + 1 <= r.rating ? "#ffc107" : "none"} />
                       ))}
                     </div>
                   </div>
                   {user && user.fullName === r.user && (
-                    <button className="delete-icon-btn" onClick={() => handleDeleteReview(r._id)}>
-                      <FiTrash2 />
-                    </button>
+                    <button className="delete-icon-btn" onClick={() => handleDeleteReview(r._id)}><FiTrash2 /></button>
                   )}
                 </div>
                 <p className="comment-body">"{r.comment}"</p>
               </div>
             ))
-          ) : (
-            <p className="no-data">No feedbacks for this product yet.</p>
-          )}
+          ) : <p className="no-data">No feedbacks for this product yet.</p>}
         </div>
 
         {user ? (
@@ -236,11 +232,7 @@ function ProductDetail() {
                 <option value="2">2 - Poor</option>
                 <option value="1">1 - Terrible</option>
               </select>
-              <textarea 
-                placeholder="What's your experience with this item?" 
-                value={review.comment} 
-                onChange={e => setReview({ ...review, comment: e.target.value })} 
-              />
+              <textarea placeholder="Your experience..." value={review.comment} onChange={e => setReview({ ...review, comment: e.target.value })} />
               <button className="submit-feedback-btn" onClick={handleAddReview}>Post Feedback</button>
             </div>
           </div>

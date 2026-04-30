@@ -1,0 +1,113 @@
+/* AdminStaffRegisterAccess.css - Full Width Version */
+
+.approval-container {
+    padding: 40px;
+    background: linear-gradient(135deg, #f0f4f3 0%, #e0e9e8 100%);
+    min-height: 100vh; /* මුළු පිටුවේම උස ආවරණය කිරීමට */
+    width: 100%; /* සම්පූර්ණ පළල */
+    box-sizing: border-box; /* Padding නිසා පිටතට පැනීම වැළැක්වීමට */
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* Header Section */
+.approval-container h2 {
+    color: #28666E; /* Teal Green */
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 30px;
+    border-left: 6px solid #FEDC97; /* Yellow accent on side */
+    padding-left: 15px;
+    text-align: left; /* වම් පසට පෙළගැස්වීම වඩාත් Professional */
+}
+
+/* Table Wrapper for Glassmorphism effect */
+.table-wrapper {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table Header */
+thead tr {
+    background-color: #28666E; /* Teal Green */
+    color: #ffffff;
+    text-align: left;
+}
+
+th {
+    padding: 20px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #e9eeed;
+    color: #334e4b;
+    font-size: 1rem;
+}
+
+/* Row Hover */
+tbody tr:hover {
+    background-color: #f8fafc;
+    transition: 0.2s ease;
+}
+
+/* Job Role styling */
+td:nth-child(3) {
+    font-weight: 700;
+    color: #00A693; /* Persian Green */
+}
+
+/* Approve Button */
+.approve-btn {
+    background: linear-gradient(135deg, #00A693 0%, #28666E 100%); /* Persian to Teal gradient */
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 166, 147, 0.2);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.approve-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(40, 102, 110, 0.3);
+    filter: brightness(1.1);
+}
+
+/* No data message */
+.approval-container p {
+    text-align: center;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 40px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .approval-container {
+        padding: 20px;
+    }
+    
+    th, td {
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+}

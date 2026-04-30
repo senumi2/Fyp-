@@ -31,6 +31,7 @@ function Reports() {
     <section className="reports-section" id="reports-section">
       <div className="reports-container">
         <h2 className="section-title">Annual Reports</h2>
+        <div className="title-bar"></div>
         
         {loading ? (
           <div className="loading">Loading reports...</div>

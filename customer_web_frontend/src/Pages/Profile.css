@@ -100,8 +100,8 @@
   transition: 0.3s;
 }
 
-.edit-main-btn { background: #1e293b; color: white; }
-.save-main-btn { background: #10b981; color: white; }
+.edit-main-btn { background: #263d62fe; color: white; }
+.save-main-btn { background: #09467ff3; color: white; }
 .cancel-main-btn { background: #ef4444; color: white; }
 
 .action-btn-group { display: flex; gap: 15px; width: 100%; }

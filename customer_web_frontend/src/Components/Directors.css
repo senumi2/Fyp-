@@ -20,14 +20,14 @@
 .section-title {
   font-size: 2rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #040404;
   text-transform: uppercase;
 }
 
 .title-underline {
   width: 60px;
   height: 4px;
-  background: #315b60;
+  background: #323d8e;
   margin: 10px auto;
   border-radius: 2px;
 }
@@ -110,7 +110,7 @@
 }
 
 .role {
-  color: #008fa0;
+  color: #120ab1;
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -130,7 +130,7 @@
   top: 40%; 
   width: 48px;
   height: 48px;
-  background: #315b60; 
+  background: #212992; 
   color: white;
   border: none;
   border-radius: 50%;
@@ -145,7 +145,7 @@
 }
 
 .slide-arrow:hover:not(.is-disabled) {
-  background: #234347;
+  background: #07105e;
   transform: translateY(-2px) scale(1.1);
 }
 

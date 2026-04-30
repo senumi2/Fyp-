@@ -21,7 +21,7 @@
 }
 
 .contact-header {
-  background-color: #7ea6a8;
+  background-color: #264c74;
   color: #ffffff;
   text-align: center;
   padding: 15px;
@@ -56,7 +56,7 @@
 }
 
 .contact-box.light {
-  background-color: #e6efef;
+  background-color: #e6e9ef;
 }
 
 .icon {
@@ -128,17 +128,17 @@
   margin-top: 20px;
   width: 100%;
   padding: 12px;
-  background: #7ea6a8;
+  background:linear-gradient(#264c74,#67a6d3);
   border: none;
   border-radius: 6px;
-  color: #fff;
+  color: #fff ;
   font-size: 16px;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .contact-form button:hover {
-  background: #546c75;
+  background:linear-gradient(#67a6d3,#264c74 );
 }
 
 /* Responsive (Mobile) */

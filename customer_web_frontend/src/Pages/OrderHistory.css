@@ -1,111 +1,176 @@
+/* --- Global Wrapper --- */
 .order-history-wrapper {
-    padding: 60px 20px;
-    background: #f8fafc;
-    min-height: 100vh;
-  }
-  
-  .order-history-card {
-    max-width: 1150px;
-    margin: 0 auto;
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.04);
-  }
-  
-  .order-title {
-    color: #0f172a;
-    margin-bottom: 5px;
-    font-weight: 800;
-    font-size: 1.8rem;
-  }
-  
-  .subtitle {
-    color: #64748b;
-    margin-bottom: 30px;
-    font-size: 0.95rem;
-  }
-  
-  .order-table-container { overflow-x: auto; }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
-  }
-  
-  th {
-    background: #f1f5f9;
-    color: #475569;
-    padding: 18px;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-align: left;
-  }
-  
-  td {
-    padding: 20px 18px;
-    border-bottom: 1px solid #f1f5f9;
-    color: #334155;
-    font-size: 0.95rem;
-  }
-  
-  .id-cell { font-weight: 700; color: #008fa0; }
-  .price-cell { font-weight: 800; color: #1e293b; }
-  
-  /* Status Tags */
-  .order-status-tag {
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: capitalize;
-  }
-  
-  .order-status-tag.pending { background: #fffbeb; color: #92400e; }
-  .order-status-tag.processing { background: #eff6ff; color: #1e40af; }
-  .order-status-tag.shipped { background: #faf5ff; color: #6b21a8; }
-  .order-status-tag.delivered { background: #ecfdf5; color: #065f46; }
-  
-  /* Action Buttons */
-  .action-cell {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .track-btn {
-    padding: 8px 16px;
-    background: #008fa0;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s ease;
-  }
-  
-  .track-btn:hover { background: #006d7a; transform: scale(1.05); }
-  
-  .inv-btn {
-    background-color: #e3f2fd; /* Light Blue */
-    color: #1976d2;
-    border: 1px solid #1976d2;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s;
-    font-weight: 500;
-  }
-  
-  .inv-btn:hover {
-    background-color: #1976d2;
-    color: white;
-  }
-  
-  .no-data {
-    padding: 50px;
-    text-align: center;
-    color: #94a3b8;
-    font-style: italic;
-  }
+  padding: 60px 20px;
+  background-color: #F1FAEE; /* Off-white background */
+  min-height: 100vh;
+  font-family: 'Inter', 'Poppins', sans-serif;
+}
+
+/* --- Main Card Container --- */
+.order-history-card {
+  max-width: 1150px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 31, 63, 0.08); /* Navy based shadow */
+  border: 1px solid rgba(0, 75, 135, 0.1);
+}
+
+/* --- Typography --- */
+.order-title {
+  color: #001F3F; /* Deep Navy Blue */
+  margin-bottom: 8px;
+  font-weight: 800;
+  font-size: 2rem;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: #004B87; /* Medium Blue */
+  margin-bottom: 35px;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* --- Table Styling --- */
+.order-table-container { 
+  overflow-x: auto; 
+  border-radius: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 850px;
+}
+
+th {
+  background: #002A5C; /* Darker Navy */
+  color: #F1FAEE; /* Off-white text for contrast */
+  padding: 18px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  text-align: left;
+  font-weight: 600;
+}
+
+/* Rounded corners for table header */
+th:first-child { border-top-left-radius: 12px; }
+th:last-child { border-top-right-radius: 12px; }
+
+td {
+  padding: 22px 18px;
+  border-bottom: 1px solid rgba(0, 75, 135, 0.08);
+  color: #001F3F;
+  font-size: 0.95rem;
+  background: #ffffff;
+}
+
+/* Table Row Hover effect */
+tbody tr:hover td {
+  background-color: rgba(0, 150, 214, 0.03);
+}
+
+.id-cell { 
+  font-weight: 700; 
+  color: #0096D6; /* Cyan for ID highlights */
+}
+
+.price-cell { 
+  font-weight: 800; 
+  color: #001F3F; 
+}
+
+.items-cell {
+  font-weight: 500;
+  color: #004B87;
+}
+
+/* --- Status Tags (Refined Colors) --- */
+.order-status-tag {
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.order-status-tag.pending { background: #e2e8f0; color: #475569; }
+.order-status-tag.processing { background: #E0F2FE; color: #0369a1; }
+.order-status-tag.shipped { background: #DBEAFE; color: #1e40af; }
+.order-status-tag.delivered { background: #DCFCE7; color: #15803d; }
+
+/* --- Action Buttons --- */
+.action-cell {
+  display: flex;
+  gap: 10px;
+}
+
+/* Track Button (Cyan Primary) */
+.track-btn {
+  padding: 10px 20px;
+  background: #0096D6; /* Cyan */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 150, 214, 0.2);
+}
+
+.track-btn:hover { 
+  background: #007bb0; 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 150, 214, 0.3);
+}
+
+/* Invoice Button (Navy Outline) */
+.inv-btn {
+  background-color: transparent;
+  color: #002A5C;
+  border: 2px solid #002A5C;
+  padding: 8px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.inv-btn:hover {
+  background-color: #002A5C;
+  color: #F1FAEE;
+}
+
+/* --- Utility Messages --- */
+.no-data {
+  padding: 60px;
+  text-align: center;
+  color: #004B87;
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.status-msg {
+  text-align: center;
+  padding: 100px;
+  font-size: 1.2rem;
+  color: #001F3F;
+  font-weight: 600;
+}
+
+.error-msg {
+  color: #dc2626;
+}
+
+/* Scrollbar for container */
+.order-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+.order-table-container::-webkit-scrollbar-thumb {
+  background: #004B87;
+  border-radius: 10px;
+}

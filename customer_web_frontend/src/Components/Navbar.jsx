@@ -29,6 +29,10 @@ function Navbar() {
             Contact
             <span className="drop"></span>
           </NavLink>
+          <NavLink className="nav-link" to="/products">
+            Products
+            <span className="drop"></span>
+          </NavLink>
         </div>
 
         {/* දකුණු පස බටන්ස් */}

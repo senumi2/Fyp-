@@ -13,7 +13,6 @@ function UserDashboard() {
   const [userName, setUserName] = useState(""); 
   const [loading, setLoading] = useState(true);
   
-  // --- Backend දත්ත සඳහා States ---
   const [stats, setStats] = useState({
     totalOrders: 0,
     pendingPayments: 0,
@@ -33,7 +32,6 @@ function UserDashboard() {
       }
 
       try {
-        // 1. User Profile Fetch
         const userRes = await fetch("http://localhost:5000/api/auth/profile", {
           headers: { "Authorization": `Bearer ${token}` },
         });
@@ -42,7 +40,6 @@ function UserDashboard() {
           setUserName(userData.fullName.split(" ")[0]); 
         }
 
-        // 2. Dashboard Stats Fetch
         const statsRes = await fetch("http://localhost:5000/api/orders/dashboard-stats", {
           headers: { "Authorization": `Bearer ${token}` },
         });
@@ -61,7 +58,6 @@ function UserDashboard() {
           monthlyData: formattedChartData
         });
 
-        // 3. Important Notices Fetch
         const noticesRes = await fetch("http://localhost:5000/api/notices/all");
         const noticesData = await noticesRes.json();
         setNotices(noticesData);
@@ -98,7 +94,7 @@ function UserDashboard() {
           </div>
           <div className="status-item">
             <span className="status-label">Active Shipments</span>
-            <span className="status-value green-text">{stats.activeShipments}</span>
+            <span className="status-value cyan-text">{stats.activeShipments}</span>
           </div>
           <div className="status-item">
             <span className="status-label">Total Spent</span>
@@ -106,7 +102,7 @@ function UserDashboard() {
           </div>
         </div>
 
-        {/* --- Info Row (Notices & Quick Actions) --- */}
+        {/* --- Info Row --- */}
         <div className="info-row">
           <div className="notice-board">
             <h4><FiBell className="bell-icon" /> Important Notices</h4>
@@ -139,14 +135,14 @@ function UserDashboard() {
           <div style={{ width: '100%', height: 250, marginTop: '20px' }}>
             <ResponsiveContainer>
               <BarChart data={stats.monthlyData.length > 0 ? stats.monthlyData : [{month: 'No Data', amount: 0}]}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#888', fontSize: 12}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#888', fontSize: 12}} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#002A5C', fontSize: 12, fontWeight: 600}} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: '#002A5C', fontSize: 12}} />
                 <Tooltip 
-                    cursor={{fill: '#f9f9f9'}} 
-                    contentStyle={{borderRadius: '10px', border: 'none', boxShadow: '0 4px 15px rgba(0,0,0,0.05)'}}
+                    cursor={{fill: '#F1FAEE'}} 
+                    contentStyle={{borderRadius: '10px', border: 'none', boxShadow: '0 4px 15px rgba(0,0,0,0.1)'}}
                 />
-                <Bar dataKey="amount" fill="#008fa0" radius={[6, 6, 0, 0]} barSize={40} />
+                <Bar dataKey="amount" fill="#0096D6" radius={[6, 6, 0, 0]} barSize={40} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -154,17 +150,15 @@ function UserDashboard() {
 
         {/* Navigation Grid */}
         <div className="dashboard-grid">
-          {/* TRACK SHIPMENT */}
           <div className="menu-card track-highlight" onClick={() => navigate("/OrderTracking")}>
             <div className="icon-box gold-bg"><FiTruck /></div>
             <div className="card-content">
               <h3>TRACK SHIPMENT</h3>
               <p>Check the live status of your salt delivery trucks and schedules.</p>
             </div>
-            <div className="arrow-btn">❯</div>
+            <div className="arrow-btn yellow-btn">❯</div>
           </div>
-
-          {/* NEW: ORDER HISTORY CARD */}
+ 
           <div className="menu-card order-history-card-highlight" onClick={() => navigate("/OrderHistory")}>
             <div className="icon-box green-bg"><FiPackage /></div>
             <div className="card-content">
@@ -174,27 +168,24 @@ function UserDashboard() {
             <div className="arrow-btn green-btn">❯</div>
           </div>
 
-          {/* PAYMENT HISTORY */}
           <div className="menu-card" onClick={() => navigate("/PaymentHistory")}>
             <div className="icon-box"><FiCreditCard /></div>
             <div className="card-content">
               <h3>PAYMENT HISTORY</h3>
               <p>View past transactions and download official tax invoices.</p>
             </div>
-            <div className="arrow-btn">❯</div>
+            <div className="arrow-btn ash-btn">❯</div>
           </div>
 
-          {/* WAREHOUSE LOCATIONS */}
           <div className="menu-card" onClick={() => navigate("/shipping_address")}>
             <div className="icon-box"><FiMapPin /></div>
             <div className="card-content">
               <h3>WAREHOUSE LOCATIONS</h3>
               <p>Manage multiple delivery points and warehouse addresses.</p>
             </div>
-            <div className="arrow-btn">❯</div>
+            <div className="arrow-btn ash-btn">❯</div>
           </div>
 
-          {/* QUALITY REPORTS */}
           <div className="menu-card quality-card" onClick={() => navigate("/QualityReports")}>
             <div className="icon-box purple-bg"><FiFileText /></div>
             <div className="card-content">
@@ -204,7 +195,6 @@ function UserDashboard() {
             <div className="arrow-btn purple-btn">❯</div>
           </div>
 
-          {/* ACCOUNT SETTINGS */}
           <div className="menu-card account-card" onClick={() => navigate("/profile")}>
             <div className="icon-box blue-bg"><FiSettings /></div>
             <div className="card-content">

@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box; /* අමතර padding නිසා පිටුව එළියට පැනීම වැළැක්වීමට */
 }
 
 .shipping-overlay {
@@ -18,109 +19,117 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px; 
+  padding: 40px 20px; /* ජංගම දුරකථන සඳහා දෙපස පරතරය අඩු කළා */
+  box-sizing: border-box;
 }
 
-/* --- ප්‍රධාන Glass Card එක (පැති දෙකකට බෙදා ඇත) --- */
+/* --- ප්‍රධාන Glass Card එක --- */
 .shipping-card.multi-location {
-  background: rgba(255, 255, 255, 0.35); /* Transparent Water Look */
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(25px);
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(5px); /* blur ගතිය මදක් වැඩි කළා පෙනුම වැඩි කිරීමට */
+  -webkit-backdrop-filter: blur(15px);
   
   width: 100%;
   max-width: 1100px; 
-  padding: 60px; 
-  border-radius: 50px;
+  padding: 50px; /* Padding මදක් අඩු කළා සියලුම screen වලට ගැලපීමට */
+  border-radius: 40px; /* මදක් අඩු කළා modern පෙනුම සඳහා */
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
   
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr; /* වම් පැත්ත Form එකට, දකුණු පැත්ත List එකට */
+  grid-template-columns: 1.2fr 0.8fr; 
   gap: 40px;
   align-items: start;
+  box-sizing: border-box;
 }
 
 /* --- වම් පස තීරුව (Form Column) --- */
 .form-column {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .shipping-header {
-  text-align: left; /* ලිපිනයන් ලැයිස්තුවක් ඇති නිසා වමට කළා */
-  margin-bottom: 40px;
+  text-align: left;
+  margin-bottom: 30px;
 }
 
 .shipping-header h2 {
-  font-size: 2.8rem; 
+  font-size: 2.5rem; 
   font-weight: 900;
   color: #000000;
   letter-spacing: -1px;
-  margin-bottom: 5px;
+  margin: 0 0 5px 0;
 }
 
 .shipping-header p {
   color: #1a1a1a;
   font-size: 1rem;
   font-weight: 500;
+  margin: 0;
 }
 
 .shipping-form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
 }
 
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
 .form-section label {
   color: #000000;
   font-weight: 800;
-  font-size: 0.8rem;
-  letter-spacing: 1.5px;
+  font-size: 0.75rem;
+  letter-spacing: 1.2px;
   display: flex;
   align-items: center;
   gap: 10px;
+  text-transform: uppercase;
 }
 
 .shipping-form input {
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(0, 0, 0, 0.1);
   color: #000000;
-  padding: 18px 25px;
-  border-radius: 20px;
-  font-size: 1.05rem;
+  padding: 15px 20px;
+  border-radius: 15px;
+  font-size: 1rem;
   font-weight: 500;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .shipping-form input:focus {
   background: rgba(255, 255, 255, 1);
   border-color: #000000;
   outline: none;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 /* District, Province, Postal Code පේළිය */
 .input-row-3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr; 
-  gap: 12px;
+  gap: 10px;
 }
 
 .shipping-save-btn {
   background: #000000;
   color: #ffffff;
-  padding: 20px;
-  border-radius: 25px;
+  padding: 18px;
+  border-radius: 20px;
   font-weight: 800;
-  font-size: 1rem;
+  font-size: 0.95rem;
   border: none;
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -131,24 +140,26 @@
 
 .shipping-save-btn:hover {
   background: #222222;
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* --- දකුණු පස තීරුව (Saved Locations List) --- */
 .locations-column {
   background: rgba(255, 255, 255, 0.2);
-  padding: 30px;
-  border-radius: 35px;
+  padding: 25px;
+  border-radius: 30px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  height: 100%;
+  height: auto;
+  max-height: 100%;
+  box-sizing: border-box;
 }
 
 .locations-column h3 {
   color: #000;
-  margin-bottom: 25px;
+  margin: 0 0 20px 0;
   font-weight: 800;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -157,78 +168,94 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-height: 550px;
+  max-height: 500px; /* කාඩ් එකේ උසට ගැලපෙන සේ සකස් කළා */
   overflow-y: auto;
-  padding-right: 8px;
+  padding-right: 10px;
 }
 
-/* Scrollbar එක පිරිසිදු කිරීමට */
-.location-list::-webkit-scrollbar { width: 4px; }
-.location-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+/* Scrollbar Style */
+.location-list::-webkit-scrollbar { width: 5px; }
+.location-list::-webkit-scrollbar-track { background: transparent; }
+.location-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
 
 .address-item-card {
   background: rgba(255, 255, 255, 0.5);
-  padding: 20px;
-  border-radius: 22px;
+  padding: 18px;
+  border-radius: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border: 1px solid transparent;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .address-item-card:hover {
   background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(0, 0, 0, 0.1);
-  transform: translateX(-5px);
+  border-color: rgba(0, 0, 0, 0.05);
+  transform: translateX(5px); /* ඇතුළට යාම වෙනුවට එළියට ඒම වඩා ලස්සනයි */
+}
+
+.loc-info {
+    flex: 1;
+    padding-right: 10px;
 }
 
 .loc-info strong { 
     display: block; 
-    font-size: 1.05rem; 
+    font-size: 1rem; 
     color: #000; 
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .loc-info p { 
-    font-size: 0.9rem; 
+    font-size: 0.85rem; 
     color: #333; 
     margin: 0; 
     line-height: 1.4;
 }
 
 .loc-info small { 
-    color: #666; 
+    color: #555; 
     font-weight: 600;
     display: block;
-    margin-top: 5px;
+    margin-top: 4px;
+    font-size: 0.8rem;
 }
 
 .delete-loc-btn {
   background: rgba(255, 77, 77, 0.1);
   border: none;
   color: #ff4d4d;
-  width: 38px;
+  min-width: 38px;
   height: 38px;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.2s ease;
 }
 
 .delete-loc-btn:hover {
   background: #ff4d4d;
   color: #fff;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
-/* --- ජංගම දුරකථන සඳහා (Responsive) --- */
+/* empty message */
+.empty-msg {
+    color: #555;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* --- Responsive --- */
 @media (max-width: 1000px) {
   .shipping-card.multi-location {
     grid-template-columns: 1fr;
-    padding: 40px 25px;
+    padding: 35px 25px;
+    max-width: 600px; /* Tablet සඳහා පළල සීමා කළා */
   }
   
   .input-row-3 {
@@ -236,10 +263,11 @@
   }
 
   .locations-column {
-    margin-top: 20px;
+    margin-top: 10px;
+    max-height: 400px;
   }
 
   .shipping-header h2 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
 }

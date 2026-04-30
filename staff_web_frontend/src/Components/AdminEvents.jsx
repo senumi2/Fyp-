@@ -67,7 +67,7 @@ function AdminEvents() {
             <div className="card-inner-title">Create New Event</div>
             <div className="creative-form-grid">
               <div className="input-group">
-                <label>Event Title</label>
+                <label>Event  Title</label>
                 <input type="text" placeholder="E.g. Annual Salt Harvest Festival" value={form.title}
                   onChange={e => setForm({...form, title:e.target.value})} required />
               </div>

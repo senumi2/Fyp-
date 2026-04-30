@@ -7,16 +7,16 @@
 .payment-history-card {
   max-width: 1100px;
   margin: 0 auto;
-  background: white;
+  background: rgba(213, 210, 210, 0.334);
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
 .title {
-  color: #0a2952;
+  color: #081d39;
   margin-bottom: 25px;
-  font-weight: 800;
+  font-weight: 2000;
 }
 
 .table-container { overflow-x: auto; }
@@ -40,7 +40,7 @@ td {
   color: #444;
 }
 
-.amount-col { font-weight: bold; color: #2ecc71; }
+.amount-col { font-weight: bold; color: #2360a2; }
 
 .status-tag {
   padding: 5px 12px;
@@ -49,7 +49,7 @@ td {
   font-weight: bold;
 }
 
-.status-tag.paid { background: #d4edda; color: #155724; }
+.status-tag.paid { background: #d4e4ede3; color: #2a508f; }
 .status-tag.pending { background: #fff3cd; color: #856404; }
 
 .view-btn {

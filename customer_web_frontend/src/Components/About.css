@@ -1,155 +1,203 @@
-/* Navbar.css */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 
-/* Fonts ආනයනය කිරීම (පොදුවේ භාවිතා වන නිසා) */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 55px; /* මදක් උස වැඩි කළා පෙනුම ලස්සන වීමට */
-  padding: 0 40px;
-  background: linear-gradient(90deg, #FEDC97, #B4D2B1, #28666E);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-  
-  /* Refresh කිරීමේදී Navbar එක Smooth ලෙස මතු වීමට */
-  animation: slideDown 0.6s ease-out forwards;
+.about-page-wrapper { 
+  overflow-x: hidden; 
+  font-family: 'Plus Jakarta Sans', sans-serif; 
 }
 
-/* උඩ සිට පහළට එන Smooth Animation එක */
-@keyframes slideDown {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+/* Animation for Section 1 - Time increased to 1.2s for smoothness */
+.animate-fade {
+  opacity: 0;
+  transform: translateY(60px); /* මදක් වැඩි කළා පෙනුම ලස්සන වීමට */
+  transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.nav-left {
-  display: flex;
-  align-items: center;
+.animate-fade.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.nav-link {
-  margin-right: 35px;
-  color: #010101;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 15px;
-  position: relative;
-  transition: color 0.3s ease;
+/* Story Section Styles */
+.story-section { 
+  padding: 120px 8%; 
+  background-color: #ffffff; 
+  min-height: 80vh; 
+  display: flex; 
+  align-items: center; 
 }
 
-/* ලින්ක් එක යටින් එන ඉර (Hover Effect) */
-.nav-link::after {
-  content: '';
+.story-container { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 60px; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+}
+
+.story-left { 
+  flex: 1.2; 
+  text-align: justify; 
+  line-height: 1.8; 
+}
+
+.story-left h2 { 
+  font-size: 2.5rem; 
+  font-weight: 800; 
+  color: #1a1a1a; 
+  margin-bottom: 25px; 
+  position: relative; 
+  display: inline-block; 
+}
+
+.story-left h2::after { 
+  content: ""; 
+  position: absolute; 
+  left: 0; 
+  bottom: -8px; 
+  width: 60px; 
+  height: 5px; 
+  background: #2979ff; 
+  border-radius: 10px; 
+}
+
+.story-left p { 
+  font-size: 1.05rem; 
+  color: #444; 
+  margin-bottom: 20px; 
+}
+
+.story-img { 
+  width: 100%; 
+  max-width: 550px; 
+  height: 450px; 
+  object-fit: cover; 
+  border-radius: 30px; 
+  box-shadow: 25px 25px 0px rgba(41, 121, 255, 0.05), 0 20px 40px rgba(0,0,0,0.1); 
+}
+
+/* Cards Section Styles */
+.about-cards-section { 
+  min-height: 100vh; 
+  background-color: #f0f4f2; 
+  position: relative; 
+  padding: 120px 20px; 
+  overflow: hidden; 
+  display: flex; 
+  align-items: center; 
+}
+
+.about-container { 
+  max-width: 1200px; 
+  width: 100%; 
+  z-index: 1; 
+  margin: 0 auto; 
+}
+
+.about-header-text { 
+  text-align: center; 
+  margin-bottom: 70px; 
+}
+
+.sub-title { 
+  color: #28666e; 
+  font-weight: 800; 
+  letter-spacing: 3px; 
+  font-size: 0.8rem; 
+  display: block; 
+}
+
+.about-header-text h1 { 
+  font-size: 3rem; 
+  font-weight: 800; 
+  color: #1a1a1a; 
+  margin-top: 10px; 
+}
+
+.about-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  gap: 30px; 
+}
+
+.about-card { 
+  background: rgba(255, 255, 255, 0.7); 
+  backdrop-filter: blur(20px); 
+  padding: 50px 35px; 
+  border-radius: 35px; 
+  border: 1px solid rgba(255, 255, 255, 0.6); 
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04); 
+  text-align: center; 
+  transition: all 0.5s ease; 
+}
+
+.card-icon-box { 
+  font-size: 2.5rem; 
+  color: #28666e; 
+  margin-bottom: 20px; 
+  display: inline-block; 
+}
+
+.card-icon-box.gold { color: #d4af37; }
+
+.card-line { 
+  width: 40px; 
+  height: 4px; 
+  background: #28666e; 
+  margin: 0 auto 25px; 
+  border-radius: 10px; 
+}
+
+.about-card p { 
+  font-size: 1rem; 
+  line-height: 1.7; 
+  color: #555; 
+}
+
+/* Animations for Cards - Duration increased to 1s */
+.animate-up { 
+  opacity: 0; 
+  transform: translateY(60px); 
+}
+
+.visible .animate-up { 
+  animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; 
+}
+
+/* Delay කාලය වැඩි කළා එකින් එක පැහැදිලිව එන ලෙස */
+.visible .delay-1 { animation-delay: 0.4s; }
+.visible .delay-2 { animation-delay: 0.7s; }
+
+@keyframes fadeInUp { 
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  } 
+}
+
+/* Blobs */
+.about-bg-elements .blob {
   position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -5px;
-  left: 0;
-  background-color: #010101;
-  transition: width 0.3s ease;
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, #28666e22, #8faea022);
+  filter: blur(80px);
+  border-radius: 50%;
+  z-index: 0;
+}
+.blob-1 { top: -100px; right: -100px; }
+.blob-2 { bottom: -100px; left: -100px; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .story-container { flex-direction: column; text-align: center; }
+  .story-left { text-align: center; }
+  .story-left h2::after { left: 50%; transform: translateX(-50%); }
+  .story-img { width: 100%; height: auto; max-height: 350px; }
 }
 
-.nav-link:hover::after, 
-.nav-link.active::after {
-  width: 100%;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-}
-
-/* User Profile Section */
-.user-profile-nav {
-  display: flex;
-  align-items: center;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 25px;
-  transition: background 0.3s ease;
-}
-
-.user-profile-nav:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-/* Buttons Styling */
-.login-btn-navi, 
-.profile-btn-navi, 
-.logout-btn-navi {
-  margin-left: 15px;
-  padding: 8px 20px;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Login Button */
-.login-btn-navi {
-  background-color: #010101;
-  color: #ffffff;
-}
-
-.login-btn-navi:hover {
-  background-color: #333333;
-  transform: translateY(-2px);
-}
-
-/* Profile Button */
-.profile-btn-navi {
-  background-color: #ffffff;
-  color: #28666E;
-  border: 1px solid #28666E;
-}
-
-.profile-btn-navi:hover {
-  background-color: #28666E;
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-/* Logout Button */
-.logout-btn-navi {
-  background-color: #d9534f;
-  color: #ffffff;
-}
-
-.logout-btn-navi:hover {
-  background-color: #c9302c;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive (Mobile) */
 @media (max-width: 768px) {
-  .navbar {
-    padding: 0 20px;
-  }
-  .nav-link {
-    margin-right: 15px;
-    font-size: 13px;
-  }
-  .nav-user-name {
-    display: none; /* Mobile වලදී නම නැතිව icon එක පමණක් පෙන්වීමට */
-  }
+  .about-header-text h1 { font-size: 2.2rem; }
+  .about-grid { grid-template-columns: 1fr; }
 }

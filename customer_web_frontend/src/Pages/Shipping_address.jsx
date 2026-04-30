@@ -32,7 +32,15 @@ function Shipping_address() {
   useEffect(() => { fetchAddresses(); }, [token]);
 
   const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+  
+    // contactNumber සහ postalCode සඳහා පමණක් අංක පරීක්ෂා කිරීම
+    if (name === "contactNumber" || name === "postalCode") {
+      const onlyNums = value.replace(/[^0-9]/g, ''); // අංක නොවන දේවල් ඉවත් කරයි
+      setFormData({ ...formData, [name]: onlyNums });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   // 2. අලුත් ගබඩාවක් එකතු කිරීම
@@ -85,7 +93,7 @@ function Shipping_address() {
               <div className="form-section">
                 <label><FiUser /> RECIPIENT DETAILS</label>
                 <input name="fullName" value={formData.fullName} onChange={handleChange} placeholder="Full Name" required />
-                <input name="contactNumber" value={formData.contactNumber} onChange={handleChange} placeholder="Contact Number" required />
+                <input name="contactNumber" value={formData.contactNumber} onChange={handleChange} placeholder="Contact Number" maxLength="10" required />
               </div>
 
               <div className="form-section">
@@ -94,7 +102,7 @@ function Shipping_address() {
                 <div className="input-row-3">
                   <input name="district" value={formData.district} onChange={handleChange} placeholder="District" required />
                   <input name="province" value={formData.province} onChange={handleChange} placeholder="Province" required />
-                  <input name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="Zip" required />
+                  <input name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="Zip" maxLength="5"  required />
                 </div>
               </div>
 

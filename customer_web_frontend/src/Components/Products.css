@@ -1,8 +1,11 @@
+/* PRODUCTS SECTION MAIN */
 .products-section {
   padding: 100px 0;
-  background: linear-gradient(180deg, #28666E 0%, #1d4d54 100%);
-  color: white;
+  /* පසුබිම මඳක් ලා පැහැති කර (Lighten) ඇත */
+  background: linear-gradient(180deg, #002A5C 0%, #004B87 100%);
+  color: #F1FAEE;
   overflow: hidden;
+  position: relative;
 }
 
 .container {
@@ -11,25 +14,39 @@
   padding: 0 20px;
 }
 
+/* SECTION HEADER */
 .section-header {
   text-align: center;
   margin-bottom: 60px;
+  position: relative;
+  z-index: 10; /* අනෙක් layers වලට වඩා ඉදිරියෙන් තැබීමට */
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 800;
   margin-bottom: 10px;
+  color: #FFFFFF !important; /* පිරිසිදු සුදු පැහැය */
+  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3); /* පැහැදිලිව පෙනීමට shadow එකක් */
+  letter-spacing: 1px;
 }
 
 .underline {
   width: 60px;
   height: 4px;
-  background: #f4d35e;
+  background: #0096D6; /* Cyan Blue */
   margin: 0 auto 20px;
+  box-shadow: 0px 0px 8px rgba(0, 150, 214, 0.4);
 }
 
-/* Grid System */
+.subtitle {
+  color: #F1FAEE;
+  font-weight: 400;
+  opacity: 0.95;
+  font-size: 1.1rem;
+}
+
+/* GRID SYSTEM */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -37,26 +54,25 @@
   transition: all 0.4s ease-in-out; 
 }
 
-
+/* HOVER EFFECTS (Maintain existing functions) */
 .product-list:hover .product-card {
   filter: blur(4px);
   opacity: 0.6;
   transform: scale(0.95);
 }
 
-
 .product-list:hover .product-card:hover {
   filter: blur(0);
   opacity: 1;
   transform: translateY(-15px) scale(1.08); 
-  background: rgba(255, 255, 255, 0.15);
-  border-color: #f4d35e;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #0096D6;
   z-index: 10;
 }
 
-
+/* PRODUCT CARD */
 .product-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 31, 63, 0.4); /* Professional Navy Glassmorphism */
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
@@ -66,7 +82,6 @@
   flex-direction: column;
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
 }
-
 
 .product-image-container {
   width: 100%;
@@ -86,22 +101,23 @@
   transform: scale(1.1);
 }
 
-
+/* PRODUCT INFO */
 .product-info {
   padding: 20px;
   text-align: center;
 }
 
 .product-info h3 {
-  color: white;
+  color: #F1FAEE;
   font-size: 1.2rem;
   margin-bottom: 15px;
 }
 
+/* EXPLORE BUTTON */
 .explore-btn {
   background: transparent;
-  border: 1px solid #f4d35e;
-  color: #f4d35e;
+  border: 1px solid #0096D6;
+  color: #0096D6;
   padding: 8px 24px;
   border-radius: 20px;
   cursor: pointer;
@@ -110,19 +126,19 @@
 }
 
 .product-card:hover .explore-btn {
-  background: #f4d35e;
-  color: #1d4d54;
+  background: #0096D6;
+  color: #FFFFFF;
+  border-color: #0096D6;
 }
 
-
+/* ANIMATIONS */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Mobile Responsive */
+/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
-
   .product-list:hover .product-card {
     filter: none;
     opacity: 1;

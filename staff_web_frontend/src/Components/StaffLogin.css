@@ -1,84 +1,131 @@
+/* StaffLogin.css - Fully Professional Theme */
+
 .staff-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #D9D9D9; 
-    padding: 20px;
-  }
+  display: flex;
+  justify-content: center;
+  /* Cards ඉහළ සිට ආරම්භ වීමට flex-start භාවිතා කරන ලදී */
+  align-items: flex-start; 
+  min-height: 100vh;
+  /* මුළු සිස්ටම් එකේම gradient තේමාව */
+  background: linear-gradient(135deg, #28666E 0%, #B4D2B1 50%, #FEDC97 100%);
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* පසුබිමට එකතු කළ දර්ශනීය වතුර බිංදු හැඩයක් */
+.staff-container::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  top: -100px;
+  right: -100px;
+  z-index: 1;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1100px;
+  width: 100%;
+  z-index: 2;
   
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 80px; 
-    max-width: 1000px;
-  }
-  
-  .menu-card {
-    background-color: #C0C8C4; 
-    padding: 15px;
-    width: 220px;
-    height: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3); 
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .menu-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 12px 12px 25px rgba(0, 0, 0, 0.4);
-  }
-  
-  .inner-card {
-    background-color: #E6E6E6; 
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border: 1px solid rgba(0,0,0,0.05);
-  }
-  
-  .card-text {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #1a202c;
-  }
-  
-  /* StaffLogin.css */
-.disabled-card {
-  filter: blur(4px);
-  opacity: 0.5;
-  pointer-events: none; /* ක්ලික් කරන්න බැරි වෙන්න */
+  /* --- Navbar එක සහ Cards අතර පරතරය මෙතැනින් පාලනය වේ --- */
+  margin-top: 100px; 
+}
+
+.menu-card {
+  background: rgba(255, 255, 255, 0.15); /* Glassmorphism effect */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 10px;
+  width: 100%;
+  height: 160px;
+  border-radius: 24px; /* වඩාත් වටකුරු සහ මෘදු පෙනුමක් */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
 }
 
-.disabled-card::after {
-  content: "Locked";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0,0,0,0.7);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 12px;
+/* Unlock වූ කාඩ්පත් සඳහා පමණක් වැඩ කරන Hover Effect එක */
+.menu-card:hover:not(.disabled-card) {
+  transform: translateY(-12px) scale(1.04);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid #FEDC97;
 }
-  
-  @media (max-width: 768px) {
-    .card-grid {
+
+.inner-card {
+  background: rgba(255, 255, 255, 0.1); 
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.card-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  letter-spacing: 0.6px;
+}
+
+/* --- Locked (Disabled) Card Styling --- */
+.disabled-card {
+  filter: grayscale(100%) blur(2px) !important;
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+/* Locked Tag එක ලස්සන කිරීම */
+.locked-tag {
+  background: #ef4444 !important; /* දීප්තිමත් රතු පැහැය */
+  color: white !important;
+  padding: 4px 12px !important;
+  font-size: 11px !important;
+  border-radius: 20px !important; /* Rounded pill shape */
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  top: 15px !important;
+  right: 15px !important;
+}
+
+/* Responsive වෙනස්කම් (Mobile & Tablet) */
+@media (max-width: 900px) {
+  .card-grid {
       grid-template-columns: repeat(2, 1fr);
-    }
+      gap: 25px;
+      margin-top: 80px;
   }
-  
-  @media (max-width: 480px) {
-    .card-grid {
+}
+
+@media (max-width: 550px) {
+  .card-grid {
       grid-template-columns: 1fr;
-    }
+      padding: 0 20px;
+      margin-top: 60px;
   }
+  .menu-card {
+      height: 130px;
+  }
+}

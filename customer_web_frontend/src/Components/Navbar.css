@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   /* Deep Navy Professional Gradient */
-  background: linear-gradient(135deg, #001F3F 0%, #002A5C 50%, #004B87 100%);
+  background: linear-gradient(135deg, #001F3F 0%, #004a87e3 50%, #386b94df 100%);
   padding: 0 40px;
   height: 75px;
   position: sticky;
@@ -12,7 +12,10 @@
   z-index: 1000;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  animation: slideDown 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  
+  /* Refresh එකේදී සිදුවන animation එක තවත් smooth කර ඇත */
+  animation: navbarReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
 }
 
 .nav-container {
@@ -21,6 +24,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Navbar එක පෙන්වූ පසු ඇතුළත items ලස්සනට fade-in වීමට */
+  animation: contentFade 1s ease-out 0.2s both;
 }
 
 /* LEFT NAVIGATION */
@@ -44,7 +49,7 @@
   z-index: 1;
 }
 
-/* REALISTIC WATER DROP EFFECT (Maintained) */
+/* REALISTIC WATER DROP EFFECT */
 .drop {
   position: absolute;
   width: 90%;
@@ -140,21 +145,35 @@
 }
 
 .logout-btn-navi:hover {
-  background: rgba(230, 57, 70, 0.1); /* Subtle Red tint */
+  background: rgba(230, 57, 71, 0.877); /* Subtle Red tint */
   border-color: #E63946;
-  color: #E63946;
+  color: #f7eff0;
   transform: translateY(-2px);
 }
 
-/* ENTRY ANIMATION (Refined) */
-@keyframes slideDown {
+/* --- ANIMATIONS --- */
+
+/* මූලික Navbar එක පෑදෙන ආකාරය */
+@keyframes navbarReveal {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-100%);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Navbar එක ඇතුළේ ඇති Content එක පෑදෙන ආකාරය */
+@keyframes contentFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 

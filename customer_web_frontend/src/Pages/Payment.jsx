@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaTrash, FaMapMarkerAlt, FaCheckCircle } from "react-icons/fa"; 
+import { AuthContext } from "../context/AuthContext"; 
 import credit_card from "../images/credit_card.png"; 
+import axios from "axios";
 import "./Payment.css";
 
 function Payment() {
@@ -9,6 +11,7 @@ function Payment() {
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [warehouses, setWarehouses] = useState([]); 
   const [selectedAddress, setSelectedAddress] = useState(null); 
+  const { user } = useContext(AuthContext); 
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -19,10 +22,29 @@ function Payment() {
   });
 
   useEffect(() => {
-    const items = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(items);
+    const fetchCart = async () => {
+      if (user) {
+        try {
+          const res = await axios.get(`http://localhost:5000/api/cart/${user._id || user.id}`);
+          if (res.data && res.data.items) {
+            const formattedItems = res.data.items.map(item => ({
+              ...item,
+              id: item.productId 
+            }));
+            setCartItems(formattedItems);
+            return;
+          }
+        } catch (err) {
+          console.error("Database cart fetch error:", err);
+        }
+      }
+      const items = JSON.parse(localStorage.getItem("cart")) || [];
+      setCartItems(items);
+    };
+
+    fetchCart();
     fetchUserAddresses();
-  }, []);
+  }, [user]);
 
   const fetchUserAddresses = async () => {
     const token = localStorage.getItem("token");
@@ -40,10 +62,35 @@ function Payment() {
     }
   };
 
-  const removeItem = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  const removeItem = async (id) => {
+    try {
+      // 1. User ලොග් වී ඇත්නම් Database එකෙන් ඉවත් කරන්න
+      if (user) {
+        const userId = user._id || user.id;
+        // Backend එකේ අපි හැදූ නව URL එක: /api/cart/remove/USER_ID/PRODUCT_ID
+        const response = await axios.delete(`http://localhost:5000/api/cart/remove/${userId}/${id}`);
+        
+        if (response.status === 200) {
+          // Database එකෙන් සාර්ථකව මැකුණොත් පමණක් UI එක Update කරන්න
+          const updatedCart = cartItems.filter((item) => item.id !== id);
+          setCartItems(updatedCart);
+          // Local storage එකත් sync කරන්න
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+        }
+      } else {
+        // 2. ලොග් වී නැතිනම් Local Storage එකෙන් පමණක් ඉවත් කරන්න
+        const updatedCart = cartItems.filter((item) => item.id !== id);
+        setCartItems(updatedCart);
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+      }
+  
+      // Badge එක update කිරීමට event එක trigger කිරීම
+      window.dispatchEvent(new Event("cartUpdated"));
+  
+    } catch (err) {
+      console.error("Error removing item:", err);
+      alert("Could not remove item.try again.");
+    }
   };
 
   const updateQty = (id, newQty) => {
@@ -57,10 +104,20 @@ function Payment() {
 
   const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  // --- PayHere Logic Start ---
+  const clearCartAfterOrder = async () => {
+    localStorage.removeItem("cart");
+    if (user) {
+      try {
+        await axios.delete(`http://localhost:5000/api/cart/clear/${user._id || user.id}`);
+      } catch (err) {
+        console.error("Error clearing DB cart:", err);
+      }
+    }
+    window.dispatchEvent(new Event("cartUpdated"));
+  };
+
   const startPayHerePayment = async (orderId, token) => {
     try {
-      // 1. Backend එකෙන් Hash එක ගන්නවා
       const hashRes = await fetch("http://localhost:5000/api/payhere/generate-hash", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -71,13 +128,11 @@ function Payment() {
         })
       });
       const { hash } = await hashRes.json();
-
       const selectedLoc = warehouses.find(w => w._id === selectedAddress);
 
-      // 2. PayHere Config
       const payment = {
-        sandbox: true, // Live යද්දී මේක false කරන්න
-        merchant_id: "YOUR_MERCHANT_ID", // ඔයාගේ Merchant ID එක මෙතනට
+        sandbox: true, 
+        merchant_id: "YOUR_MERCHANT_ID", 
         return_url: `http://localhost:3000/invoice/${orderId}`,
         cancel_url: "http://localhost:3000/payment",
         notify_url: "http://localhost:5000/api/payhere/notify",
@@ -87,7 +142,7 @@ function Payment() {
         currency: "LKR",
         first_name: formData.nameOnCard || "Customer",
         last_name: "",
-        email: "customer@example.com",
+        email: user?.email || "customer@example.com",
         phone: "0771234567",
         address: selectedLoc?.address || "No Address",
         city: selectedLoc?.warehouseName || "Colombo",
@@ -97,9 +152,9 @@ function Payment() {
 
       window.payhere.startPayment(payment);
 
-      window.payhere.onCompleted = function onCompleted() {
+      window.payhere.onCompleted = async function onCompleted() {
         alert("Payment Successful!");
-        localStorage.removeItem("cart");
+        await clearCartAfterOrder();
         navigate(`/invoice/${orderId}`);
       };
 
@@ -115,7 +170,6 @@ function Payment() {
       console.error("PayHere setup error", err);
     }
   };
-  // --- PayHere Logic End ---
 
   const handlePayNow = async (e) => {
     e.preventDefault();
@@ -145,13 +199,11 @@ function Payment() {
 
       if (res.ok) {
         const result = await res.json();
-        
-        // --- මෙතනදී තමයි Card ද නැද්ද කියලා බලන්නේ ---
         if (paymentMethod === "card") {
           startPayHerePayment(result._id, token);
         } else {
           alert("Order Placed Successfully!");
-          localStorage.removeItem("cart");
+          await clearCartAfterOrder();
           navigate(`/invoice/${result._id}`);
         }
       } else {
@@ -190,7 +242,7 @@ function Payment() {
               </div>
             ))
           ) : (
-            <p>No items in cart.</p>
+            <p style={{color: '#fff'}}>No items in cart.</p>
           )}
         </div>
         <div className="total-footer-row">
@@ -205,7 +257,7 @@ function Payment() {
           <div className="location-selection-area">
             <div className="location-header">
               <h3 style={{color: '#fff', fontSize: '1rem'}}>Shipping Location</h3>
-              <Link to="/shipping_address" className="edit-loc-btn" style={{color: '#aaa'}}>+ Add New</Link>
+              <Link to="/shipping_address" className="edit-loc-btn" >+ Add New</Link>
             </div>
             <div className="location-grid" style={{marginBottom: '20px'}}>
               {warehouses.map((loc) => (
@@ -243,8 +295,6 @@ function Payment() {
               <input type="text" placeholder="ABC Perera" value={formData.nameOnCard} onChange={(e) => setFormData({...formData, nameOnCard: e.target.value})}
                 required={paymentMethod === "card"} disabled={paymentMethod === "cod"} />
             </div>
-            {/* PayHere පාවිච්චි කරන නිසා Card Number, Expiry, CVV අවශ්‍යම නැහැ, මොකද ඒක PayHere window එකේ එන නිසා. 
-                ඒත් ඔයාගේ UI එක වෙනස් නොවෙන්න මම ඒ ටික තිබ්බා. */}
             <div className="form-field">
               <label>Card Number</label>
               <input type="text" placeholder="XXXX XXXX XXXX XXXX" value={formData.cardNumber} onChange={(e) => setFormData({...formData, cardNumber: e.target.value})}

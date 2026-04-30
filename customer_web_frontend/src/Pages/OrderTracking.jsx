@@ -59,7 +59,7 @@ function OrderTracking() {
             <button className="back-dash-btn" onClick={() => navigate("/dashboard")}>
               <FiArrowLeft /> Dashboard
             </button>
-            <h2>My Salt Orders</h2>
+            <h2>My  Orders</h2>
             <p>Select an order to view real-time tracking.</p>
           </div>
 
@@ -104,7 +104,7 @@ function OrderTracking() {
         <button className="back-link" onClick={() => {
             // Back click කරද්දී URL එකේ තියෙන orderId එක අයින් කරන එක හොඳයි
             setSelectedOrder(null);
-            navigate("/order-tracking", { replace: true });
+            navigate("/OrderTracking", { replace: true });
         }}>
           <FiArrowLeft /> Back to List
         </button>

@@ -5,7 +5,7 @@
   --saltern-light: #00bbf9;
   --bg-color: #f8fafc;
   --text-dark: #0f172a;
-  --text-grey: #64748b;
+  --text-grey: #897b60;
   --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
 }
 
@@ -45,13 +45,13 @@
   border: 1px solid #e2e8f0;
 }
 
-.pill-icon { font-size: 1.4rem; background: #f0f9ff; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+.pill-icon { font-size: 1.4rem; background: #f0f9ff; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 20px; }
 .pill-label { font-size: 0.7rem; font-weight: 800; color: var(--text-grey); text-transform: uppercase; display: block; }
 .pill-val { font-size: 1.4rem; font-weight: 800; color: var(--saltern-blue); line-height: 1; }
 
 /* Management Card */
 .management-card {
-  background: white;
+  background: rgba(130, 190, 163, 0.481);
   padding: 30px;
   border-radius: 24px;
   box-shadow: var(--card-shadow);
@@ -92,7 +92,7 @@
 .action-main-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
 
 /* Table Section */
-.table-card { background: white; border-radius: 24px; box-shadow: var(--card-shadow); border: 1px solid #edf2f7; overflow: hidden; }
+.table-card { background: rgb(255, 255, 255); border-radius: 24px; box-shadow: var(--card-shadow); border: 1px solid #edf2f7; overflow: hidden; }
 .table-header-info { padding: 25px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
 .table-header-info h4 { margin: 0; font-size: 1.1rem; font-weight: 800; }
 .sync-note { font-size: 0.75rem; font-weight: 600; color: var(--text-grey); display: flex; align-items: center; gap: 5px; }

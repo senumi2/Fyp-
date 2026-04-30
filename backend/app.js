@@ -79,6 +79,7 @@ app.use("/api/wages", wageRoutes);
 app.use("/api/transport", transportRoutes);
 app.use("/api/maintenance-repair-logs", maintenanceRepairLogsRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/cart", require("./routes/cartRoutes"));
 
 // Finance API
 app.use("/api/finance", financeRoutes); 

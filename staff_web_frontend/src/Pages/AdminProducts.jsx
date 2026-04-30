@@ -77,7 +77,7 @@ function AdminProducts() {
         {/* Header Section with Compact Stats */}
         <header className="admin-header-row">
           <div className="glass-header">
-            <h1>Saltern Product Hub</h1>
+            <h1>Saltern Products</h1>
             <p>Monitor real-time inventory and salt varieties</p>
           </div>
           

@@ -1,142 +1,187 @@
-/* Invoice.css */
-
+/* --- Global Styles --- */
 .invoice-page-container {
-  max-width: 900px;
-  margin: 40px auto;
+  /* Card එකේ පළල වැඩි කිරීමට මෙහි අගය 1100px දක්වා වැඩි කළා */
+  max-width: 1100px; 
+  margin: 30px auto;
   padding: 20px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background-color: #F1FAEE;
+  min-height: 100vh;
 }
 
-/* Action Bar */
+/* --- Action Top Bar --- */
 .invoice-top-bar {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
-.back-btn, .print-btn {
-  padding: 12px 20px;
+.back-home-btn, .print-download-btn {
+  padding: 10px 24px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: 0.3s;
-}
-
-.back-btn { background: #eee; color: #333; }
-.print-btn { background: #000; color: #fff; }
-
-/* Invoice Card */
-.invoice-card-box {
-  background: #fff;
-  padding: 50px;
-  border-radius: 2px; /* Professional flat look */
-  box-shadow: 0 10px 50px rgba(0,0,0,0.05);
-  border: 1px solid #eee;
-}
-
-.invoice-inner-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.brand-info h1 { font-size: 1.5rem; letter-spacing: 2px; }
-.brand-info h1 span { font-weight: 300; color: #777; }
-.brand-info p { color: #888; font-size: 0.9rem; }
-
-.order-meta { text-align: right; }
-.order-meta h2 { font-size: 2rem; margin: 0; color: #111; }
-.order-meta p { margin: 5px 0; color: #555; font-size: 0.9rem; }
-
-.divider { margin: 30px 0; border: 0; border-top: 1px solid #eee; }
-
-/* Billing & Status */
-.invoice-billing-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
-}
-
-.billing-box h4, .status-box h4 {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  color: #999;
-  margin-bottom: 10px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
 }
 
-.status-badge {
-  background: #e8f5e9;
-  color: #2e7d32;
-  padding: 6px 15px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
+.back-home-btn { background: #002A5C; color: #F1FAEE; }
+.print-download-btn { background: #0096D6; color: #ffffff; }
+.back-home-btn:hover, .print-download-btn:hover { opacity: 0.9; }
 
-/* Table */
-.invoice-data-table {
+/* --- Main Invoice Card --- */
+.invoice-card-box {
+  background: #ffffff;
+  /* දෙපස padding 40px දක්වා වැඩි කළා පුළුල් පෙනුමක් ලබා දීමට */
+  padding: 50px 40px; 
+  border-radius: 8px; 
+  box-shadow: 0 15px 40px rgba(0, 31, 63, 0.1);
+  border-top: 10px solid #001F3F;
+  box-sizing: border-box; 
   width: 100%;
-  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.invoice-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 40px;
 }
 
-.invoice-data-table th {
-  text-align: left;
-  padding: 15px;
-  background: #f9f9f9;
+.company-branding h1 { font-size: 2rem; color: #001F3F; font-weight: 900; margin: 0; letter-spacing: 2px; }
+.company-branding h1 span { color: #0096D6; font-weight: 300; }
+.company-branding p { color: #004B87; margin: 5px 0 0; font-size: 0.95rem; }
+
+.invoice-title-meta { text-align: right; }
+.invoice-title-meta h2 { font-size: 3rem; color: #001F3F; font-weight: 900; margin: 0; line-height: 1; }
+.invoice-title-meta p { margin: 8px 0 0; color: #004B87; font-size: 1rem; }
+
+.invoice-hr { margin: 35px 0; border: 0; border-top: 2px solid #F1FAEE; }
+
+/* --- Billing Grid --- */
+.invoice-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 45px;
+}
+
+.info-block h4 { font-size: 0.85rem; color: #0096D6; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+.customer-name { font-size: 1.2rem; color: #001F3F; font-weight: 700; margin-bottom: 8px; }
+.full-address { color: #004B87; font-size: 1rem; line-height: 1.6; margin: 0; }
+
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  background: rgba(0, 150, 214, 0.1);
+  color: #0096D6;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* --- Items Table (පුළුල් කළ වගුව) --- */
+.invoice-items-table-wrapper {
+  width: 100%;
+  margin: 40px 0;
+  box-sizing: border-box;
+}
+
+.invoice-items-table {
+  width: 100%;
+  border-collapse: separate; 
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.invoice-items-table thead th {
+  background: #001F3F;
+  color: #ffffff;
+  padding: 16px 12px;
   font-size: 0.85rem;
-  color: #666;
-  border-bottom: 2px solid #eee;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
 }
 
-.invoice-data-table td {
-  padding: 20px 15px;
-  border-bottom: 1px solid #eee;
+/* Column Widths - පළල වැඩි නිසා Description එකට වැඩි ඉඩක් ලබා දුන්නා */
+.invoice-items-table thead th:nth-child(1) { 
+  width: 45%; 
+  text-align: left; 
+  padding-left: 25px;
+  border-top-left-radius: 12px; 
+  border-bottom-left-radius: 12px; 
+}
+.invoice-items-table thead th:nth-child(2) { width: 15%; text-align: center; }
+.invoice-items-table thead th:nth-child(3) { width: 20%; text-align: right; }
+.invoice-items-table thead th:nth-child(4) { 
+  width: 20%; 
+  text-align: right; 
+  padding-right: 25px;
+  border-top-right-radius: 12px; 
+  border-bottom-right-radius: 12px; 
 }
 
-.item-subtext { font-size: 0.8rem; color: #aaa; margin-top: 5px; }
+.invoice-items-table td {
+  padding: 22px 12px;
+  border-bottom: 1px solid #F1FAEE;
+  color: #001F3F;
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+.invoice-items-table td:first-child { padding-left: 25px; }
+.invoice-items-table td:last-child { padding-right: 25px; }
+
+.item-desc strong { font-size: 1.1rem; display: block; margin-bottom: 4px; color: #001F3F; }
+.item-desc p { font-size: 0.85rem; color: #0096D6; margin: 0; }
+
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 
-/* Footer */
-.invoice-footer-section {
+/* --- Footer Summary --- */
+.invoice-summary-footer {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 40px;
 }
 
-.final-total-box { width: 300px; }
-
-.total-row-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  color: #666;
+.calculation-box { 
+  width: 350px; /* පළල වැඩි නිසා summary box එකත් මදක් විශාල කළා */
+  background: #001F3F; 
+  padding: 25px;
+  border-radius: 15px;
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(0, 31, 63, 0.2);
 }
 
-.grand-total {
-  border-top: 2px solid #000;
-  margin-top: 10px;
-  padding-top: 15px;
-  color: #000;
-  font-weight: 900;
-  font-size: 1.2rem;
+.grand-total-row { display: flex; justify-content: space-between; align-items: center; }
+.grand-total-row span:first-child { font-size: 0.9rem; font-weight: 600; opacity: 0.8; }
+.grand-total-row span:last-child { font-size: 1.8rem; font-weight: 900; color: #0096D6; }
+
+.invoice-bottom-strip {
+  margin-top: 60px;
+  text-align: center;
+  border-top: 2px solid #F1FAEE;
+  padding-top: 20px;
+  font-size: 0.9rem;
+  color: #004B87;
+  letter-spacing: 1px;
 }
 
-/* Print Optimization */
+/* --- Print Settings --- */
 @media print {
-  body { background: white; }
   .no-print { display: none !important; }
-  .invoice-page-container { margin: 0; width: 100%; max-width: 100%; }
-  .invoice-card-box { box-shadow: none; border: none; padding: 20px; }
-  @page { margin: 1cm; }
+  .invoice-page-container { margin: 0; padding: 0; max-width: 100%; width: 100%; }
+  .invoice-card-box { box-shadow: none; border: none; padding: 40px; width: 100%; }
+  body { background: white; }
 }

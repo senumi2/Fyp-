@@ -1,15 +1,17 @@
 .footer {
-  background-color: #1a3c40; /* තද පැහැයක් ලබා දී ඇත */
-  color: #ffffff;
+  /* Deep Navy Background */
+  background: linear-gradient(135deg, #001F3F 0%, #002A5C 100%); 
+  color: #F1FAEE; /* Off-white text */
   padding: 70px 20px 30px;
   font-family: 'Poppins', sans-serif;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr; /* Layout එක වඩාත් සමබර කර ඇත */
+  grid-template-columns: 1.5fr 1fr 1fr;
   gap: 50px;
   padding-bottom: 50px;
 }
@@ -18,31 +20,32 @@
   font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 25px;
-  color: #f4f4f4;
+  color: #FFFFFF;
 }
 
 .footer-logo {
   font-size: 1.7rem !important;
   font-weight: 700;
   margin-bottom: 15px !important;
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .footer-logo span {
   font-weight: 300;
-  color: #20ad96; /* Limited යන කොටසට වෙනස් වර්ණයක් */
+  color: #0096D6; /* Cyan Blue */
 }
 
 .address-text {
   line-height: 1.8;
   font-size: 15px;
-  opacity: 0.8;
+  opacity: 0.85;
   margin-bottom: 20px;
+  color: #F1FAEE;
 }
 
 .inline-icon {
   margin-right: 8px;
-  color: #20ad96;
+  color: #0096D6; /* Cyan Blue */
 }
 
 /* Links and Navigation */
@@ -53,7 +56,7 @@
 }
 
 .footer-column a {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(241, 250, 238, 0.7); /* Slightly transparent off-white */
   text-decoration: none;
   font-size: 15px;
   transition: all 0.3s ease;
@@ -62,7 +65,7 @@
 }
 
 .footer-column a:hover {
-  color: #20ad96;
+  color: #0096D6; /* Cyan Blue on hover */
   transform: translateX(5px);
 }
 
@@ -70,10 +73,10 @@
 .contact-item .icon {
   margin-right: 12px;
   font-size: 1.1rem;
-  color: #20ad96;
+  color: #0096D6; /* Cyan Blue */
 }
 
-/* Social Icons (Professional Look) */
+/* Social Icons */
 .social-links {
   display: flex;
   gap: 15px;
@@ -87,13 +90,15 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  color: white !important;
+  color: #F1FAEE !important;
   transition: all 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .social-icon:hover {
-  background: #20ad96;
+  background: #0096D6; /* Cyan Blue */
   transform: translateY(-5px) !important;
+  box-shadow: 0 5px 15px rgba(0, 150, 214, 0.3);
 }
 
 .footer-bottom {
@@ -101,7 +106,8 @@
   padding-top: 30px;
   text-align: center;
   font-size: 14px;
-  opacity: 0.6;
+  opacity: 0.7;
+  color: #F1FAEE;
 }
 
 /* Responsive */

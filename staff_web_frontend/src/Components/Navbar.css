@@ -1,22 +1,160 @@
-/* Navbar.css */
+/* NAVBAR MAIN CONTAINER */
 .navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(90deg, #FEDC97, #B4D2B1, #28666E);
+  padding: 0 40px;
+  height: 75px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  animation: navbarReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1300px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  height: 50px; /* උස හරියටම 50px */
-  padding: 0 40px;
-  background: linear-gradient(90deg, #FEDC97, #B4D2B1, #28666E);
-  position: fixed; /* උඩින්ම ස්ථාවරව තැබීමට */
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+  animation: contentFade 1s ease-out 0.2s both;
 }
 
-/* අනෙක් සියලුම Navbar styles (nav-link, button-navi ආදිය) ඔබ පෙර එවූ පරිදිම පවත්වා ගන්න */
-.nav-left { display: flex; align-items: center; }
-.nav-link { margin-right: 40px; color: #010101; text-decoration: none; font-weight: 500; }
-.nav-right { display: flex; align-items: center; }
-.logout-btn-navi, .profile-btn-navi { margin-left: 15px; padding: 6px 16px; border-radius: 20px; border: none; cursor: pointer; font-size: 14px; }
+.nav-left {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-link {
+  position: relative;
+  color: #0f100f;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 22px;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  transition: all 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* REALISTIC WATER DROP EFFECT */
+.drop {
+  position: absolute;
+  width: 90%;
+  height: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(4px);
+  border-radius: 51% 49% 48% 52% / 62% 37% 63% 38%;
+  box-shadow: 
+    inset 4px 4px 8px rgba(0, 0, 0, 0.1),
+    8px 12px 12px rgba(0, 0, 0, 0.2),
+    inset -6px -6px 10px rgba(255, 255, 255, 0.3);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.drop::after {
+  content: "";
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+}
+
+.nav-link:hover .drop,
+.nav-link.active .drop {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 41% 59% 41% 59% / 54% 45% 55% 46%;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: #101010;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.login-btn-navi,
+.profile-btn-navi {
+  background: #1b422b81;
+  color: #f3eeee;
+  padding: 10px 26px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 150, 214, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logout-btn-navi {
+  background: transparent;
+  color: #F1FAEE;
+  padding: 8px 22px;
+  border: 1.5px solid rgba(241, 250, 238, 0.4);
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.login-btn-navi:hover,
+.profile-btn-navi:hover {
+  background: #F1FAEE;
+  color: #001F3F;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(241, 250, 238, 0.3);
+}
+
+.logout-btn-navi:hover {
+  background: rgba(230, 57, 71, 0.877);
+  border-color: #E63946;
+  color: #f7eff0;
+  transform: translateY(-2px);
+}
+
+@keyframes navbarReveal {
+  from { opacity: 0; transform: translateY(-100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes contentFade {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  .navbar { padding: 0 20px; height: 70px; }
+  .nav-link { padding: 8px 12px; font-size: 14px; }
+  .login-btn-navi, .profile-btn-navi { padding: 8px 18px; }
+}

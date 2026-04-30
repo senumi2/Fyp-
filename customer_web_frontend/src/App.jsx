@@ -41,7 +41,8 @@ function App() {
     "/profile",
     "/dashboard",
     "/payment",
-    "/QualityReports"
+    "/QualityReports",
+    "/products" // මෙතනට /products එකතු කළා, එවිට Products page එකේදී footer එක පෙන්නන්නේ නැහැ
   ];
 
   // Navbar එක සහ CartIcon එක සැඟවිය යුතු Routes

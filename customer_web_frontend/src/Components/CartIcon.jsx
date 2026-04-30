@@ -1,36 +1,49 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
-import { AuthContext } from "../context/AuthContext"; // AuthContext එක import කරන්න
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 import "./CartIcon.css";
 
 function CartIcon() {
   const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
-  const location = useLocation(); // දැනට ඉන්න පිටුව හඳුනා ගැනීමට
-  const { user } = useContext(AuthContext); // User ලොග් වෙලාද බලන්න
+  const location = useLocation();
+  const { user } = useContext(AuthContext);
 
-  const updateCartCount = () => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartCount(cart.length);
+  const updateCartCount = async () => {
+    let count = 0;
+  
+    if (user) {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/cart/${user._id || user.id}`);
+        if (res.data && res.data.items) {
+          count = res.data.items.length;
+        }
+      } catch (err) {
+        console.error("Cart fetch error:", err);
+      }
+    } else {
+      // ලොග් වී නැතිනම් පමණක් localStorage බලන්න
+      const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+      count = localCart.length;
+    }
+    setCartCount(count);
   };
 
   useEffect(() => {
     updateCartCount();
-
-    window.addEventListener("storage", updateCartCount);
+    // ඕනෑම තැනක සිට Cart එක update වූ බව දැනුම් දෙන Event එක
     window.addEventListener("cartUpdated", updateCartCount);
+    window.addEventListener("storage", updateCartCount);
 
     return () => {
-      window.removeEventListener("storage", updateCartCount);
       window.removeEventListener("cartUpdated", updateCartCount);
+      window.removeEventListener("storage", updateCartCount);
     };
-  }, []);
+  }, [user]);
 
-  // 1. User ලොග් වෙලා නැතිනම් පෙන්වන්න එපා
   if (!user) return null;
-
-  // 2. Login හෝ Register පිටුවල ඉන්නවා නම් පෙන්වන්න එපා
   const hiddenPaths = ["/login", "/register"];
   if (hiddenPaths.includes(location.pathname)) return null;
 
@@ -38,7 +51,10 @@ function CartIcon() {
     <div className="floating-cart-container" onClick={() => navigate("/payment")}>
       <div className="cart-circle">
         <FaShoppingCart className="main-cart-svg" />
-        {cartCount > 0 && <span className="cart-floating-badge">{cartCount}</span>}
+        {/* අංකය පෙන්වන කොටස (Badge) - මෙන්න මේකයි ඔබ ඇසූ කොටස */}
+        {cartCount > 0 && (
+          <span className="cart-floating-badge">{cartCount}</span>
+        )}
       </div>
     </div>
   );

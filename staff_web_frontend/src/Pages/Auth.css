@@ -1,156 +1,173 @@
-/* Container styling with the specific saltern-themed gradient */
 .auth-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #083833, #5ba9a1, #c9b872); 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 20px;
-  }
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #28666E 0%, #B4D2B1 50%, #FEDC97 100%);
+  font-family: 'Inter', sans-serif;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- Background Drops Styling --- */
+.water-drop-bg {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow: inset 6px 6px 12px rgba(255, 255, 255, 0.3), inset -6px -6px 12px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+  animation: bubble-float 7s infinite ease-in-out;
+}
+
+/* විවිධ බිංදු වල පිහිටීම් සහ ප්‍රමාණයන් */
+.drop-v1 { width: 90px; height: 100px; top: 5%; left: 10%; }
+.drop-v2 { width: 40px; height: 45px; top: 60%; left: 5%; animation-delay: 1s; }
+.drop-v3 { width: 130px; height: 140px; bottom: 5%; left: 15%; animation-duration: 10s; opacity: 0.1; }
+.drop-v4 { width: 70px; height: 75px; top: 15%; right: 10%; animation-delay: 2s; }
+.drop-v5 { width: 100px; height: 110px; bottom: 15%; right: 5%; animation-duration: 9s; }
+.drop-v6 { width: 35px; height: 40px; top: 45%; right: 20%; animation-delay: 0.5s; }
+.drop-v7 { width: 55px; height: 60px; top: 5%; right: 35%; }
+.drop-v8 { width: 80px; height: 85px; bottom: 40%; left: 25%; animation-delay: 3s; }
+.drop-v9 { width: 45px; height: 50px; top: 30%; left: 40%; animation-duration: 5s; }
+.drop-v10 { width: 65px; height: 70px; bottom: 10%; left: 45%; animation-delay: 4s; }
+.drop-v11 { width: 30px; height: 35px; top: 80%; right: 40%; }
+.drop-v12 { width: 110px; height: 120px; top: 50%; left: 2%; opacity: 0.08; }
+
+@keyframes bubble-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(10px, -20px) scale(1.02); }
+  66% { transform: translate(-15px, 10px) scale(0.98); }
+}
+
+/* --- Main Water Drop Card --- */
+.auth-card {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  padding: 60px 45px;
   
-  /* Glassmorphism card effect */
-  .auth-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px); /* Safari support */
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    width: 100%;
-    max-width: 500px;
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
+  /* මුල් හැඩය */
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
   
-  .auth-card h2 { 
-    text-align: center; 
-    margin-bottom: 5px; 
-    font-weight: 600; 
-    letter-spacing: 1px;
-  }
-  
-  .auth-card p { 
-    text-align: center; 
-    margin-bottom: 25px; 
-    opacity: 0.8; 
-    font-size: 14px; 
-  }
-  
-  /* Grouping layout for Name/Email and Contact/Role */
-  .input-group { 
-    display: flex; 
-    gap: 8px; 
-    margin-bottom: 5px; 
-  }
-  
-  /* Inputs and Select drop-down styling */
-  input, select {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
-    outline: none;
-    transition: all 0.3s ease;
-    font-size: 14px;
-  }
-  
-  input::placeholder { 
-    color: rgba(255, 255, 255, 0.6); 
-  }
-  
-  /* Select option styling */
-  select option { 
-    background: #2c3e50; 
-    color: #fff; 
-  }
-  
-  input:focus, select:focus { 
-    background: rgba(255, 255, 255, 0.25); 
-    border-color: #fdbb2d;
-  }
-  
-  /* Password eye icon wrapper */
-  .password-wrapper {
-    position: relative;
-    width: 90%;
-  }
-  
-  .password-wrapper input {
-    padding-right: 45px; /* Icon එකට ඉඩ තැබීමට */
-  }
-  
-  .eye-icon {
-    position: absolute;
-    right: 20px; ;
-    top: 40%; /* මධ්‍යයට ආසන්න කිරීමට */
-    transform: translateY(-50%); /* නිවැරදිව මැදට ගැනීම */
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 18px;
-    transition: 0.3s;
-    z-index: 10;
-  }
-  
-  .eye-icon:hover {
-    color: #fdbb2d;
-  }
-  
-  /* Submit button styling */
-  .auth-btn {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 8px;
-    background: #fff;
-    color: #083833;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    margin-top: 10px;
-    font-size: 15px;
-  }
-  
-  .auth-btn:hover { 
-    background: #fdbb2d; 
-    transform: translateY(-2px); 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Footer and links */
-  .auth-footer {
-    margin-top: 25px;
-    text-align: center;
-  }
-  
-  .auth-footer p {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 0;
-  }
-  
-  .auth-link {
-    color: #fdbb2d;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    transition: 0.3s;
-    margin-left: 5px;
-  }
-  
-  .auth-link:hover {
-    text-decoration: underline;
-    color: #fff;
-  }
-  
-  /* Responsive adjustment for small screens */
-  @media (max-width: 480px) {
-    .input-group {
-      flex-direction: column;
-      gap: 0;
-    }
-  }
+  box-shadow: inset 10px 10px 20px rgba(255, 255, 255, 0.4), 20px 40px 60px rgba(0, 0, 0, 0.1);
+  width: 100%; max-width: 460px;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* සිනිඳු වෙනසක් සඳහා */
+}
+
+/* Hover කළ විට හැඩය වෙනස් වන Wobble Effect එක */
+.auth-card:hover {
+  border-radius: 40% 60% 40% 60% / 60% 40% 60% 40%;
+  transform: scale(1.02);
+}
+
+.title-section { color: #2d785a;display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 5px; }
+
+.back-to-home {
+  font-size: 18px; color: #2d785a; cursor: pointer;
+  background: rgba(255, 255, 255, 0.2);
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: 0.3s;
+}
+
+.back-to-home:hover { background: #fedc97c2; color: #28666E; transform: scale(1.1); }
+
+.auth-card h2 { font-weight: 800; font-size: 1.8rem; margin: 0; }
+
+.auth-card p {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin-bottom: 15px;
+}
+
+.theme-icon-box { margin: 15px 0; font-size: 2.2rem; display: flex; justify-content: center; gap: 15px; }
+.icon-water { color: #ffffff63; animation: float 3s infinite ease-in-out; }
+.icon-sun { color: #FEDC97; }
+
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+input {
+  width: 100%; padding: 15px; margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px; background: rgba(255, 255, 255, 0.1);
+  color: #083833; outline: none; transition: 0.3s; box-sizing: border-box;
+}
+
+input:focus { background: rgba(255, 255, 255, 0.95); border-color: #FEDC97; color: #28666E; }
+
+.auth-btn {
+  width: 75%; padding: 16px; border: none; border-radius: 20px;
+  background: #28666E; color: #fff; font-weight: 800;
+  cursor: pointer; transition: 0.4s; margin-top: 10px;
+}
+
+.auth-btn:hover { background: #FEDC97; color: #28666E; transform: translateY(-3px); }
+
+.register-footer { margin-top: 20px; font-size: 14px; color: #5d5b5bdd; background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin-top: 20px;}
+
+.register-link { color: #5d5b5bbc; font-weight: 700; text-decoration: underline; cursor: pointer; }
+.register-link:hover { color: #5d5b5b; }
+
+/* Register පිටුව සඳහා Card එක මඳක් පළල් කිරීම */
+.register-card {
+  max-width: 600px; /* Register Form එක විශාල නිසා */
+}
+
+/* එක පේළියේ Inputs දෙකක් තැබීමට */
+.input-row {
+  display: flex;
+  gap: 15px;
+}
+
+.input-row input, .input-row select {
+  flex: 1;
+}
+
+/* Select box එක Input එකට සමාන කිරීම */
+.auth-select {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.292);
+  color: #083833;
+  outline: none;
+  appearance: none; /* Default arrow අයින් කිරීමට */
+  cursor: pointer;
+}
+
+/* Password eye icon එක නිවැරදිව තැබීමට */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  color: #28666E;
+  cursor: pointer;
+  z-index: 15;
+}
+
+.subtitle {
+  margin-bottom: 25px;
+  font-size: 14px;
+  color: #ffffffcc;
+}
