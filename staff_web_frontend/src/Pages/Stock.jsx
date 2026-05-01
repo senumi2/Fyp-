@@ -3,7 +3,7 @@ import axios from "axios";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import toast, { Toaster } from 'react-hot-toast'; 
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable'; // මෙතැන import එක වෙනස් කළා
 import "./Stock.css";
 
 const Stock = () => {
@@ -13,6 +13,7 @@ const Stock = () => {
     const [reportType, setReportType] = useState('Monthly'); 
     const [editId, setEditId] = useState(null); 
     const [showFullTable, setShowFullTable] = useState({}); 
+    const [unit, setUnit] = useState('kg'); 
 
     const items = ["Salt", "Jipsum", "Artemiya", "Agriculture Salt"];
     const tableRefs = useRef({});
@@ -43,6 +44,14 @@ const Stock = () => {
         } catch (err) { 
             toast.error("Failed to retrieve data."); 
         }
+    };
+
+    const formatWeight = (value) => {
+        const num = Number(value);
+        if (unit === 'Tons') {
+            return (num / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 3 });
+        }
+        return num.toLocaleString();
     };
 
     const getBalance = (itemName) => {
@@ -119,18 +128,48 @@ const Stock = () => {
         tableRefs.current[itemName]?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    // FIXED DOWNLOAD PDF FUNCTION
     const downloadPDF = () => {
-        const doc = new jsPDF();
-        doc.setFontSize(16);
-        doc.text("Inventory Status Report", 14, 15);
-        const tableData = allData.map(d => [d.no, d.itemName, d.transactionType, d.partyName || '-', `${d.quantity}kg`, new Date(d.date).toLocaleDateString()]);
-        doc.autoTable({
-            head: [['REF NO', 'Item', 'Type', 'Party', 'Qty', 'Date']],
-            body: tableData,
-            startY: 25,
-            headStyles: { fillColor: [28, 57, 187] } 
-        });
-        doc.save(`Stock_Report_${today}.pdf`);
+        try {
+            if (!allData || allData.length === 0) {
+                toast.error("No data to export");
+                return;
+            }
+
+            const doc = new jsPDF();
+            doc.setFontSize(18);
+            doc.setTextColor(28, 57, 187);
+            doc.text("Inventory Status Report", 14, 20);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Generated on: ${new Date().toLocaleString()} | Unit: ${unit}`, 14, 28);
+
+            const tableData = allData.map(d => [
+                d.no ? String(d.no) : '-', 
+                d.itemName || '-', 
+                d.transactionType || '-', 
+                d.partyName || '-', 
+                `${formatWeight(d.quantity || 0)} ${unit}`, 
+                d.date ? new Date(d.date).toLocaleDateString() : '-'
+            ]);
+
+            // doc.autoTable වෙනුවට කෙලින්ම autoTable function එක භාවිතා කිරීම වඩාත් සුදුසුයි
+            autoTable(doc, {
+                head: [['REF NO', 'Item', 'Type', 'Party', `Qty (${unit})`, 'Date']],
+                body: tableData,
+                startY: 35,
+                theme: 'grid',
+                headStyles: { fillColor: [28, 57, 187], textColor: [255, 255, 255] },
+                alternateRowStyles: { fillColor: [240, 244, 248] }
+            });
+
+            doc.save(`Stock_Report_${today}.pdf`);
+            toast.success("PDF Downloaded!");
+        } catch (error) {
+            console.error("PDF Error:", error); // මොකක්ද error එක කියලා console එකේ බලාගන්න
+            toast.error("Error generating PDF");
+        }
     };
 
     const getChartData = (itemName) => {
@@ -142,8 +181,11 @@ const Stock = () => {
                 ? `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`
                 : `${dateObj.getFullYear()}`;
             if (!summary[period]) summary[period] = { period, inward: 0, outward: 0 };
-            if (entry.transactionType === 'Inward') summary[period].inward += Number(entry.quantity);
-            else summary[period].outward += Number(entry.quantity);
+            
+            const qty = unit === 'Tons' ? entry.quantity / 1000 : entry.quantity;
+            
+            if (entry.transactionType === 'Inward') summary[period].inward += qty;
+            else summary[period].outward += qty;
         });
         return Object.values(summary).sort((a, b) => a.period.localeCompare(b.period));
     };
@@ -152,7 +194,7 @@ const Stock = () => {
         let filtered = allData.filter(d => 
             d.itemName === itemName && d.transactionType === activeTab &&
             `${d.no} ${d.partyName}`.toLowerCase().includes(searchTerm.toLowerCase())
-        ).reverse(); 
+        ).sort((a, b) => new Date(b.date) - new Date(a.date)); 
 
         const isFull = showFullTable[itemName];
         const balance = getBalance(itemName);
@@ -172,9 +214,8 @@ const Stock = () => {
                 <div className="card-header-flex">
                     <div className="title-stack">
                         <h4>{itemName}</h4>
-                        <span className="balance-tag">Available: {balance.toLocaleString()}kg</span>
+                        <span className="balance-tag">Available: {formatWeight(balance)} {unit}</span>
                     </div>
-                    {/* Low Stock Warning නැවත එක් කළා */}
                     <div className="header-badges">
                         {balance < 1000 && <span className="low-stock-warning">⚠️ Low Stock</span>}
                         {!isFull && filtered.length > 20 && <span className="view-mode-tag">Latest 20</span>}
@@ -185,8 +226,10 @@ const Stock = () => {
                         <thead>
                             <tr>
                                 <th>REF NO</th>
+                                <th>Date</th>
                                 <th>{activeTab === 'Inward' ? 'Supplier Name' : 'Customer Name'}</th>
-                                <th>Qty (kg)</th>
+                                <th>Sub Type</th>
+                                <th>Qty ({unit})</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -194,8 +237,10 @@ const Stock = () => {
                             {displayRecords.map(record => (
                                 <tr key={record._id}>
                                     <td><span className="ref-tag">{record.no}</span></td>
+                                    <td>{new Date(record.date).toLocaleDateString()}</td>
                                     <td><span className="party-name">{record.partyName || '-'}</span></td>
-                                    <td className="qty-cell"><strong>{record.quantity.toLocaleString()}</strong></td>
+                                    <td>{record.subType || '-'}</td>
+                                    <td className="qty-cell"><strong>{formatWeight(record.quantity)}</strong></td>
                                     <td className="action-btns-group">
                                         <button onClick={() => handleEdit(record)} className="stock-edit-btn">Edit</button>
                                         <button onClick={() => handleDelete(record._id, record.date)} className="stock-del-btn">Delete</button>
@@ -209,7 +254,7 @@ const Stock = () => {
                 <div className="table-footer-actions">
                     {filtered.length > 20 ? (
                         <button className="view-all-btn" onClick={() => toggleTableMode(itemName)}>
-                            {isFull ? "Show Less (Latest 20)" : `View All Records (${filtered.length})`}
+                            {isFull ? "Show Less" : `View All (${filtered.length})`}
                         </button>
                     ) : <div></div>}
 
@@ -230,12 +275,31 @@ const Stock = () => {
             <Toaster position="top-right" />
             <div className="stock-layout">
                 <aside className="stock-sidebar">
-                    <div className="sidebar-header">INVENTORY</div>
+                    <div className="sidebar-header">
+                        <span className="header-icon">📦</span> INVENTORY
+                    </div>
+                    
                     <nav className="sidebar-nav">
                         <button className={activeTab === 'Inward' ? 'active' : ''} onClick={() => {setActiveTab('Inward'); setEditId(null);}}>Inward Stock</button>
                         <button className={activeTab === 'Outward' ? 'active' : ''} onClick={() => {setActiveTab('Outward'); setEditId(null);}}>Outward Stock</button>
                         <button className={activeTab === 'Reports' ? 'active' : ''} onClick={() => setActiveTab('Reports')}>Analysis Reports</button>
                     </nav>
+
+                    <div className="sidebar-footer">
+                        <div className="unit-toggle-container">
+                            <span className={unit === 'kg' ? 'unit-label active' : 'unit-label'}>kg</span>
+                            <label className="switch">
+                                <input 
+                                    type="checkbox" 
+                                    checked={unit === 'Tons'} 
+                                    onChange={() => setUnit(unit === 'kg' ? 'Tons' : 'kg')} 
+                                />
+                                <span className="slider round"></span>
+                            </label>
+                            <span className={unit === 'Tons' ? 'unit-label active' : 'unit-label'}>Tons</span>
+                        </div>
+                        <div className="sidebar-copyright">Stock System v1.0</div>
+                    </div>
                 </aside>
 
                 <main className="stock-content">
@@ -259,7 +323,7 @@ const Stock = () => {
                                 {items.map(item => (
                                     <div key={item} className="item-nav-card" onClick={() => scrollToTable(item)}>
                                         <h3>{item}</h3>
-                                        <p>Balance: <strong>{getBalance(item).toLocaleString()} kg</strong></p>
+                                        <p>Balance: <strong>{formatWeight(getBalance(item))} {unit}</strong></p>
                                         <button className="nav-view-btn">View Log</button>
                                     </div>
                                 ))}
@@ -268,11 +332,26 @@ const Stock = () => {
                             <form className="stock-form" onSubmit={handleAddOrUpdate}>
                                 <div className="form-fields">
                                     <div className="input-group">
+                                        <label>Date</label>
+                                        <input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} required />
+                                    </div>
+                                    <div className="input-group">
                                         <label>Product Item</label>
                                         <select name="itemName" value={formData.itemName} onChange={(e) => setFormData({...formData, itemName: e.target.value})}>
                                             {items.map(item => <option key={item} value={item}>{item}</option>)}
                                         </select>
                                     </div>
+                                    {formData.itemName === 'Salt' && (
+                                        <div className="input-group">
+                                            <label>Salt Category</label>
+                                            <select value={formData.subType} onChange={(e) => setFormData({...formData, subType: e.target.value})} required>
+                                                <option value="">Select Category</option>
+                                                <option value="Table Salt">Table Salt</option>
+                                                <option value="Industrial Salt">Industrial Salt</option>
+                                                <option value="Crushed Salt">Crushed Salt</option>
+                                            </select>
+                                        </div>
+                                    )}
                                     <div className="input-group">
                                         <label>{activeTab === 'Inward' ? "Supplier" : "Customer"}</label>
                                         <input type="text" placeholder="Enter name..." value={formData.partyName} onChange={(e) => setFormData({...formData, partyName: e.target.value})} required />
@@ -299,7 +378,7 @@ const Stock = () => {
                     {activeTab === 'Reports' && (
                         <div className="reports-section">
                             <div className="report-header-flex">
-                                <h3>Stock Statistical Analysis</h3>
+                                <h3>Stock Analysis ({unit})</h3>
                                 <div className="report-controls">
                                     <button onClick={() => setReportType('Monthly')} className={reportType === 'Monthly' ? 'active-report-btn' : 'report-btn'}>Monthly</button>
                                     <button onClick={() => setReportType('Annually')} className={reportType === 'Annually' ? 'active-report-btn' : 'report-btn'}>Annually</button>
@@ -310,14 +389,14 @@ const Stock = () => {
                                 {items.map(item => (
                                     <div className="stat-card" key={item}>
                                         <span>{item} Stock</span>
-                                        <h4>{getBalance(item).toLocaleString()} <span>kg</span></h4>
+                                        <h4>{formatWeight(getBalance(item))} <span>{unit}</span></h4>
                                     </div>
                                 ))}
                             </div>
                             <div className="charts-container">
                                 {items.map(item => (
                                     <div className="chart-wrapper-card" key={item}>
-                                        <h5>{item} In/Out Trend</h5>
+                                        <h5>{item} Trend ({unit})</h5>
                                         <ResponsiveContainer width="100%" height={250}>
                                             <LineChart data={getChartData(item)}>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
@@ -325,8 +404,8 @@ const Stock = () => {
                                                 <YAxis stroke="#64748b" fontSize={12} />
                                                 <Tooltip contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
                                                 <Legend iconType="circle" />
-                                                <Line type="monotone" dataKey="inward" stroke="#008080" strokeWidth={3} dot={{r: 5, fill: "#008080"}} name="Inward (Teal)" />
-                                                <Line type="monotone" dataKey="outward" stroke="#1C39BB" strokeWidth={3} dot={{r: 5, fill: "#1C39BB"}} name="Outward (Blue)" />
+                                                <Line type="monotone" dataKey="inward" stroke="#008080" strokeWidth={3} dot={{r: 5, fill: "#008080"}} name={`Inward (${unit})`} />
+                                                <Line type="monotone" dataKey="outward" stroke="#1C39BB" strokeWidth={3} dot={{r: 5, fill: "#1C39BB"}} name={`Outward (${unit})`} />
                                             </LineChart>
                                         </ResponsiveContainer>
                                     </div>

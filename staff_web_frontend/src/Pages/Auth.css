@@ -157,6 +157,10 @@ input:focus { background: rgba(255, 255, 255, 0.95); border-color: #FEDC97; colo
   width: 100%;
 }
 
+.password-wrapper input {
+  padding-right: 50px; /* Icon එක නිසා අකුරු වැසීම වැලැක්වීමට */
+}
+
 .eye-icon {
   position: absolute;
   right: 20px;

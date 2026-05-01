@@ -1,196 +1,281 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-:root {
-    --sidebar-bg: #0f172a;
-    --sidebar-hover: #1e293b;
-    --accent-blue: #3b82f6;
-    --bg-light: #f8fafc;
-    --text-main: #1e293b;
-    --white: #ffffff;
-}
-
-.ponds-admin-wrapper {
+/* --- LAYOUT CONFIG --- */
+.ponds-page-container {
     display: flex;
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-light);
-}
-
-/* --- SIDEBAR --- */
-.ponds-sidebar {
-    width: 75px;
-    background-color: var(--sidebar-bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: sticky;
-    top: 0;
     height: 100vh;
-    padding: 25px 0;
-    z-index: 100;
+    width: 100%;
+    background-color: #f8fafc;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
 }
 
-.ponds-sidebar-header {
-    font-size: 24px;
-    color: var(--accent-blue);
-    margin-bottom: 40px;
-    font-weight: bold;
-}
-
-.ponds-nav-list {
+/* --- ENHANCED MINI SIDEBAR --- */
+.ponds-mini-sidebar {
+    width: 95px;
+    background: linear-gradient(180deg, #004d40 0%, #002d26 100%);
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    width: 100%;
     align-items: center;
+    
+    
+    padding: 25px 0;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    z-index: 10;
 }
 
-.ponds-nav-btn {
-    position: relative;
-    background: transparent;
-    border: none;
-    padding: 15px;
-    cursor: pointer;
-    border-radius: 12px;
-    transition: 0.3s;
+
+.sidebar-logo-area {
+    width: 100%;
     display: flex;
     justify-content: center;
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.ponds-icon { font-size: 22px; color: #94a3b8; }
-
-.ponds-nav-btn:hover, .ponds-nav-btn.active {
-    background-color: rgba(59, 130, 246, 0.15);
+.mini-logo-circle {
+    width: 54px;
+    height: 54px;
+    background: #ffc107;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
 }
 
-.ponds-nav-btn:hover .ponds-icon, .ponds-nav-btn.active .ponds-icon {
-    color: var(--accent-blue);
+.mini-sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
 }
 
-.ponds-tooltip {
+.mini-nav-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mini-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+.mini-nav-btn.active {
+    background-color: #ffc107;
+    box-shadow: 0 10px 20px rgba(255, 193, 7, 0.3);
+}
+
+.mini-icon { font-size: 22px; }
+
+.mini-divider {
+    width: 35px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 10px 0;
+}
+
+.mini-tooltip {
     position: absolute;
-    left: 85px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 75px;
     background: #1e293b;
     color: white;
-    padding: 8px 15px;
+    padding: 8px 14px;
     border-radius: 8px;
-    font-size: 13px;
-    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 500;
     opacity: 0;
-    visibility: hidden;
-    transition: 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 1000;
+    pointer-events: none;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    white-space: nowrap;
 }
 
-.ponds-nav-btn:hover .ponds-tooltip {
-    opacity: 1;
-    visibility: visible;
-    left: 75px;
+.mini-nav-btn:hover .mini-tooltip { opacity: 1; left: 85px; }
+
+/* --- MAIN CONTENT AREA --- */
+.ponds-content-area {
+    flex: 1;
+    padding: 35px 45px;
+    overflow-y: auto;
 }
 
-/* --- SEARCH BAR (Right aligned, under topic) --- */
-.admin-header-flex {
-    display: block;
-    width: 100%;
-    margin-bottom: 25px;
+.ponds-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
 }
 
-.admin-header-flex h3 {
-    display: inline-block;
-    margin-bottom: 5px;
+.header-text h2 {
+    color: #004d40;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0;
 }
 
-.admin-search {
-    display: block;
-    margin-left: auto;
-    margin-top: -10px;
-    margin-bottom: 20px;
-    padding: 10px 16px;
-    width: 220px;
-    border: 1px solid #f0e7e2;
-    color: black;
-    border-radius: 12px;
-    background: var(--white);
+.header-text p {
+    color: #64748b;
+    margin-top: 5px;
+}
+
+.ponds-search-bar {
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: 1px solid #e2e8f0;
+    width: 300px;
     outline: none;
-    font-size: 13.5px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    background: white;
+    transition: 0.3s;
 }
 
-.admin-search::placeholder {
-    color: #b89496;
+.ponds-search-bar:focus { border-color: #008080; box-shadow: 0 0 0 4px rgba(0, 128, 128, 0.05); }
+
+/* --- SCROLLABLE CARD SETTINGS --- */
+.scrollable-card {
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
 }
 
-
-
-.admin-search:focus {
-    border-color: var(--accent-blue);
-    width: 260px;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+.table-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
 }
 
-/* --- ANALYTICS (2 charts per row) --- */
-.admin-chart-grid {
+/* Custom Scrollbar */
+.table-scroll-container::-webkit-scrollbar, 
+.ponds-content-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb,
+.ponds-content-area::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* --- FORM & TABLES --- */
+.ponds-glass-form {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.ponds-glass-form input {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid #f1f5f9;
+    background: #f8fafc;
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.ponds-primary-btn {
+    background: #008080;
+    color: white;
+    padding: 0 35px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.ponds-primary-btn:hover { background: #006666; transform: translateY(-2px); }
+
+.ponds-table-card, .data-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+}
+
+.card-title {
+    color: #004d40;
+    border-left: 5px solid #ffc107;
+    padding-left: 15px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.ponds-modern-table { width: 100%; border-collapse: collapse; }
+.ponds-modern-table th {
+    background: #f1f5f9;
+    padding: 15px 20px;
+    text-align: left;
+    color: #475569;
+    font-size: 12px;
+    letter-spacing: 1px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.ponds-modern-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f8fafc;
+    color: #1e293b;
+}
+
+.text-highlighted { color: #008080; font-weight: 800; }
+
+/* --- ANALYTICS (2 per Row) --- */
+.analytics-grid-layout {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Meken thama row ekakata 2k enne */
-    gap: 25px;
+    grid-template-columns: 1fr 1fr; /* එක් පේළියකට 2 බැගින් */
+    gap: 30px;
 }
 
-.chart-wrapper-admin {
-    background: var(--white);
+.chart-card {
+    background: white;
     padding: 25px;
     border-radius: 20px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.04);
 }
 
-/* --- OTHER STYLES (No changes) --- */
-.ponds-main-content { flex: 1; padding: 40px; }
-.ponds-tank-form {
-    background: var(--white); padding: 30px; border-radius: 16px;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px; margin-bottom: 40px; border: 1px solid rgba(226, 232, 240, 0.8);
+.chart-card h4 {
+    margin-bottom: 20px;
+    color: #004d40;
 }
 
-.ponds-tank-form input{
-    color: black;
-}
-.ponds-add-btn { background-color: var(--accent-blue); color: white; border-radius: 8px; cursor: pointer; border:none; padding:10px; font-weight:600; }
-.ponds-table-style { width: 100%; background: var(--white); border-radius: 16px; border-collapse: collapse; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-.ponds-table-style th, .ponds-table-style td { padding: 15px 20px; text-align: left; border-bottom: 1px solid #f1f5f9; }
-.admin-view-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
-.view-block { background: var(--white); padding: 20px; border-radius: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-.view-badge { background: #eff6ff; color: #1d4ed8; font-size: 12px; padding: 5px 12px; border-radius: 20px; font-weight: 600; }
+/* --- BADGES --- */
+.badge { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.badge.pending { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.badge.completed { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
 
-.ponds-edit-mini{
-    background-color: #1b9468;
-    color: white;
-    border-radius: 8px;
+/* --- GENERAL GRID --- */
+.view-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+/* --- BUTTONS --- */
+.btn-edit, .btn-delete {
+    border: none;
+    background: none;
+    font-size: 18px;
     cursor: pointer;
-    border:none;
-    padding:5px 10px;
-    font-weight:600;
-    font-size: 12px;
     margin-right: 10px;
 }
+.btn-edit { color: #008080; }
+.btn-delete { color: #ef4444; }
 
-.ponds-edit-mini :hover {
-    background-color: #157b5b;
-}
-
-.ponds-delete-mini{
-    background-color: #ef4444;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    border:none;
-    padding:5px 10px;
-    font-weight:600;
-    font-size: 12px;
-}
-
-.ponds-delete-mini:hover {
-    background-color: #dc2626;
-}
+/* Animations */
+.fade-in { animation: fadeIn 0.5s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

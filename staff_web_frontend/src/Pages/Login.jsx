@@ -2,12 +2,13 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { FaDroplet, FaSun, FaArrowLeft } from 'react-icons/fa6';
+import { FaDroplet, FaSun, FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa6';
 import './Auth.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -34,7 +35,7 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      {/* පසුබිමේ විසිරී ඇති වතුර බිංදු රාශියක් */}
+      {/* Background Decorative Drops */}
       <div className="water-drop-bg drop-v1"></div>
       <div className="water-drop-bg drop-v2"></div>
       <div className="water-drop-bg drop-v3"></div>
@@ -63,13 +64,35 @@ const Login = () => {
         
         <p>Access your Saltern Management Portal</p>
         
-        <form onSubmit={handleLogin}>
+        {/* autoComplete="off" මගින් සම්පූර්ණ form එකටම auto-fill වීම වළක්වයි */}
+        <form onSubmit={handleLogin} autoComplete="off">
           <div className="input-group">
-            <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input 
+              type="email" 
+              name="staff_user_email" // සුවිශේෂී නමක් ලබා දීමෙන් Browser එක පටලවා ගැනීම වළක්වයි
+              placeholder="Email Address" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              autoComplete="one-time-code" // Chrome වැනි browser වල force auto-fill වළක්වන උපක්‍රමයකි
+              required 
+            />
           </div>
-          <div className="input-group">
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          
+          <div className="input-group password-wrapper">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              name="staff_user_password" // සුවිශේෂී නමක් ලබා දීම
+              placeholder="Password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              autoComplete="new-password" // කලින් save වුනු passwords පිරවීම වළක්වයි
+              required 
+            />
+            <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
           </div>
+
           <button type="submit" className="auth-btn"> Login</button>
         </form>
         

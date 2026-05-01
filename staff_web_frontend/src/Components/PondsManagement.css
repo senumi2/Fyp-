@@ -82,6 +82,7 @@
     color: var(--teal-dark);
     font-weight: 800;
     margin-bottom: 30px;
+    margin-top: 30px;
     border-left: 6px solid var(--persian-green);
     padding-left: 15px;
 }
@@ -94,10 +95,25 @@
 }
 
 .ponds-tank-card {
-    background: white;
+    background: rgba(88, 199, 149, 0.167);
     border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    padding: 10px 20px 15px 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.326);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0;      /* ඉහළ margin එක සම්පූර්ණයෙන් ඉවත් කිරීම */
+    margin-bottom: 5px; /* පහළ ඇති ඉඩත් මඳක් අඩු කිරීම */
+}
+
+.tank-name {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--teal-dark);
+    margin-top: 0;      /* අකුරට ඉහළින් ඇති ඉඩ ඉවත් කිරීම */
 }
 
 .meter-bar {
@@ -113,6 +129,14 @@
     background: var(--persian-green);
 }
 
+.location-tag {
+    font-size: 0.85rem;
+    color: #6a8a8d;
+    margin-top: -5px;   /* නමට මඳක් ලං කිරීමට minus margin එකක් භාවිතා කළ හැක */
+    margin-bottom: 15px; 
+    display: block;
+}
+
 /* Forms, Buttons, etc. */
 .ponds-search-bar {
     width: 100%;
@@ -121,6 +145,7 @@
     border-radius: 50px;
     border: 2px solid #E0E7E9;
     margin-bottom: 30px;
+    box-shadow: rgba(0, 0, 0, 0.379) 0px 2px 5px -1px;
 }
 
 .ponds-add-btn {
@@ -131,6 +156,10 @@
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
+}
+
+.ponds-add-btn:hover {
+    background: #00796b;
 }
 
 /* Table Scroll */
@@ -161,3 +190,42 @@
     font-weight: 700;
 }
 .stable { background: #e0f2f1; color: #00796b; }
+
+/* --- Analytics Chart Grid Styling --- */
+
+.ponds-chart-grid {
+    display: grid;
+    /* එක පේළියකට සමාන ප්‍රමාණයේ කොටස් 3ක් ලබා දීම */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px;
+    width: 100%;
+}
+
+.ponds-chart-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #edf2f4;
+}
+
+.ponds-chart-card h4 {
+    font-size: 14px;
+    color: var(--teal-dark);
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Screen එක කුඩා වන විට (Responsive) charts ප්‍රමාණය වෙනස් වීම */
+@media (max-width: 1200px) {
+    .ponds-chart-grid {
+        grid-template-columns: repeat(2, 1fr); /* Tablet වලදී පේළියට 2ක් */
+    }
+}
+
+@media (max-width: 768px) {
+    .ponds-chart-grid {
+        grid-template-columns: 1fr; /* Mobile වලදී පේළියට 1ක් */
+    }
+}

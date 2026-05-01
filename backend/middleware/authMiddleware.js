@@ -11,11 +11,11 @@ const authMiddleware = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // මෙහිදී decoded.role සහ decoded.jobRole යන දෙකම පරීක්ෂා කරයි
+    // වැදගත්: Token එක ඇතුළේ role එක හෝ jobRole එක තිබේදැයි බලන්න
     req.user = {
       id: decoded.id || decoded._id || decoded.userId,
       email: decoded.email,
-      role: decoded.role || decoded.jobRole 
+      role: (decoded.role || decoded.jobRole || "").toLowerCase().trim() 
     };
 
     next();
@@ -25,13 +25,13 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-// Admin Role එක පරීක්ෂා කිරීමට
+// productRoutes වල authMiddleware.admin ලෙස භාවිතා කරන්නේ මෙයයි
 authMiddleware.admin = (req, res, next) => {
-  // role එක lowercase කර "admin" ද කියා පරීක්ෂා කිරීම වඩාත් ආරක්ෂිතයි
-  if (req.user && req.user.role && req.user.role.toLowerCase().trim() === "admin") {
+  if (req.user && req.user.role === "admin") {
     next();
   } else {
-    res.status(403).json({ message: "Access denied. Admin only." });
+    console.log("Forbidden: User role is", req.user ? req.user.role : "none");
+    return res.status(403).json({ message: "Access denied. Admin only." });
   }
 };
 

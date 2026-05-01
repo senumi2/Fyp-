@@ -79,7 +79,7 @@ const ExpensesFinance = () => {
   const resetForms = () => {
     setIsEditing(false);
     setCurrentId(null);
-    setSearchTerm(""); // Tab එක මාරු කරන විට search එක reset කිරීම
+    setSearchTerm("");
     setWageForm({ workerName: '', role: '', hoursWorked: '', wageRate: '', status: 'Pending' });
     setTransForm({ vehicle: '', route: '', fuelCost: '', maintenance: '' });
     setMaintForm({ equipment: '', issue: '', cost: '', statuse: 'Pending' });
@@ -96,6 +96,13 @@ const ExpensesFinance = () => {
   return (
     <div className="finance-wrapper">
       <div className="finance-sidebar">
+        {/* Sidebar Header with Professional Look */}
+        <div className="sidebar-header">
+          <div className="header-logo"></div>
+          <h3>Finance Hub</h3>
+        </div>
+        <div className="sidebar-divider"></div>
+
         <button onClick={() => {setActiveTab('profit'); resetForms();}} className={activeTab === 'profit' ? 'nav-btn active' : 'nav-btn'}>Profit & Lost Report</button>
         <button onClick={() => {setActiveTab('wages'); resetForms();}} className={activeTab === 'wages' ? 'nav-btn active' : 'nav-btn'}>Work Wages Tracking</button>
         <button onClick={() => {setActiveTab('transport'); resetForms();}} className={activeTab === 'transport' ? 'nav-btn active' : 'nav-btn'}>Transport cost Record</button>
@@ -104,7 +111,6 @@ const ExpensesFinance = () => {
 
       <div className="finance-content">
         
-        {/* WORK WAGES SECTION */}
         {activeTab === 'wages' && (
           <div className="tab-pane">
             <h2>Workers' Wages Tracking</h2>
@@ -118,14 +124,16 @@ const ExpensesFinance = () => {
               </select>
               <button type="submit" className="add-btn">{isEditing ? "Update" : "Add"}</button>
             </form>
+            
             <div className="search-container">
-            <div className="search-input-wrapper">
-              <svg className="search-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
-                <path fill="#1e2b26" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-              </svg>
-              <input type="text" className="search-bar" placeholder=" Search worker name..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+              <div className="search-input-wrapper">
+                <svg className="search-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+                  <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#006D5B"/>
+                </svg>
+                <input type="text" className="search-bar" placeholder=" Search worker name..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+              </div>
             </div>
-            </div>
+
             <div className="table-container">
               <table className="finance-table">
                 <thead><tr><th>Date</th><th>Worker</th><th>Role</th><th>Hours</th><th>Rate</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
@@ -149,7 +157,6 @@ const ExpensesFinance = () => {
           </div>
         )}
 
-        {/* TRANSPORT SECTION */}
         {activeTab === 'transport' && (
           <div className="tab-pane">
             <h2>Transport Cost Record</h2>
@@ -160,14 +167,16 @@ const ExpensesFinance = () => {
               <input type="number" placeholder="Maint. Cost" value={transForm.maintenance} onChange={(e)=>setTransForm({...transForm, maintenance: e.target.value})} required />
               <button type="submit" className="add-btn">{isEditing ? "Update" : "Add"}</button>
             </form>
+
             <div className="search-container">
-            <div className="search-input-wrapper">
-              <svg className="search-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
-                <path fill="#1e2b26" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-              </svg>
-              <input type="text" className="search-bar" placeholder="Search by vehicle..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+              <div className="search-input-wrapper">
+                <svg className="search-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+                  <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#006D5B"/>
+                </svg>
+                <input type="text" className="search-bar" placeholder="Search vehicle..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+              </div>
             </div>
-            </div>
+
             <div className="table-container">
               <table className="finance-table">
                 <thead><tr><th>Date</th><th>Vehicle</th><th>Route</th><th>Fuel</th><th>Maint.</th><th>Total</th><th>Actions</th></tr></thead>
@@ -190,7 +199,6 @@ const ExpensesFinance = () => {
           </div>
         )}
 
-        {/* MAINTENANCE SECTION */}
         {activeTab === 'maintenance' && (
           <div className="tab-pane">
             <h2>Maintenance & Repair Logs</h2>
@@ -203,14 +211,16 @@ const ExpensesFinance = () => {
               </select>
               <button type="submit" className="add-btn">{isEditing ? "Update" : "Add"}</button>
             </form>
+
             <div className="search-container">
-            <div className="search-input-wrapper">
-              <svg className="search-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
-                <path fill="#1e2b26" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-              </svg>
-              <input type="text" className="search-bar" placeholder=" Search equipment or status..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+              <div className="search-input-wrapper">
+                <svg className="search-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+                  <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#006D5B"/>
+                </svg>
+                <input type="text" className="search-bar" placeholder=" Search logs..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+              </div>
             </div>
-            </div>
+
             <div className="table-container">
               <table className="finance-table">
                 <thead><tr><th>Date</th><th>Equipment</th><th>Issue</th><th>Cost</th><th>Status</th><th>Actions</th></tr></thead>
@@ -237,11 +247,10 @@ const ExpensesFinance = () => {
           </div>
         )}
         
-        {/* PROFIT TAB */}
         {activeTab === 'profit' && (
           <div className="tab-pane">
             <h2>Profit & Lost Report</h2>
-            <div className="chart-box">Graph Displaying Area...</div>
+            <div className="chart-box">Financial Analysis Graph...</div>
           </div>
         )}
 

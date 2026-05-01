@@ -17,7 +17,7 @@
     background: #006D5B; /* Teal Green */
     color: white;
     padding: 30px 0;
-    position: absolute;
+    position: fixed;
     height: 100vh;
     display: flex;
     flex-direction: column;

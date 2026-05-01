@@ -5,7 +5,10 @@ const maintenanceController = require("../controllers/maintenanceRepairLogsContr
 
 // --- Routes ---
 // 🚀 මම Controller එක ඇතුළට addLog සහ getAllLogs දැම්මා. දැන් මේවා වැඩ!
-router.post("/", authMiddleware, authMiddleware.admin, maintenanceController.addLog);
-router.get("/", authMiddleware, authMiddleware.admin, maintenanceController.getAllLogs);
+router.post("/", authMiddleware, maintenanceController.addLog);
+router.get("/", authMiddleware,  maintenanceController.getAllLogs);
+
+router.put("/:id", authMiddleware, maintenanceController.updateLog); // Update සඳහා
+router.delete("/:id", authMiddleware, maintenanceController.deleteLog); // Delete සඳහා
 
 module.exports = router;

@@ -96,7 +96,7 @@ function AdminPaymentHistory() {
         <section className="filter-bar-container modern-glass-card">
           <input 
             type="text" 
-            placeholder="Search by Customer or Order ID..." 
+            placeholder="Search by  Order ID..." 
             className="search-input-main"
             onChange={(e) => {setSearchTerm(e.target.value); setCurrentPage(1);}}
           />

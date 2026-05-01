@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   FaHistory, FaLock, FaUserEdit, 
-  FaCalendarAlt, FaPhone, FaCamera, FaGlobe, FaIdBadge 
+  FaCalendarAlt, FaPhone, FaCamera, FaGlobe, FaIdBadge,
+  FaEye, FaEyeSlash // Eye Icons මෙහිදී එක් කරන ලදී
 } from "react-icons/fa";
 import axios from "axios";
 import "./Profile.css";
@@ -15,9 +16,12 @@ function Profile() {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Password Visibility States (අලුතින් එක් කරන ලදී)
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+
   const navigate = useNavigate();
   
-  // වැදගත්: මෙතන localStorage එකේ නම පරීක්ෂා කරන්න
   const token = localStorage.getItem("token");
   const userRole = localStorage.getItem("role") || "Staff Member";
 
@@ -64,7 +68,7 @@ function Profile() {
       setPreview(null);
       setImage(null);
       alert("Profile Updated Successfully!");
-      loadProfile(); // දත්ත refresh කරන්න
+      loadProfile(); 
     } catch (err) {
       alert("Failed to update profile.");
     } finally {
@@ -184,8 +188,24 @@ function Profile() {
                 <h3>Account Password</h3>
                 <p className="sub-desc">Update your password to keep your account safe.</p>
                 <div className="security-form">
-                    <div className="form-input"><label>Old Password</label><input type="password" /></div>
-                    <div className="form-input"><label>New Password</label><input type="password" /></div>
+                    <div className="form-input">
+                        <label>Old Password</label>
+                        <div className="password-input-container">
+                          <input type={showOldPassword ? "text" : "password"} />
+                          <span className="password-toggle-icon" onClick={() => setShowOldPassword(!showOldPassword)}>
+                            {showOldPassword ? <FaEyeSlash /> : <FaEye />}
+                          </span>
+                        </div>
+                    </div>
+                    <div className="form-input">
+                        <label>New Password</label>
+                        <div className="password-input-container">
+                          <input type={showNewPassword ? "text" : "password"} />
+                          <span className="password-toggle-icon" onClick={() => setShowNewPassword(!showNewPassword)}>
+                            {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                          </span>
+                        </div>
+                    </div>
                     <button className="primary-save-btn">Change Password</button>
                 </div>
             </div>

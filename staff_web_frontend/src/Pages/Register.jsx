@@ -11,9 +11,23 @@ const Register = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
   const navigate = useNavigate();
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  // සියලුම input වල දත්ත නිවැරදිව state එකට ඇතුළු වන සේ සකස් කරන ලදී
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    
+    // මෙහිදී name එක 'reg_user_email' වැනි එකක් වුවද නිවැරදි state key එකට data යවයි
+    if (name === "reg_user_email") {
+      setFormData({ ...formData, email: value });
+    } else if (name === "reg_user_password") {
+      setFormData({ ...formData, password: value });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,14 +36,12 @@ const Register = () => {
     }
     
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', formData);
+      // Backend එකට යන්නේ නිවැරදි email සහ password සහිත formData එකයි
+      await axios.post('http://localhost:5000/api/auth/register', formData);
+      
       alert("Registration submitted! Please wait for Admin approval before logging in.");
-
-      if (res.data.token) {
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
-        navigate('/dashboard'); 
-      }
+      navigate('/'); 
+      
     } catch (err) {
       alert(err.response?.data?.msg || "Registration Failed");
     }
@@ -37,7 +49,6 @@ const Register = () => {
 
   return (
     <div className="auth-container">
-      {/* Background Floating Drops */}
       <div className="water-drop-bg drop-v1"></div>
       <div className="water-drop-bg drop-v2"></div>
       <div className="water-drop-bg drop-v3"></div>
@@ -50,7 +61,6 @@ const Register = () => {
       <div className="water-drop-bg drop-v10"></div>
 
       <div className="auth-card register-card">
-        {/* Title Section with Back Arrow */}
         <div className="title-section">
           <div className="back-to-home" onClick={() => navigate('/')} title="Back to Home">
             <FaArrowLeft />
@@ -65,14 +75,35 @@ const Register = () => {
         
         <p className="subtitle">Saltern Management System</p>
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <div className="input-row">
-            <input type="text" name="fullName" placeholder="Full Name" onChange={handleChange} required />
-            <input type="email" name="email" placeholder="Email Address" onChange={handleChange} required />
+            <input 
+              type="text" 
+              name="fullName" 
+              placeholder="Full Name" 
+              onChange={handleChange} 
+              required 
+              autoComplete="off" 
+            />
+            <input 
+              type="email" 
+              name="reg_user_email" // Auto-fill වැළැක්වීමට නම වෙනස්
+              placeholder="Email Address" 
+              onChange={handleChange} 
+              required 
+              autoComplete="new-email-field" 
+            />
           </div>
           
           <div className="input-row">
-            <input type="text" name="contact" placeholder="Contact Number" onChange={handleChange} required />
+            <input 
+              type="text" 
+              name="contact" 
+              placeholder="Contact Number" 
+              onChange={handleChange} 
+              required 
+              autoComplete="off" 
+            />
             <select name="jobRole" className="auth-select" onChange={handleChange} required defaultValue="">
               <option value="" disabled>Select Job Role</option>
               <option value="Admin">Admin</option>
@@ -81,16 +112,18 @@ const Register = () => {
               <option value="Harvest Management">Harvest Management</option>
               <option value="Equipment Usage">Equipment Usage</option>
               <option value="Expenses & Finance">Expenses & Finance</option>
+              <option value="Driver">Driver</option>
             </select>
           </div>
           
           <div className="password-wrapper">
             <input 
               type={showPassword ? "text" : "password"} 
-              name="password" 
+              name="reg_user_password" // Auto-fill වැළැක්වීමට නම වෙනස්
               placeholder="Password" 
               onChange={handleChange} 
               required 
+              autoComplete="new-password" 
             />
             <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -99,14 +132,15 @@ const Register = () => {
 
           <div className="password-wrapper">
             <input 
-              type={showPassword ? "text" : "password"} 
+              type={showConfirmPassword ? "text" : "password"} 
               name="confirmPassword" 
               placeholder="Confirm Password" 
               onChange={handleChange} 
               required 
+              autoComplete="new-password" 
             />
-            <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            <span className="eye-icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
           

@@ -4,6 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import './AdminPondsManagement.css';
 
 const AdminPondsManagement = () => {
+    // --- State & Logic (නොවෙනස්ව පවතී) ---
     const [tanks, setTanks] = useState([]);
     const [activeTab, setActiveTab] = useState('tank-details');
     const [formData, setFormData] = useState({ type: '', capacity: '', totalPonds: '', location: '' });
@@ -46,8 +47,16 @@ const AdminPondsManagement = () => {
     };
 
     const handleDelete = (id) => {
-        if (window.confirm("Are you sure you want to delete this tank and all its history?")) {
-            axios.delete(`${API_URL}/${id}`).then(() => fetchTanks());
+        if (window.confirm("Are you sure you want to delete?")) {
+            axios.delete(`${API_URL}/${id}`)
+                .then(() => {
+                    setTanks(tanks.filter(tank => tank._id !== id));
+                    alert("Tank deleted successfully!");
+                })
+                .catch(err => {
+                    console.error("Delete error:", err);
+                    alert("Failed to delete the tank.");
+                });
         }
     };
 
@@ -62,99 +71,103 @@ const AdminPondsManagement = () => {
     );
 
     return (
-        <div className="ponds-admin-wrapper">
-            <aside className="ponds-sidebar">
-                <div className="ponds-sidebar-header">☰</div>
-                <nav className="ponds-nav-list">
-                    <button className={`ponds-nav-btn ${activeTab === 'tank-details' ? 'active' : ''}`} onClick={() => setActiveTab('tank-details')}>
-                        <span className="ponds-icon">💧</span>
-                        <span className="ponds-tooltip">Tank Management</span>
-                    </button>
-                    <button className={`ponds-nav-btn ${activeTab === 'salinity' ? 'active' : ''}`} onClick={() => setActiveTab('salinity')}>
-                        <span className="ponds-icon">🧂</span>
-                        <span className="ponds-tooltip">Brine Logs</span>
-                    </button>
-                    <button className={`ponds-nav-btn ${activeTab === 'maintenance' ? 'active' : ''}`} onClick={() => setActiveTab('maintenance')}>
-                        <span className="ponds-icon">🛠️</span>
-                        <span className="ponds-tooltip">Maintenance</span>
-                    </button>
-                    <button className={`ponds-nav-btn ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}>
-                        <span className="ponds-icon">📊</span>
-                        <span className="ponds-tooltip">AI Analytics</span>
-                    </button>
-                </nav>
-            </aside>
-
-            <main className="ponds-main-content">
-                <div className="admin-header-flex">
-                    <h3>
-                        {activeTab === 'tank-details' && (editingId ? "Update Existing Tank" : "Register New Saltern Tank")}
-                        {activeTab === 'salinity' && "Historical Brine Data"}
-                        {activeTab === 'maintenance' && "Maintenance Logs"}
-                        {activeTab === 'analytics' && "Growth Trends (Real-time AI)"}
-                        {activeTab !== 'tank-details' && <span className="view-badge">View Only</span>}
-                    </h3>
-                    <input 
-                        type="text" className="admin-search" 
-                        placeholder="Search by name/location..." 
-                        value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+        <div className="ponds-page-container">
+            {/* 1. Mini Sidebar */}
+            <aside className="ponds-mini-sidebar">
+                <div className="sidebar-logo-area">
+                    <div className="mini-logo-circle">
+                        <span role="img" aria-label="salt-logo">🧂</span>
+                    </div>
                 </div>
 
-                {activeTab === 'tank-details' && (
-                    <div className="ponds-section-tank">
-                        <form onSubmit={handleTankSubmit} className="ponds-tank-form">
-                            <input type="text" placeholder="Tank Type" value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})} required />
-                            <input type="text" placeholder="Capacity" value={formData.capacity} onChange={(e) => setFormData({...formData, capacity: e.target.value})} required />
-                            <input type="number" placeholder="Total Ponds" value={formData.totalPonds} onChange={(e) => setFormData({...formData, totalPonds: e.target.value})} required />
-                            <input type="text" placeholder="Location" value={formData.location} onChange={(e) => setFormData({...formData, location: e.target.value})} required />
-                            <button type="submit" className="ponds-add-btn">{editingId ? "Update Tank" : "Register Tank"}</button>
-                            {editingId && <button type="button" onClick={resetForm} className="ponds-cancel-btn">Cancel</button>}
-                        </form>
+                <div className="mini-sidebar-content">
+                    <button className={`mini-nav-btn ${activeTab === 'tank-details' ? 'active' : ''}`} onClick={() => setActiveTab('tank-details')}>
+                        <span className="mini-icon">💧</span>
+                        <div className="mini-tooltip">Tank Management</div>
+                    </button>
+                    
+                    <button className={`mini-nav-btn ${activeTab === 'salinity' ? 'active' : ''}`} onClick={() => setActiveTab('salinity')}>
+                        <span className="mini-icon">📅</span>
+                        <div className="mini-tooltip">Brine Logs</div>
+                    </button>
 
-                        {filteredTanks.length === 0 ? (
-                            <div className="admin-empty-state">No tanks found. Please add or adjust search.</div>
-                        ) : (
-                            <table className="ponds-table-style">
-                                <thead>
-                                    <tr><th>Type</th><th>Capacity</th><th>Ponds</th><th>Location</th><th>Current Be°</th><th>Actions</th></tr>
-                                </thead>
-                                <tbody>
-                                    {filteredTanks.map(tank => (
-                                        <tr key={tank._id}>
-                                            <td><strong>{tank.type}</strong></td>
-                                            <td>{tank.capacity}</td>
-                                            <td>{tank.totalPonds}</td>
-                                            <td>{tank.location}</td>
-                                            <td>{tank.currentSalinity || 0} Be°</td>
-                                            <td>
-                                                <button onClick={() => handleEdit(tank)} className="ponds-edit-mini">Edit</button>
-                                                <button onClick={() => handleDelete(tank._id)} className="ponds-delete-mini">Delete</button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        )}
+                    <button className={`mini-nav-btn ${activeTab === 'maintenance' ? 'active' : ''}`} onClick={() => setActiveTab('maintenance')}>
+                        <span className="mini-icon">🛠️</span>
+                        <div className="mini-tooltip">Maintenance</div>
+                    </button>
+
+                    <div className="mini-divider"></div>
+
+                    <button className={`mini-nav-btn ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}>
+                        <span className="mini-icon">📈</span>
+                        <div className="mini-tooltip">Analytics Trends</div>
+                    </button>
+                </div>
+            </aside>
+
+            {/* 2. Main Content Area */}
+            <main className="ponds-content-area">
+                <header className="ponds-content-header">
+                    <div className="header-text">
+                        <h2>{activeTab.replace('-', ' ').toUpperCase()}</h2>
+                        <p>National Salt Limited - Hambantota Saltern Management</p>
                     </div>
-                )}
+                    <input 
+                        type="text" 
+                        className="ponds-search-bar" 
+                        placeholder="Filter database..." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </header>
 
-                {activeTab === 'salinity' && (
-                    <div className="ponds-section-salinity">
-                        <div className="admin-view-grid">
-                            {filteredTanks.map((tank) => (
-                                <div key={tank._id} className="view-block">
-                                    <div className="block-header">{tank.type} - {tank.location}</div>
-                                    <div className="scroll-table-wrapper">
-                                        <table className="ponds-table-style mini">
-                                            <thead><tr><th>Date</th><th>Be°</th><th>Status</th></tr></thead>
+                <div className="ponds-scroll-body">
+                    {/* Tank Management Tab */}
+                    {activeTab === 'tank-details' && (
+                        <div className="fade-in">
+                            <form onSubmit={handleTankSubmit} className="ponds-glass-form">
+                                <input type="text" placeholder="Tank Type" value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})} required />
+                                <input type="text" placeholder="Capacity" value={formData.capacity} onChange={(e) => setFormData({...formData, capacity: e.target.value})} required />
+                                <input type="number" placeholder="Total Ponds" value={formData.totalPonds} onChange={(e) => setFormData({...formData, totalPonds: e.target.value})} required />
+                                <input type="text" placeholder="Location" value={formData.location} onChange={(e) => setFormData({...formData, location: e.target.value})} required />
+                                <button type="submit" className="ponds-primary-btn">{editingId ? "Update Tank" : "Register Tank"}</button>
+                            </form>
+
+                            <div className="ponds-table-card">
+                                <table className="ponds-modern-table">
+                                    <thead>
+                                        <tr><th>TANK TYPE</th><th>CAPACITY</th><th>LOCATION</th><th>CONTROLS</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredTanks.map(tank => (
+                                            <tr key={tank._id}>
+                                                <td><strong>{tank.type}</strong></td>
+                                                <td>{tank.capacity}</td>
+                                                <td>{tank.location}</td>
+                                                <td>
+                                                    <button onClick={() => handleEdit(tank)} className="btn-edit">✎</button>
+                                                    <button onClick={() => handleDelete(tank._id)} className="btn-delete">🗑</button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Brine Logs Tab (With Scrollers) */}
+                    {activeTab === 'salinity' && (
+                        <div className="view-grid-layout fade-in">
+                            {filteredTanks.map(tank => (
+                                <div key={tank._id} className="data-card scrollable-card">
+                                    <h4 className="card-title">{tank.type} - {tank.location}</h4>
+                                    <div className="table-scroll-container">
+                                        <table className="ponds-modern-table mini">
+                                            <thead><tr><th>DATE</th><th>SALINITY (Be°)</th></tr></thead>
                                             <tbody>
-                                                {tank.salinityRecords?.slice().reverse().map((rec, i) => (
-                                                    <tr key={i}>
-                                                        <td>{new Date(rec.date).toLocaleDateString()}</td>
-                                                        <td>{rec.level}</td>
-                                                        <td><span className={`status-text ${rec.status?.toLowerCase().replace(/\s/g, '-')}`}>{rec.status}</span></td>
-                                                    </tr>
+                                                {tank.salinityRecords?.map((rec, i) => (
+                                                    <tr key={i}><td>{new Date(rec.date).toLocaleDateString()}</td><td className="text-highlighted">{rec.level} Be°</td></tr>
                                                 ))}
                                             </tbody>
                                         </table>
@@ -162,24 +175,27 @@ const AdminPondsManagement = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {activeTab === 'maintenance' && (
-                    <div className="ponds-section-salinity">
-                        <div className="admin-view-grid">
-                            {filteredTanks.map((tank) => (
-                                <div key={tank._id} className="view-block">
-                                    <div className="block-header">{tank.type} Maintenance</div>
-                                    <div className="scroll-table-wrapper">
-                                        <table className="ponds-table-style mini">
-                                            <thead><tr><th>Task</th><th>Start</th><th>End</th></tr></thead>
+                    {/* Maintenance Tab (With Scrollers) */}
+                    {activeTab === 'maintenance' && (
+                        <div className="view-grid-layout fade-in">
+                            {filteredTanks.map(tank => (
+                                <div key={tank._id} className="data-card scrollable-card">
+                                    <h4 className="card-title">{tank.type} Maintenance</h4>
+                                    <div className="table-scroll-container">
+                                        <table className="ponds-modern-table mini">
+                                            <thead><tr><th>TASK</th><th>START DATE</th><th>STATUS</th></tr></thead>
                                             <tbody>
-                                                {tank.maintenanceLogs?.slice().reverse().map((log, i) => (
+                                                {tank.maintenanceLogs?.map((log, i) => (
                                                     <tr key={i}>
                                                         <td>{log.task}</td>
                                                         <td>{log.startDate}</td>
-                                                        <td>{log.endDate}</td>
+                                                        <td>
+                                                            <span className={`badge ${log.endDate === "Pending" ? "pending" : "completed"}`}>
+                                                                {log.endDate === "Pending" ? "Processing" : "Completed"}
+                                                            </span>
+                                                        </td>
                                                     </tr>
                                                 ))}
                                             </tbody>
@@ -188,29 +204,28 @@ const AdminPondsManagement = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
-                )}
-
-                {activeTab === 'analytics' && (
-                    <div className="ponds-section-prediction">
-                        <div className="admin-chart-grid">
+                    )}
+                    
+                    {/* Analytics Tab (2 per Row) */}
+                    {activeTab === 'analytics' && (
+                        <div className="analytics-grid-layout fade-in">
                             {filteredTanks.map(tank => (
-                                <div className="chart-wrapper-admin" key={tank._id}>
-                                    <h4>{tank.type} Salinity Curve</h4>
-                                    <ResponsiveContainer width="100%" height={200}>
+                                <div className="chart-card" key={tank._id}>
+                                    <h4>{tank.type} Concentration Trend</h4>
+                                    <ResponsiveContainer width="100%" height={250}>
                                         <LineChart data={tank.salinityRecords}>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                                            <XAxis dataKey="date" tickFormatter={(d) => new Date(d).toLocaleDateString()} hide />
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+                                            <XAxis dataKey="date" hide />
                                             <YAxis />
                                             <Tooltip />
-                                            <Line type="monotone" dataKey="level" stroke="#2563eb" strokeWidth={2} dot={false} />
+                                            <Line type="monotone" dataKey="level" stroke="#008080" strokeWidth={3} dot={{ r: 4, fill: '#008080' }} />
                                         </LineChart>
                                     </ResponsiveContainer>
                                 </div>
                             ))}
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </main>
         </div>
     );

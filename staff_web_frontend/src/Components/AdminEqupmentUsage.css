@@ -1,142 +1,228 @@
-/* Overall Layout */
-.admin-usage-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    background-color: #f4f7f6;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* AdminEqupmentUsage.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --persian-green: #00A896;
+    --teal-green: #028090;
+    --vibrant-yellow: #F9C80E;
+    --dark-slate: #1a2e35;
+    --admin-bg: #f4f7f6;
+    --white: #ffffff;
+    --text-muted: #64748b;
 }
 
-/* Slim Sidebar with Tooltips */
-.admin-sidebar-icons {
+.admin-usage-wrapper {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--admin-bg);
+}
+
+/* Slim Sidebar - Persian & Teal Gradient */
+.admin-mini-sidebar {
     width: 80px;
-    background-color: #1e293b;
+    background: linear-gradient(180deg, var(--teal-green) 0%, var(--dark-slate) 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
-    gap: 20px;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+    z-index: 100;
 }
 
-.sidebar-logo {
-    color: #3b82f6;
-    font-weight: bold;
-    font-size: 0.8rem;
-    margin-bottom: 20px;
+.admin-sidebar-logo {
+    color: var(--vibrant-yellow);
+    font-weight: 800;
+    font-size: 0.75rem;
+    margin-bottom: 40px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
 }
 
-.sidebar-icon-btn {
+.admin-nav-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.icon-btn {
     width: 50px;
     height: 50px;
+    border-radius: 15px;
     border: none;
     background: transparent;
-    font-size: 22px;
+    font-size: 1.4rem;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    color: #94a3b8;
 }
 
-.sidebar-icon-btn:hover {
-    background-color: #334155;
-    transform: scale(1.1);
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(3px);
 }
 
-.sidebar-icon-btn.active {
-    background-color: #3b82f6;
-    color: white;
-    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+.icon-btn.active {
+    background: var(--vibrant-yellow);
+    box-shadow: 0 4px 15px rgba(249, 200, 14, 0.4);
+    color: var(--dark-slate);
 }
 
-/* Content Area */
-.admin-main-content {
+/* Main Content Area */
+.admin-usage-main {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    padding: 40px;
+    max-width: calc(100vw - 80px);
 }
 
-.admin-top-header {
-    padding: 20px 40px;
-    background-color: white;
+.admin-usage-header {
     display: flex;
-    justify-content: flex-end;
-    border-bottom: 1px solid #e2e8f0;
+    flex-direction: column; /* Title එකට යටින් Search Bar එක එන ලෙස */
+    margin-bottom: 40px;
 }
 
-.admin-search-wrapper {
-    background: #f1f5f9;
-    padding: 10px 15px;
-    border-radius: 25px;
+.admin-header-title h1 {
+    font-size: 2rem;
+    color: var(--teal-green);
+    font-weight: 800;
+    margin: 0;
+}
+
+.admin-header-title p {
+    color: var(--text-muted);
+    margin: 8px 0 0 0;
+    font-size: 1rem;
+}
+
+/* Search Bar Wrapper - Title එක සහ මෙතන අතර පරතරය වැඩි කර ඇත */
+.admin-header-controls {
+    margin-top: 30px; /* Gap between Title and Search Bar */
+    display: flex;
+    justify-content: flex-start;
+}
+
+/* Modern Styled Search Bar */
+.admin-modern-search {
+    background: var(--white);
+    border: 2px solid var(--persian-green);
+    border-radius: 50px;
+    padding: 0 22px;
     display: flex;
     align-items: center;
-    width: 300px;
+    width: 420px; /* පෙනුම වැඩි කිරීමට පළල වැඩි කරන ලදී */
+    height: 50px;
+    box-shadow: 0 4px 12px rgba(0, 168, 150, 0.12);
+    transition: all 0.3s ease;
 }
 
-.admin-search-wrapper input {
-    border: none;
-    background: transparent;
-    outline: none;
-    margin-left: 10px;
+.admin-modern-search:focus-within {
+    box-shadow: 0 6px 20px rgba(0, 168, 150, 0.2);
+    transform: translateY(-2px);
+    border-color: var(--teal-green);
+}
+
+.admin-search-icon {
+    font-size: 1.2rem;
+    color: var(--persian-green);
+    margin-right: 15px;
+}
+
+.admin-modern-search input {
+    border: none !important;
+    outline: none !important;
     width: 100%;
-}
-
-.admin-content-body {
-    padding: 40px;
-    overflow-y: auto;
-    flex: 1;
-}
-
-.section-title {
-    margin-bottom: 25px;
-    color: #1e293b;
-    font-size: 1.5rem;
+    font-size: 1rem;
+    color: var(--dark-slate);
+    background: transparent;
+    font-family: inherit;
 }
 
 /* View-Only Table Styling */
-.admin-data-table {
+.admin-table-container {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    border: 1px solid #edf2f7;
+}
+
+.admin-view-table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-.admin-data-table th {
-    background-color: #f8fafc;
-    color: #64748b;
-    text-align: center;
-    padding: 15px;
-    border: 1px solid #e2e8f0;
-    font-size: 0.9rem;
+.admin-view-table th {
+    background: var(--teal-green);
+    padding: 20px;
+    text-align: left;
+    font-size: 0.85rem;
+    color: var(--vibrant-yellow);
     text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 700;
 }
 
-.admin-data-table td {
-    padding: 15px;
+.admin-view-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--dark-slate);
+    font-size: 0.95rem;
+}
+
+.admin-table-row {
+    transition: background 0.2s ease;
+}
+
+.admin-table-row:hover {
+    background: #f0fdfa; /* ඉතා ලා පැහැති පර්සියානු කොළ ටින්ට් එකක් */
+}
+
+/* Row Data Highlighting */
+.admin-bold-text {
+    font-weight: 700;
+    color: var(--teal-green);
+}
+
+.admin-qty-tag {
+    background: #00a89722;
+    color: #1a1b1c;
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.85rem;
+}
+
+.admin-cost-text {
+    font-weight: 800;
+    color: var(--persian-green);
+}
+
+/* Status Badges - Theme Based */
+.admin-status-pill {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.admin-status-pill.pending { background: #fff4cc; color: #b25e09; }
+.admin-status-pill.good, .admin-status-pill.fixed { background: var(--persian-green); color: white; }
+.admin-status-pill.ongoing, .admin-status-pill.fair { background: var(--teal-green); color: white; }
+.admin-status-pill.poor { background: #fee2e2; color: #991b1b; }
+
+/* Empty States & Loader */
+.admin-loader, .admin-no-data {
+    padding: 60px;
     text-align: center;
-    border: 1px solid #e2e8f0;
-    color: #334155;
-}
-
-.admin-data-table tr:hover {
-    background-color: #f1f5f9;
-}
-
-/* Status Badges */
-.status-tag {
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.8rem;
+    color: var(--teal-green);
     font-weight: 600;
+    font-size: 1.1rem;
 }
-
-.status-tag.pending { background: #fee2e2; color: #991b1b; }
-.status-tag.fixed, .status-tag.completed { background: #dcfce7; color: #166534; }
-.status-tag.in-progress, .status-tag.scheduled { background: #fef3c7; color: #92400e; }

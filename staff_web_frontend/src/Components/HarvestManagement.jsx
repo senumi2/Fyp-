@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import './HarvestManagement.css';
 
 const HarvestManagement = () => {
@@ -10,6 +12,8 @@ const HarvestManagement = () => {
     const [inputs, setInputs] = useState({});
     const [showAll, setShowAll] = useState({});
     const [unit, setUnit] = useState('kg');
+    const [searchTerm, setSearchTerm] = useState("");
+    const [editMode, setEditMode] = useState(null);
 
     const categories = ['Salt Harvest', 'Jipsum Harvest', 'Artimiya Harvest', 'Agriculture Salt Harvest'];
 
@@ -18,11 +22,8 @@ const HarvestManagement = () => {
         try {
             const res = await axios.get('http://localhost:5000/api/harvest');
             setHarvestData(res.data || []);
-        } catch (err) {
-            console.error("Fetch Error:", err);
-        } finally {
-            setLoading(false);
-        }
+        } catch (err) { console.error("Fetch Error:", err); }
+        finally { setLoading(false); }
     };
 
     useEffect(() => { fetchHarvests(); }, []);
@@ -33,23 +34,32 @@ const HarvestManagement = () => {
         setInputs({ ...inputs, [cat]: { ...inputs[cat], [field]: val } });
     };
 
-    const handleAdd = async (cat) => {
+    const handleAddOrUpdate = async (cat) => {
         const data = inputs[cat];
-        if (!data?.type || !data?.quantity || isNaN(data.quantity)) {
-            return alert("කරුණාකර සියලුම තොරතුරු නිවැරදිව ඇතුළත් කරන්න.");
-        }
+        if (!data?.type || !data?.quantity) return alert("කරුණාකර සියලුම තොරතුරු ඇතුළත් කරන්න.");
+
         try {
-            const response = await axios.post('http://localhost:5000/api/harvest/add', {
-                category: cat,
-                type: data.type,
-                quantity: Number(data.quantity)
-            });
+            let response;
+            if (editMode && editMode.cat === cat) {
+                response = await axios.put(`http://localhost:5000/api/harvest/update/${cat}/${editMode.id}`, {
+                    type: data.type,
+                    quantity: Number(data.quantity)
+                });
+                setEditMode(null);
+            } else {
+                response = await axios.post('http://localhost:5000/api/harvest/add', {
+                    category: cat, type: data.type, quantity: Number(data.quantity)
+                });
+            }
             setHarvestData(response.data);
             setInputs({ ...inputs, [cat]: { type: '', quantity: '' } });
-        } catch (err) { 
-            console.error(err);
-            alert("Error adding record"); 
-        }
+        } catch (err) { alert(err.response?.data?.message || "දෝෂයක් සිදු විය."); }
+    };
+
+    const startEdit = (cat, record) => {
+        setEditMode({ cat, id: record._id });
+        setInputs({ ...inputs, [cat]: { type: record.type, quantity: record.quantity } });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleDelete = async (cat, recordId) => {
@@ -57,11 +67,39 @@ const HarvestManagement = () => {
         try {
             const res = await axios.delete(`http://localhost:5000/api/harvest/delete/${cat}/${recordId}`);
             setHarvestData(res.data);
-        } catch (err) { 
-            console.error(err);
-            alert("Delete failed"); 
-        }
+        } catch (err) { alert(err.response?.data?.message || "Delete failed"); }
     };
+
+    const downloadPDF = () => {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text("SALTERN ERP - Harvest Report", 14, 20);
+        doc.setFontSize(11);
+        doc.text(`Report Generated: ${new Date().toLocaleString()}`, 14, 30);
+        
+        let allRecordsForPdf = [];
+        harvestData.forEach(catObj => {
+            catObj.records.forEach(r => {
+                allRecordsForPdf.push([
+                    new Date(r.date).toLocaleDateString(),
+                    catObj.category,
+                    r.type,
+                    `${formatVal(r.quantity).toLocaleString()} ${unit}`
+                ]);
+            });
+        });
+
+        autoTable(doc, {
+            head: [['Date', 'Category', 'Type', `Quantity (${unit})`]],
+            body: allRecordsForPdf,
+            startY: 35,
+            theme: 'striped',
+            headStyles: { fillColor: [0, 109, 91] }
+        });
+        doc.save("Saltern_Harvest_Report.pdf");
+    };
+
+    const formatVal = (val) => unit === 'kg' ? val : val / 1000;
 
     const stats = useMemo(() => {
         let total = 0;
@@ -72,12 +110,9 @@ const HarvestManagement = () => {
             catTotals[c.category] = sum;
         });
         const highest = Object.keys(catTotals).length > 0 
-            ? Object.keys(catTotals).reduce((a, b) => catTotals[a] > catTotals[b] ? a : b) 
-            : 'N/A';
+            ? Object.keys(catTotals).reduce((a, b) => catTotals[a] > catTotals[b] ? a : b) : 'N/A';
         return { total, highest };
     }, [harvestData]);
-
-    const formatVal = (val) => unit === 'kg' ? val : val / 1000;
 
     const getChartData = (cat) => {
         const found = harvestData.find(h => h.category === cat);
@@ -97,7 +132,6 @@ const HarvestManagement = () => {
                     <button className={activeTab === 'management' ? 'active' : ''} onClick={() => setActiveTab('management')}>📋 Management</button>
                     <button className={activeTab === 'tracking' ? 'active' : ''} onClick={() => setActiveTab('tracking')}>📈 Analytics</button>
                 </nav>
-                
                 <div className="unit-toggle-container">
                     <span className={unit === 'kg' ? 'active-u' : ''}>KG</span>
                     <label className="switch">
@@ -118,14 +152,22 @@ const HarvestManagement = () => {
                         <span>Top Category</span>
                         <h2>{stats.highest}</h2>
                     </div>
-                    <div className="stat-box teal">
-                        <span>System Status</span>
-                        <h2>Active</h2>
+                    <div className="stat-box teal pdf-btn-container">
+                        <button className="pdf-btn" onClick={downloadPDF}>📥 Download PDF</button>
                     </div>
                 </header>
 
                 {activeTab === 'management' ? (
                     <div className="fade-in">
+                        <div className="search-bar-container">
+                            <input 
+                                type="text" 
+                                placeholder="Search by type or date (e.g. Fine or 2024)..." 
+                                className="search-input"
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+
                         <div className="category-nav">
                             {categories.map(cat => (
                                 <a key={cat} href={`#${cat.replace(/\s+/g, '')}`} className="nav-pill">{cat}</a>
@@ -135,53 +177,59 @@ const HarvestManagement = () => {
                         <div className="table-list">
                             {categories.map(cat => {
                                 const categoryObj = harvestData.find(h => h.category === cat);
-                                let records = categoryObj ? [...categoryObj.records].reverse() : [];
-                                const isExpanded = showAll[cat];
-                                const displayData = isExpanded ? records : records.slice(0, 10); // Reduced initial view to 10 for better UI
+                                let records = categoryObj ? categoryObj.records : [];
+                                
+                                const filteredRecords = records.filter(r => 
+                                    r.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    new Date(r.date).toLocaleDateString().includes(searchTerm)
+                                ).reverse();
+
+                                // SCROLLER එක සඳහා මෙතැනින් .slice(0, 10) ඉවත් කර ඇත
+                                const displayData = filteredRecords;
 
                                 return (
                                     <section key={cat} id={cat.replace(/\s+/g, '')} className="table-card">
                                         <h3>{cat}</h3>
+                                        {/* මෙම table-wrapper එක හරහා දැන් Scroll වේ */}
                                         <div className="table-wrapper">
                                             <table>
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th>Date</th>
-                                                        <th>Type</th>
-                                                        <th>Qty ({unit})</th>
-                                                        <th>Action</th>
+                                                        <th>#</th><th>Date</th><th>Type</th><th>Qty ({unit})</th><th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr className="add-row">
                                                         <td className="plus">+</td>
                                                         <td className="small-date">Today</td>
-                                                        <td><input type="text" placeholder="Enter Type (e.g. Fine)" value={inputs[cat]?.type || ''} onChange={e => handleInput(cat, 'type', e.target.value)} /></td>
-                                                        <td><input type="number" placeholder={`Qty`} value={inputs[cat]?.quantity || ''} onChange={e => handleInput(cat, 'quantity', e.target.value)} /></td>
-                                                        <td><button className="add-btn" onClick={() => handleAdd(cat)}>Add</button></td>
+                                                        <td><input type="text" placeholder="Type" value={inputs[cat]?.type || ''} onChange={e => handleInput(cat, 'type', e.target.value)} /></td>
+                                                        <td><input type="number" placeholder="Qty" value={inputs[cat]?.quantity || ''} onChange={e => handleInput(cat, 'quantity', e.target.value)} /></td>
+                                                        <td>
+                                                            <button className="add-btn" onClick={() => handleAddOrUpdate(cat)}>
+                                                                {editMode?.cat === cat ? 'Update' : 'Add'}
+                                                            </button>
+                                                            {editMode?.cat === cat && <button className="del-btn" style={{marginLeft:'5px'}} onClick={() => {setEditMode(null); setInputs({});}}>Cancel</button>}
+                                                        </td>
                                                     </tr>
-                                                    {displayData.length > 0 ? displayData.map((r, i) => (
-                                                        <tr key={r._id} className={r.quantity < 100 ? 'low-stock' : ''}>
-                                                            <td>{records.length - i}</td>
+                                                    {displayData.map((r, i) => (
+                                                        <tr key={r._id}>
+                                                            <td>{filteredRecords.length - i}</td>
                                                             <td>{new Date(r.date).toLocaleDateString()}</td>
                                                             <td><span className="type-tag">{r.type}</span></td>
                                                             <td className="bold">{formatVal(r.quantity).toLocaleString()}</td>
                                                             <td>
-                                                                {isToday(r.date) && <button className="del-btn" onClick={() => handleDelete(cat, r._id)}>Delete</button>}
+                                                                {isToday(r.date) && (
+                                                                    <>
+                                                                        <button className="edit-btn" onClick={() => startEdit(cat, r)} style={{marginRight:'8px'}}>Edit</button>
+                                                                        <button className="del-btn" onClick={() => handleDelete(cat, r._id)}>Delete</button>
+                                                                    </>
+                                                                )}
                                                             </td>
                                                         </tr>
-                                                    )) : (
-                                                        <tr><td colSpan="5" style={{textAlign:'center', padding:'20px', color:'#999'}}>No records found for this category.</td></tr>
-                                                    )}
+                                                    ))}
                                                 </tbody>
                                             </table>
                                         </div>
-                                        {records.length > 10 && (
-                                            <button className="expand-btn" onClick={() => setShowAll({ ...showAll, [cat]: !isExpanded })}>
-                                                {isExpanded ? 'View Less' : `View All Records (${records.length})`}
-                                            </button>
-                                        )}
                                     </section>
                                 );
                             })}

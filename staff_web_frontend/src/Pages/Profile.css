@@ -1,8 +1,7 @@
 .profile-wrapper {
-  background: #f0f4f4; /* පිරිසිදු පසුබිමක් */
+  background: #f0f4f4;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
-  /* Navbar එකට යට වීම වැළැක්වීමට margin-top එකතු කරන ලදී */
   margin-top: 85px; 
   padding-bottom: 50px;
 }
@@ -12,11 +11,11 @@
   padding: 15px 40px;
   display: flex;
   align-items: center;
-  border-bottom: 3px solid #FEDC97; /* Yellow Accent */
+  border-bottom: 3px solid #FEDC97;
 }
 
 .back-circle-btn {
-  background: #FEDC97; /* Yellow */
+  background: #FEDC97;
   border: none;
   width: 40px;
   height: 40px;
@@ -36,16 +35,16 @@
 .portal-tag { 
   font-size: 0.7rem; 
   font-weight: 800; 
-  color: #28666E; /* Teal Green */
+  color: #28666E;
   letter-spacing: 1px; 
 }
 
-.header-user-name { margin: 0; font-size: 0.25rem; color: #0f172a; }
+.header-user-name { margin: 0; font-size: 1.25rem; color: #0f172a; }
 
 .account-status { margin-left: auto; font-weight: 600; font-size: 0.85rem; color: #28666E; }
 .status-indicator-active {
   width: 10px; height: 10px; 
-  background: #B4D2B1; /* Persian Green */
+  background: #B4D2B1; 
   border-radius: 50%; display: inline-block; margin-right: 5px;
   box-shadow: 0 0 8px #B4D2B1;
 }
@@ -71,7 +70,7 @@
 .profile-img-container {
   width: 140px; height: 140px; margin: 0 auto 20px;
   position: relative; border-radius: 50%; 
-  border: 4px solid #FEDC97; /* Yellow Border */
+  border: 4px solid #FEDC97; 
   overflow: hidden;
 }
 
@@ -87,8 +86,8 @@
 .profile-img-container:hover .upload-overlay { opacity: 1; }
 
 .role-badge-main {
-  background: #B4D2B1; /* Persian Green */
-  color: #28666E; /* Teal Green */
+  background: #B4D2B1; 
+  color: #28666E; 
   padding: 4px 12px; border-radius: 20px;
   font-weight: 700; font-size: 0.8rem;
 }
@@ -103,7 +102,7 @@
 
 .profile-tabs button:hover { background: #f0f4f4; }
 .profile-tabs button.active { 
-  background: #28666E; /* Teal Green */
+  background: #28666E; 
   color: white; 
   box-shadow: 0 4px 12px rgba(40, 102, 110, 0.3);
 }
@@ -116,10 +115,9 @@
 }
 .s-card:hover { transform: translateY(-5px); }
 
-/* නව වර්ණ සංකලනය */
-.info-gradient { background: #28666E; } /* Teal */
-.date-gradient { background: #B4D2B1; color: #28666E; } /* Persian Green */
-.location-gradient { background: #FEDC97; color: #28666E; } /* Yellow */
+.info-gradient { background: #28666E; } 
+.date-gradient { background: #B4D2B1; color: #28666E; } 
+.location-gradient { background: #FEDC97; color: #28666E; } 
 
 .content-card { 
   background: white; 
@@ -143,10 +141,33 @@
 
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .form-input label { display: block; margin-bottom: 6px; font-weight: 600; color: #28666E; font-size: 0.9rem; }
+
+/* Password Field විශේෂ සැකසුම */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .form-input input {
   width: 100%; padding: 12px; border: 1px solid #B4D2B1; border-radius: 10px;
   background: white; font-size: 1rem; color: #0f172a;
 }
+
+.password-toggle-icon {
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
+  color: #28666E;
+  display: flex;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.password-toggle-icon:hover {
+  color: #FEDC97;
+}
+
 .form-input input:focus {
   outline: none;
   border-color: #28666E;
@@ -155,7 +176,7 @@
 
 .primary-save-btn {
   margin-top: 30px; width: 100%; padding: 14px; 
-  background: #28666E; /* Teal Green */
+  background: #28666E; 
   color: white; border: none; border-radius: 10px; 
   font-weight: 700; cursor: pointer;
   transition: 0.3s;

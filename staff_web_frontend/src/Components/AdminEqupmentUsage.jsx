@@ -1,179 +1,149 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./AdminEqupmentUsage.css";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './AdminEqupmentUsage.css';
 
 const AdminEqupmentUsage = () => {
-  const [activePage, setActivePage] = useState("inventory");
-  const [searchTerm, setSearchTerm] = useState("");
-  
-  const [inventory, setInventory] = useState([]);
-  const [issues, setIssues] = useState([]);
-  const [maintenance, setMaintenance] = useState([]);
+    const [activeTab, setActiveTab] = useState('inventory');
+    const [dataList, setDataList] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(false);
 
-  // Fetching all data from existing APIs
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [invRes, issRes, mainRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/inventory"),
-          axios.get("http://localhost:5000/api/issues"),
-          axios.get("http://localhost:5000/api/maintenance")
-        ]);
-        setInventory(invRes.data);
-        setIssues(issRes.data);
-        setMaintenance(mainRes.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
+    const getTargetRoute = (tab) => {
+        if (tab === 'logs') return 'maintenance-repair-logs';
+        return tab;
     };
-    fetchData();
-  }, []);
 
-  // Filter logic for search bar
-  const filteredInventory = inventory.filter(item => 
-    item.items?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    const fetchCurrentData = async () => {
+        setLoading(true);
+        try {
+            const endpoint = getTargetRoute(activeTab);
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
 
-  const filteredIssues = issues.filter(item => 
-    item.issue?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+            let url = `http://localhost:5000/api/${endpoint}`;
+            // Logs ඇතුළු සියලුම Tabs සඳහා search එක වැඩ කිරීමට:
+        if (searchTerm) {
+          url += `?search=${searchTerm}`;
+      }
 
-  const filteredMaintenance = maintenance.filter(item => 
-    item.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+            const response = await axios.get(url, config);
+            setDataList(Array.isArray(response.data) ? response.data : []);
+        } catch (err) {
+            console.error("Fetch error:", err);
+            setDataList([]);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  const renderContent = () => {
-    switch (activePage) {
-      case "inventory":
-        return (
-          <div className="admin-page-section">
-            <h2 className="section-title">Equipment Inventory</h2>
-            <table className="admin-data-table">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Date Added</th>
-                  <th>Item Name</th>
-                  <th>Quantity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredInventory.map((item, index) => (
-                  <tr key={item._id}>
-                    <td>{index + 1}</td>
-                    <td>{new Date(item.createdAt).toLocaleDateString()}</td>
-                    <td>{item.items}</td>
-                    <td>{item.quantity}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
-      case "issues":
-        return (
-          <div className="admin-page-section">
-            <h2 className="section-title">Reported Issues</h2>
-            <table className="admin-data-table">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Date</th>
-                  <th>Issue Description</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredIssues.map((item, index) => (
-                  <tr key={item._id}>
-                    <td>{index + 1}</td>
-                    <td>{new Date(item.createdAt).toLocaleDateString()}</td>
-                    <td>{item.issue}</td>
-                    <td><span className={`status-tag ${item.status.toLowerCase().replace(" ", "-")}`}>{item.status}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
-      case "maintenance":
-        return (
-          <div className="admin-page-section">
-            <h2 className="section-title">Maintenance Logs</h2>
-            <table className="admin-data-table">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Date</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredMaintenance.map((item, index) => (
-                  <tr key={item._id}>
-                    <td>{index + 1}</td>
-                    <td>{new Date(item.createdAt).toLocaleDateString()}</td>
-                    <td>{item.description}</td>
-                    <td><span className={`status-tag ${item.status.toLowerCase().replace(" ", "-")}`}>{item.status}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            fetchCurrentData();
+        }, 300);
+        return () => clearTimeout(delayDebounce);
+    }, [activeTab, searchTerm]);
 
-  return (
-    <div className="admin-usage-container">
-      {/* Icon Sidebar */}
-      <div className="admin-sidebar-icons">
-        <div className="sidebar-logo">Admin</div>
-        <button 
-          className={`sidebar-icon-btn ${activePage === "inventory" ? "active" : ""}`}
-          onClick={() => setActivePage("inventory")}
-          title="Equipment Inventory"
-        >
-          📦
-        </button>
-        <button 
-          className={`sidebar-icon-btn ${activePage === "issues" ? "active" : ""}`}
-          onClick={() => setActivePage("issues")}
-          title="Reported Issues"
-        >
-          ⚠️
-        </button>
-        <button 
-          className={`sidebar-icon-btn ${activePage === "maintenance" ? "active" : ""}`}
-          onClick={() => setActivePage("maintenance")}
-          title="Maintenance Logs"
-        >
-          🛠️
-        </button>
-      </div>
+    return (
+        <div className="admin-usage-wrapper">
+            <aside className="admin-mini-sidebar">
+                <div className="admin-sidebar-logo">ADMIN</div>
+                <div className="admin-nav-icons">
+                    <button 
+                        className={`icon-btn ${activeTab === 'inventory' ? 'active' : ''}`} 
+                        onClick={() => {setActiveTab('inventory'); setSearchTerm('');}}
+                        title="Inventory"
+                    >
+                        📦
+                    </button>
+                    <button 
+                        className={`icon-btn ${activeTab === 'issues' ? 'active' : ''}`} 
+                        onClick={() => {setActiveTab('issues'); setSearchTerm('');}}
+                        title="Issues"
+                    >
+                        ⚠️
+                    </button>
+                    <button 
+                        className={`icon-btn ${activeTab === 'logs' ? 'active' : ''}`} 
+                        onClick={() => {setActiveTab('logs'); setSearchTerm('');}}
+                        title="Maintenance Logs"
+                    >
+                        🛠️
+                    </button>
+                </div>
+            </aside>
 
-      {/* Main Content Area */}
-      <div className="admin-main-content">
-        <div className="admin-top-header">
-          <div className="admin-search-wrapper">
-            <span>🔍</span>
-            <input 
-              type="text" 
-              placeholder="Search details..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+            <main className="admin-usage-main">
+                <header className="admin-usage-header">
+                    <div className="admin-header-title">
+                        <h1>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} View</h1>
+                        <p>View-only mode for equipment and maintenance monitoring.</p>
+                    </div>
+                    
+                    <div className="admin-header-controls">
+                        {/* Enhanced Modern Search Bar */}
+                        <div className="admin-modern-search">
+                            <span className="admin-search-icon">🔍</span>
+                            <input 
+                                type="text" 
+                                placeholder={`Search for ${activeTab}...`} 
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </header>
+
+                <div className="admin-table-container">
+                    {loading ? (
+                        <div className="admin-loader">Fetching data...</div>
+                    ) : (
+                        <table className="admin-view-table">
+                            <thead>
+                                {activeTab === 'inventory' && (
+                                    <tr><th>Date</th><th>Item Name</th><th>Quantity</th></tr>
+                                )}
+                                {activeTab === 'issues' && (
+                                    <tr><th>Date</th><th>Issue</th><th>Status</th></tr>
+                                )}
+                                {activeTab === 'logs' && (
+                                    <tr><th>Date</th><th>Equipment</th><th>Issue</th><th>Cost</th><th>Condition</th></tr>
+                                )}
+                            </thead>
+                            <tbody>
+                                {dataList.length > 0 ? (
+                                    dataList.map((item) => (
+                                        <tr key={item._id} className="admin-table-row">
+                                            <td>{item.date ? new Date(item.date).toLocaleDateString() : 'N/A'}</td>
+                                            {activeTab === 'inventory' && (
+                                                <><td className="admin-bold-text">{item.items}</td>
+                                                <td><span className="admin-qty-tag">{item.quantity}</span></td></>
+                                            )}
+                                            {activeTab === 'issues' && (
+                                                <><td>{item.issue}</td>
+                                                <td><span className={`admin-status-pill ${item.status?.toLowerCase()}`}>{item.status}</span></td></>
+                                            )}
+                                            {activeTab === 'logs' && (
+                                                <>
+                                                    <td className="admin-bold-text">{item.equipment}</td>
+                                                    <td>{item.issue}</td>
+                                                    <td className="admin-cost-text">Rs. {item.cost?.toLocaleString()}</td>
+                                                    <td><span className={`admin-status-pill ${item.statuse?.toLowerCase()}`}>{item.statuse}</span></td>
+                                                </>
+                                            )}
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr><td colSpan="5" className="admin-no-data">No records found.</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+            </main>
         </div>
-        <div className="admin-content-body">
-          {renderContent()}
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default AdminEqupmentUsage;
