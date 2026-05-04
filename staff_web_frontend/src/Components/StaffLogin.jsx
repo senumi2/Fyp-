@@ -5,8 +5,8 @@ import './StaffLogin.css';
 const StaffLogin = () => {
   const navigate = useNavigate();
   
-  // localStorage එකෙන් Role එක ලබාගෙන trim සහ lowercase කරයි
-  const userRole = (localStorage.getItem('role') || "").toLowerCase().trim();
+  // ✅ 2 වෙනි ප්‍රශ්නය සඳහා: sessionStorage භාවිතයෙන් Role එක ලබා ගැනීම
+  const userRole = (sessionStorage.getItem('role') || "").toLowerCase().trim();
 
   const menuItems = [
     { id: 1, title: 'Admin Panel', path: '/adminDashboard', role: 'admin' },
@@ -15,15 +15,14 @@ const StaffLogin = () => {
     { id: 4, title: 'Equipment', path: '/equpmentUsage', role: 'equipment usage' },
     { id: 5, title: 'Inventory', path: '/inventoryManagement', role: 'inventory management' },
     { id: 6, title: 'Finance', path: '/expensesFinance', role: 'expenses & finance' },
-    { id: 7, title: 'Deliveries', path: '/driverDashboard', role: 'Driver' },
+    { id: 7, title: 'Deliveries', path: '/driverDashboard', role: 'driver' },
   ];
 
   return (
     <div className="staff-container">
       <div className="card-grid">
         {menuItems.map((item) => {
-          // ✅ මෙහිදී Role එක අකුරක් නෑර සමාන නම් පමණක් Card එක Unlock වේ.
-          // Admin ට පවා Unlock වන්නේ 'admin' role එක සහිත Card එක පමණි.
+          // ✅ Login වූ User ට අදාළ Card එක පමණක් Unblock කිරීමේ logic එක
           const isDisabled = userRole !== item.role;
 
           return (
@@ -36,7 +35,7 @@ const StaffLogin = () => {
                 opacity: isDisabled ? 0.6 : 1,
                 cursor: isDisabled ? 'not-allowed' : 'pointer',
                 pointerEvents: isDisabled ? 'none' : 'auto',
-                position: 'relative' // Locked tag එක නිවැරදිව පෙන්වීමට
+                position: 'relative'
               }}
             >
               <div className="inner-card">

@@ -133,7 +133,8 @@ exports.markAsDelivered = async (req, res) => {
 exports.getAllOrdersForAdmin = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate("userId", "name email") // Customer ගේ නම සහ Email එක ගමු
+      .populate("userId", "fullName email") // Customer ගේ නම සහ Email එක ගමු
+      .populate("shippingAddress")
       .sort({ date: -1 }); // අලුත්ම ගනුදෙනු උඩට එන ලෙස
     res.json(orders);
   } catch (err) {

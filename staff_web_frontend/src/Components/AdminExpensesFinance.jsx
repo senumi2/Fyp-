@@ -1,116 +1,195 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell 
+    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell,
+    PieChart, Pie
 } from 'recharts';
 import './AdminExpensesFinance.css';
 
-const AdminExpensesFinance = ({ chartData, rawExpenseStats }) => {
-  const [activeTab, setActiveTab] = useState('wages');
+const AdminExpensesFinance = () => {
+  const [activeTab, setActiveTab] = useState('profit');
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Data States
   const [wages, setWages] = useState([]);
   const [transports, setTransports] = useState([]);
   const [maintenances, setMaintenances] = useState([]);
+  const [operationals, setOperationals] = useState([]);
+  const [finData, setFinData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const UNIT_PRICE = 50; 
-  const COLORS = ["#3b82f6", "#10b981", "#f59e0b"];
+  // Filter States
+  const [selectedYear, setSelectedYear] = useState("2026");
+  const [selectedMonth, setSelectedMonth] = useState("");
+
+  const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
   useEffect(() => {
     fetchAllData();
   }, []);
 
+  useEffect(() => {
+    if (activeTab === 'profit') {
+      fetchFinancialStats();
+    }
+  }, [activeTab, selectedYear, selectedMonth]);
+
   const fetchAllData = async () => {
     try {
-      const resWages = await axios.get("http://localhost:5000/api/finance/wages");
-      const resTrans = await axios.get("http://localhost:5000/api/finance/transport");
-      const resMaint = await axios.get("http://localhost:5000/api/finance/maintenanceRepairLogs");
-      setWages(resWages.data);
-      setTransports(resTrans.data);
-      setMaintenances(resMaint.data);
-    } catch (err) { console.error("Error fetching data", err); }
+      const token = localStorage.getItem("token");
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+
+      const [resW, resT, resM, resO] = await Promise.all([
+        axios.get("http://localhost:5000/api/finance/wages", config),
+        axios.get("http://localhost:5000/api/finance/transport", config),
+        axios.get("http://localhost:5000/api/finance/maintenanceRepairLogs", config),
+        axios.get("http://localhost:5000/api/operational-expenses/operational", config)
+      ]);
+
+      setWages(resW.data || []);
+      setTransports(resT.data || []);
+      setMaintenances(resM.data || []);
+      setOperationals(resO.data || []);
+    } catch (err) {
+      console.error("Error fetching admin finance data", err);
+    }
   };
 
-  // Profit & Loss Logic
-  const calculatePL = () => {
-    const totalSalesQty = chartData?.reduce((acc, curr) => acc + (curr.Sales || 0), 0) || 0;
-    const totalRev = totalSalesQty * UNIT_PRICE;
-    const totalW = rawExpenseStats?.wageStats?.reduce((acc, curr) => acc + curr.total, 0) || 0;
-    const totalT = rawExpenseStats?.transportStats?.reduce((acc, curr) => acc + curr.total, 0) || 0;
-    const totalM = rawExpenseStats?.maintenanceStats?.reduce((acc, curr) => acc + curr.total, 0) || 0;
-    const totalExp = totalW + totalT + totalM;
+  const fetchFinancialStats = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`http://localhost:5000/api/analytics/financial-stats?year=${selectedYear}&month=${selectedMonth}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setFinData(res.data);
+    } catch (err) {
+      console.error("Error fetching financial stats:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Safe Calculations for Summary
+  const calculateSummaries = () => {
+    const defaultData = { income: 0, w: 0, t: 0, m: 0, o: 0, totalExp: 0, net: 0, pieData: [] };
+    if (!finData) return defaultData;
     
-    return {
-        totalRev, totalExp, profit: totalRev - totalExp,
-        barData: [
-            { name: 'Wages', amount: totalW },
-            { name: 'Transport', amount: totalT },
-            { name: 'Maintenance', amount: totalM }
-        ]
+    const sum = (arr) => arr?.reduce((acc, curr) => acc + (parseFloat(curr.total || curr.amount) || 0), 0) || 0;
+    
+    const income = sum(finData.incomeStats);
+    const w = sum(finData.wageStats);
+    const t = sum(finData.transportStats);
+    const m = sum(finData.maintenanceStats);
+    const o = sum(finData.operationalStats);
+    const totalExp = w + t + m + o;
+    
+    return { 
+        income, w, t, m, o, totalExp, net: income - totalExp,
+        pieData: [
+            { name: 'Wages', value: w },
+            { name: 'Transport', value: t },
+            { name: 'Maintenance', value: m },
+            { name: 'Operational', value: o }
+        ].filter(item => item.value > 0) // Only show items with values
     };
   };
 
-  const plData = calculatePL();
+  const summary = calculateSummaries();
 
   return (
     <div className="admin-finance-wrapper">
       <div className="admin-finance-sidebar-icons">
-        <button onClick={() => setActiveTab('profit')} className={activeTab === 'profit' ? 'icon-btn active' : 'icon-btn'} title="Profit & Loss Summary">📊</button>
-        <button onClick={() => setActiveTab('wages')} className={activeTab === 'wages' ? 'icon-btn active' : 'icon-btn'} title="Work Wages View">👷‍♂️</button>
-        <button onClick={() => setActiveTab('transport')} className={activeTab === 'transport' ? 'icon-btn active' : 'icon-btn'} title="Transport Records">🚛</button>
-        <button onClick={() => setActiveTab('maintenance')} className={activeTab === 'maintenance' ? 'icon-btn active' : 'icon-btn'} title="Maintenance Logs">🛠️</button>
+        <h1>💲</h1>
+        <button onClick={() => setActiveTab('profit')} className={activeTab === 'profit' ? 'icon-btn active' : 'icon-btn'} title="Financial Summary">📊</button>
+        <button onClick={() => setActiveTab('wages')} className={activeTab === 'wages' ? 'icon-btn active' : 'icon-btn'} title="Wages View">👷‍♂️</button>
+        <button onClick={() => setActiveTab('transport')} className={activeTab === 'transport' ? 'icon-btn active' : 'icon-btn'} title="Transport View">🚛</button>
+        <button onClick={() => setActiveTab('maintenance')} className={activeTab === 'maintenance' ? 'icon-btn active' : 'icon-btn'} title="Maintenance View">🛠️</button>
+        <button onClick={() => setActiveTab('operational')} className={activeTab === 'operational' ? 'icon-btn active' : 'icon-btn'} title="Operational Costs">🏢</button>
       </div>
 
       <div className="admin-finance-content">
         {/* PROFIT & LOSS VIEW */}
         {activeTab === 'profit' && (
           <div className="tab-pane">
-            <h2 className="view-header">Profit & Loss Financial Report (Annual)</h2>
-            <div className="summary-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '30px' }}>
-                <div className="card" style={{ borderLeft: '5px solid #3b82f6' }}>
-                    <h3>Gross Revenue</h3>
-                    <p>Rs. {plData.totalRev.toLocaleString()}</p>
-                </div>
-                <div className="card" style={{ borderLeft: '5px solid #ef4444' }}>
-                    <h3>Total Expenses</h3>
-                    <p>Rs. {plData.totalExp.toLocaleString()}</p>
-                </div>
-                <div className="card" style={{ borderLeft: `5px solid ${plData.profit >= 0 ? '#10b981' : '#ef4444'}` }}>
-                    <h3>Net Profit</h3>
-                    <p style={{ color: plData.profit >= 0 ? '#10b981' : '#ef4444' }}>Rs. {plData.profit.toLocaleString()}</p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h2 className="view-header">Profit & Loss Financial Report</h2>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <select className="search-bar" style={{ marginBottom: 0, width: '120px' }} value={selectedYear} onChange={(e)=>setSelectedYear(e.target.value)}>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                    <select className="search-bar" style={{ marginBottom: 0, width: '150px' }} value={selectedMonth} onChange={(e)=>setSelectedMonth(e.target.value)}>
+                        <option value="">Full Year</option>
+                        {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((m, i) => (
+                            <option key={i} value={i+1}>{m}</option>
+                        ))}
+                    </select>
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '20px' }}>
-                <div className="card" style={{ height: '350px' }}>
-                    <h4>Expense Comparison</h4>
-                    <ResponsiveContainer width="100%" height="90%">
-                        <BarChart data={plData.barData}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip formatter={(val) => `Rs. ${val.toLocaleString()}`} />
-                            <Bar dataKey="amount" radius={[5, 5, 0, 0]}>
-                                {plData.barData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index]} />)}
-                            </Bar>
-                        </BarChart>
-                    </ResponsiveContainer>
+            {loading ? (
+                <div className="loading-spinner">Loading financial data...</div>
+            ) : (
+                <>
+                <div className="summary-cards">
+                    <div className="card" style={{ borderLeft: '5px solid #10b981' }}>
+                        <h3>Total Income</h3>
+                        <p>Rs. {summary.income.toLocaleString()}</p>
+                    </div>
+                    <div className="card" style={{ borderLeft: '5px solid #ef4444' }}>
+                        <h3>Total Expenses</h3>
+                        <p>Rs. {summary.totalExp.toLocaleString()}</p>
+                    </div>
+                    <div className="card" style={{ borderLeft: `5px solid ${summary.net >= 0 ? '#3b82f6' : '#ef4444'}` }}>
+                        <h3>Net {summary.net >= 0 ? 'Profit' : 'Loss'}</h3>
+                        <p style={{ color: summary.net >= 0 ? '#10b981' : '#ef4444' }}>Rs. {summary.net.toLocaleString()}</p>
+                    </div>
                 </div>
-                <div className="card">
-                    <h4>Detailed Breakdown</h4>
-                    <table className="admin-view-table">
-                        <tbody>
-                            <tr><td>Operating Revenue</td><td align="right">{plData.totalRev.toLocaleString()}</td></tr>
-                            <tr><td>Total Wages</td><td align="right" style={{ color: 'red' }}>- {plData.barData[0].amount.toLocaleString()}</td></tr>
-                            <tr><td>Total Transport</td><td align="right" style={{ color: 'red' }}>- {plData.barData[1].amount.toLocaleString()}</td></tr>
-                            <tr><td>Total Maintenance</td><td align="right" style={{ color: 'red' }}>- {plData.barData[2].amount.toLocaleString()}</td></tr>
-                            <tr style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-                                <td>Net Profit</td>
-                                <td align="right" style={{ color: plData.profit >= 0 ? 'green' : 'red' }}>{plData.profit.toLocaleString()}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '30px' }}>
+                    <div className="card" style={{ minHeight: '450px' }}>
+                        <h4>Expense Distribution</h4>
+                        <div style={{ width: '100%', height: '350px' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie 
+                                        data={summary.pieData.length > 0 ? summary.pieData : [{name: 'No Data', value: 1}]} 
+                                        dataKey="value" 
+                                        nameKey="name" 
+                                        cx="50%" 
+                                        cy="50%" 
+                                        outerRadius={100} 
+                                        label
+                                    >
+                                        {summary.pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                                        {summary.pieData.length === 0 && <Cell fill="#ccc" />}
+                                    </Pie>
+                                    <Tooltip formatter={(val) => `Rs. ${val.toLocaleString()}`} />
+                                    <Legend />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                    <div className="card" style={{ minHeight: '450px' }}>
+                        <h4>Revenue vs Expense</h4>
+                        <div style={{ width: '100%', height: '350px' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={[{ name: 'Financials', Income: summary.income, Expense: summary.totalExp }]}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip formatter={(val) => `Rs. ${val.toLocaleString()}`} />
+                                    <Legend />
+                                    <Bar dataKey="Income" fill="#10b981" radius={[5, 5, 0, 0]} />
+                                    <Bar dataKey="Expense" fill="#ef4444" radius={[5, 5, 0, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                </>
+            )}
           </div>
         )}
 
@@ -131,8 +210,8 @@ const AdminExpensesFinance = ({ chartData, rawExpenseStats }) => {
                     <tr key={w._id}>
                       <td>{new Date(w.date).toLocaleDateString()}</td>
                       <td>{w.workerName}</td><td>{w.role}</td><td>{w.hoursWorked}</td>
-                      <td>{w.wageRate.toLocaleString()}</td><td className="bold-text">{w.total.toLocaleString()}</td>
-                      <td><span className={`status-badge ${w.status.toLowerCase()}`}>{w.status}</span></td>
+                      <td>{w.wageRate?.toLocaleString()}</td><td className="bold-text">{w.total?.toLocaleString()}</td>
+                      <td><span className={`status-badge ${w.status?.toLowerCase()}`}>{w.status}</span></td>
                     </tr>
                   ))}
                 </tbody>
@@ -141,19 +220,22 @@ const AdminExpensesFinance = ({ chartData, rawExpenseStats }) => {
           </div>
         )}
 
-        {/* TRANSPORT VIEW (කලින් තිබූ ආකාරයටම...) */}
+        {/* TRANSPORT VIEW */}
         {activeTab === 'transport' && (
           <div className="tab-pane">
             <h2 className="view-header">Transport Cost Records</h2>
+            <div className="search-box">
+                <input type="text" className="search-bar" placeholder="🔍 Search vehicle or route..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+            </div>
             <div className="table-container">
               <table className="admin-view-table">
                 <thead><tr><th>Date</th><th>Vehicle</th><th>Route</th><th>Fuel</th><th>Maint.</th><th>Total</th></tr></thead>
                 <tbody>
-                  {transports.map(t => (
+                  {transports.filter(t => t.vehicle?.toLowerCase().includes(searchTerm.toLowerCase()) || t.route?.toLowerCase().includes(searchTerm.toLowerCase())).map(t => (
                     <tr key={t._id}>
                       <td>{new Date(t.date).toLocaleDateString()}</td><td>{t.vehicle}</td><td>{t.route}</td>
-                      <td>{t.fuelCost.toLocaleString()}</td><td>{t.maintenance.toLocaleString()}</td>
-                      <td className="bold-text">{t.total.toLocaleString()}</td>
+                      <td>{t.fuelCost?.toLocaleString()}</td><td>{t.maintenance?.toLocaleString()}</td>
+                      <td className="bold-text">{t.total?.toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -162,19 +244,47 @@ const AdminExpensesFinance = ({ chartData, rawExpenseStats }) => {
           </div>
         )}
 
-        {/* MAINTENANCE VIEW (කලින් තිබූ ආකාරයටම...) */}
+        {/* MAINTENANCE VIEW */}
         {activeTab === 'maintenance' && (
           <div className="tab-pane">
             <h2 className="view-header">Maintenance Logs</h2>
+            <div className="search-box">
+                <input type="text" className="search-bar" placeholder="🔍 Search equipment..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+            </div>
             <div className="table-container">
               <table className="admin-view-table">
                 <thead><tr><th>Date</th><th>Equipment</th><th>Issue</th><th>Cost</th><th>Status</th></tr></thead>
                 <tbody>
-                  {maintenances.map(m => (
+                  {maintenances.filter(m => m.equipment?.toLowerCase().includes(searchTerm.toLowerCase())).map(m => (
                     <tr key={m._id}>
                       <td>{new Date(m.date).toLocaleDateString()}</td><td>{m.equipment}</td><td>{m.issue}</td>
-                      <td className="bold-text">{Number(m.cost).toLocaleString()}</td>
-                      <td><span className={`status-badge ${m.statuse?.toLowerCase()}`}>{m.statuse}</span></td>
+                      <td className="bold-text">{Number(m.cost || 0).toLocaleString()}</td>
+                      <td><span className={`status-badge ${m.status?.toLowerCase() || m.statuse?.toLowerCase()}`}>{m.status || m.statuse}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* OPERATIONAL VIEW */}
+        {activeTab === 'operational' && (
+          <div className="tab-pane">
+            <h2 className="view-header">Operational Expenses</h2>
+            <div className="search-box">
+                <input type="text" className="search-bar" placeholder="🔍 Search description..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+            </div>
+            <div className="table-container">
+              <table className="admin-view-table">
+                <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th></tr></thead>
+                <tbody>
+                  {operationals.filter(o => o.description?.toLowerCase().includes(searchTerm.toLowerCase())).map(o => (
+                    <tr key={o._id}>
+                      <td>{new Date(o.date).toLocaleDateString()}</td>
+                      <td>{o.description}</td>
+                      <td>{o.category}</td>
+                      <td className="bold-text">Rs. {o.amount?.toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -20,13 +20,26 @@ const Login = () => {
       const userData = res.data.user;
 
       if (token && userData) {
+        // ✅ අලුත් Tab එකකදී Logout වී තිබීමට අනිවාර්යයෙන්ම sessionStorage භාවිතා කළ යුතුය
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('role', userData.jobRole);
+
         login({ token, user: userData });
+        
         const userRole = userData.jobRole ? userData.jobRole.toLowerCase().trim() : "";
         alert("Login Successful! Welcome " + (userData.fullName || ""));
 
-        if (userRole === 'admin') navigate('/adminDashboard');
-        else if (userRole === 'driver') navigate('/driverDashboard');
-        else navigate('/staff'); 
+        // ✅ ගැටළුව 1: Role එක අනුව නිවැරදි Page එකට කෙලින්ම Navigate කිරීම
+        if (userRole === 'admin') {
+          navigate('/adminDashboard');
+        } else if (userRole === 'driver') {
+          navigate('/driverDashboard');
+        } else if (userRole === 'customer') {
+          navigate('/customerDashboard');
+        } else {
+          // වෙනත් ඕනෑම Staff role එකක් නම් Staff Login (Cards පෙන්වන) Page එකට යවයි
+          navigate('/staff'); 
+        }
       }
     } catch (err) {
       alert(err.response?.data?.msg || "Login Failed.");
@@ -35,7 +48,7 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      {/* Background Decorative Drops */}
+      {/* Water Drops 12 - කලින් තිබූ පරිදිම */}
       <div className="water-drop-bg drop-v1"></div>
       <div className="water-drop-bg drop-v2"></div>
       <div className="water-drop-bg drop-v3"></div>
@@ -56,49 +69,42 @@ const Login = () => {
           </div>
           <h2>Welcome Back</h2>
         </div>
-
         <div className="theme-icon-box">
           <FaDroplet className="icon-water" />
           <FaSun className="icon-sun" />
         </div>
-        
         <p>Access your Saltern Management Portal</p>
         
-        {/* autoComplete="off" මගින් සම්පූර්ණ form එකටම auto-fill වීම වළක්වයි */}
         <form onSubmit={handleLogin} autoComplete="off">
           <div className="input-group">
             <input 
               type="email" 
-              name="staff_user_email" // සුවිශේෂී නමක් ලබා දීමෙන් Browser එක පටලවා ගැනීම වළක්වයි
+              name="user_login_email_unique"
               placeholder="Email Address" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
-              autoComplete="one-time-code" // Chrome වැනි browser වල force auto-fill වළක්වන උපක්‍රමයකි
+              autoComplete="none"
               required 
             />
           </div>
-          
           <div className="input-group password-wrapper">
             <input 
               type={showPassword ? "text" : "password"} 
-              name="staff_user_password" // සුවිශේෂී නමක් ලබා දීම
+              name="user_login_password_unique"
               placeholder="Password" 
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
-              autoComplete="new-password" // කලින් save වුනු passwords පිරවීම වළක්වයි
+              autoComplete="new-password"
               required 
             />
             <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
-
           <button type="submit" className="auth-btn"> Login</button>
         </form>
-        
         <p className="register-footer">
-          Don't have an account? 
-          <span onClick={() => navigate('/register')} className="register-link">Register </span>
+          Don't have an account? <span onClick={() => navigate('/register')} className="register-link">Register</span>
         </p>
       </div>
     </div>

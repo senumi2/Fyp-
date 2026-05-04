@@ -26,6 +26,7 @@ import ExpensesFinance from "./Components/ExpensesFinance";
 import Inventory from "./Pages/Inventory";
 import Issues from "./Pages/Issues";
 import Maintenance from "./Pages/Maintenance";
+import WeatherDashboard from "./Components/WeatherDashboard";
 
 import "./App.css";
 
@@ -46,7 +47,8 @@ function App() {
     "/expensesFinance",
     "/admin/directors",
     "/staff",
-    "/profile"
+    "/profile",
+
   ];
 
   // දැනට තිබෙන path එක exclude list එකේ නැතිනම් පමණක් Footer එක පෙන්වන්න
@@ -101,6 +103,10 @@ function App() {
 
         {/* --- 🚀 Driver Dashboard Route --- */}
         <Route path="/driverDashboard" element={<DriverDashboard />} />
+
+        {/* --- Weather Management Route --- */}
+        <Route path="/weatherdashboard" element={<WeatherDashboard />} />
+
         
       </Routes>
 

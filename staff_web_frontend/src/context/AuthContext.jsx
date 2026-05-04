@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 
-// 1. Context එක export කිරීම (Vite එකට මෙය ගැටලුවක් නොවන පරිදි)
+// 1. Context එක export කිරීම
 export const AuthContext = createContext(null);
 
 /**
@@ -9,12 +9,13 @@ export const AuthContext = createContext(null);
  */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  // ✅ localStorage වෙනුවට sessionStorage භාවිතා කිරීමෙන් අලුත් Tab එකක් ඇරියම Logout වී පෙන්වයි
+  const [token, setToken] = useState(sessionStorage.getItem("token") || null);
   const [loading, setLoading] = useState(true);
 
-  // පිටුව පූරණය වන විට localStorage එකෙන් දත්ත ලබා ගැනීම
+  // පිටුව පූරණය වන විට sessionStorage එකෙන් දත්ත ලබා ගැනීම
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
@@ -27,11 +28,11 @@ export const AuthProvider = ({ children }) => {
 
   // 🔐 Login function - Staff Cards Unlock වීමට 'role' එක අනිවාර්යයෙන්ම save කරයි
   const login = (data) => {
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    sessionStorage.setItem("token", data.token);
+    sessionStorage.setItem("user", JSON.stringify(data.user));
     
     // 🔥 ඉතා වැදගත්: මෙය නොමැතිව Staff Dashboard එකේ Cards වැඩ කරන්නේ නැත
-    localStorage.setItem("role", data.user.jobRole); 
+    sessionStorage.setItem("role", data.user.jobRole); 
 
     setToken(data.token);
     setUser(data.user);
@@ -39,9 +40,9 @@ export const AuthProvider = ({ children }) => {
 
   // 🚪 Logout function
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("role");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("role");
     setUser(null);
     setToken(null);
   };

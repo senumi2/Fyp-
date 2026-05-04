@@ -4,7 +4,6 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
     PieChart, Pie, Cell 
 } from 'recharts';
-import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import './AdminDashboard.css';
 
@@ -73,212 +72,142 @@ const AdminDashboard = () => {
 };
 
 const ProductionVsSalesView = () => {
-    const [chartData, setChartData] = useState([]);
-    const [expenseData, setExpenseData] = useState([]);
-    const [rawExpenseStats, setRawExpenseStats] = useState(null);
-    const [selectedMonth, setSelectedMonth] = useState("All"); 
+    const [originalChartData, setOriginalChartData] = useState([]);
+    const [displayChartData, setDisplayChartData] = useState([]);
+    const [expensePieData, setExpensePieData] = useState([]);
+    const [rawFinancials, setRawFinancials] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState("All");
     const [loading, setLoading] = useState(true);
 
-    const COLORS = ["#3b82f6", "#10b981", "#f59e0b"];
+    const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     useEffect(() => {
-        const fetchAnalytics = async () => {
+        const fetchAllStats = async () => {
             try {
                 const token = localStorage.getItem('token');
                 const config = { headers: { Authorization: `Bearer ${token}` } };
 
-                const resProd = await axios.get("http://localhost:5000/api/analytics/production-vs-sales", config);
-                const salesArr = Array.isArray(resProd.data.salesStats) ? resProd.data.salesStats : [];
-                const harvestArr = Array.isArray(resProd.data.harvestStats) ? resProd.data.harvestStats : [];
+                const [resProd, resFin] = await Promise.all([
+                    axios.get("http://localhost:5000/api/analytics/production-vs-sales", config),
+                    axios.get("http://localhost:5000/api/analytics/financial-stats?year=2026", config)
+                ]);
 
-                const formattedProdData = months.map((month, index) => {
-                    const monthNum = index + 1;
-                    const sale = salesArr.find(s => s._id === monthNum);
-                    const harvest = harvestArr.find(h => h._id === monthNum);
+                const sales = resProd.data.salesStats || [];
+                const harvest = resProd.data.harvestStats || [];
+                
+                const formatted = months.map((m, index) => {
+                    const mNum = index + 1;
                     return {
-                        name: month,
-                        Sales: sale ? sale.totalQuantity : 0,
-                        Harvest: harvest ? harvest.totalHarvest : 0
+                        name: m,
+                        Harvest: harvest.find(h => h._id === mNum)?.totalHarvest || 0,
+                        Sales: sales.find(s => s._id === mNum)?.totalQuantity || 0
                     };
                 });
-                setChartData(formattedProdData);
 
-                const resFin = await axios.get("http://localhost:5000/api/analytics/financial-stats", config);
-                setRawExpenseStats({
-                    ...resFin.data,
-                    salesStats: salesArr
-                });
+                setOriginalChartData(formatted);
+                setDisplayChartData(formatted); // මුලින්ම වාර්ෂික දත්ත පෙන්වයි
+                setRawFinancials({ ...resFin.data, salesStats: sales });
+                processPieData(resFin.data, "All");
                 
-                updatePieChart(resFin.data, "All");
                 setLoading(false);
             } catch (err) {
-                console.error("Analytics fetch error:", err);
+                console.error("Dashboard error:", err);
                 setLoading(false);
             }
         };
-        fetchAnalytics();
+        fetchAllStats();
     }, []);
 
-    const updatePieChart = (data, monthLabel) => {
-        let wages = 0, transport = 0, maintenance = 0;
+    const processPieData = (data, monthLabel) => {
+        if (!data) return;
+        let w = 0, t = 0, m = 0, o = 0;
+
         if (monthLabel === "All") {
-            wages = data.wageStats.reduce((acc, curr) => acc + (curr.total || 0), 0);
-            transport = data.transportStats.reduce((acc, curr) => acc + (curr.total || 0), 0);
-            maintenance = data.maintenanceStats.reduce((acc, curr) => acc + (curr.total || 0), 0);
+            w = (data.wageStats || []).reduce((a, b) => a + (b.total || 0), 0);
+            t = (data.transportStats || []).reduce((a, b) => a + (b.total || 0), 0);
+            m = (data.maintenanceStats || []).reduce((a, b) => a + (b.total || 0), 0);
+            o = (data.operationalStats || []).reduce((a, b) => a + (b.total || 0), 0);
         } else {
-            const monthNum = months.indexOf(monthLabel) + 1;
-            wages = data.wageStats.find(s => s._id === monthNum)?.total || 0;
-            transport = data.transportStats.find(s => s._id === monthNum)?.total || 0;
-            maintenance = data.maintenanceStats.find(s => s._id === monthNum)?.total || 0;
+            const mIdx = months.indexOf(monthLabel) + 1;
+            w = data.wageStats?.find(s => s._id === mIdx)?.total || 0;
+            t = data.transportStats?.find(s => s._id === mIdx)?.total || 0;
+            m = data.maintenanceStats?.find(s => s._id === mIdx)?.total || 0;
+            o = data.operationalStats?.find(s => s._id === mIdx)?.total || 0;
         }
-        setExpenseData([
-            { name: "Wages", value: wages },
-            { name: "Transport", value: transport },
-            { name: "Maintenance", value: maintenance },
+
+        setExpensePieData([
+            { name: "Wages", value: w },
+            { name: "Transport", value: t },
+            { name: "Maintenance", value: m },
+            { name: "Operational", value: o }
         ]);
     };
 
-    const handleMonthChange = (e) => {
-        const m = e.target.value;
-        setSelectedMonth(m);
-        if (rawExpenseStats) updatePieChart(rawExpenseStats, m);
-    };
-
-    const handleDownloadReport = () => {
-        const doc = new jsPDF();
-        const dateStr = new Date().toLocaleDateString();
-        const reportTitle = selectedMonth === "All" ? "Annual Financial Report - 2026" : `Monthly Financial Report - ${selectedMonth} 2026`;
-
-        doc.setFontSize(22);
-        doc.setTextColor(30, 41, 59);
-        doc.text("SENUMI HIMANADHI SALTERNS", 14, 20);
-        doc.setFontSize(10);
-        doc.setTextColor(100);
-        doc.text(`Generated on: ${dateStr}`, 160, 28);
-        doc.line(14, 32, 196, 32);
-
-        doc.setFontSize(14);
-        doc.setTextColor(51, 65, 85);
-        doc.text(reportTitle, 14, 42);
-
-        let tableData = [];
-        let grandTotalRev = 0;
-        let grandTotalExp = 0;
-
-        const getDataForMonth = (mName) => {
-            const mIdx = months.indexOf(mName) + 1;
-            const dRow = chartData.find(d => d.name === mName) || { Harvest: 0, Sales: 0 };
-            const sData = rawExpenseStats?.salesStats?.find(s => s._id === mIdx) || { totalSales: 0 };
-            const w = rawExpenseStats.wageStats.find(s => s._id === mIdx)?.total || 0;
-            const t = rawExpenseStats.transportStats.find(s => s._id === mIdx)?.total || 0;
-            const m = rawExpenseStats.maintenanceStats.find(s => s._id === mIdx)?.total || 0;
-            const totalExp = w + t + m;
-            const rev = sData.totalSales;
-            return { harvest: dRow.Harvest, salesKg: dRow.Sales, rev: rev, exp: totalExp, profit: rev - totalExp };
-        };
-
-        if (selectedMonth === "All") {
-            months.forEach(mName => {
-                const s = getDataForMonth(mName);
-                if (s.harvest > 0 || s.salesKg > 0 || s.exp > 0 || s.rev > 0) {
-                    tableData.push([mName, s.harvest, s.salesKg, s.rev.toLocaleString(), s.exp.toLocaleString(), s.profit.toLocaleString()]);
-                    grandTotalRev += s.rev; grandTotalExp += s.exp;
-                }
-            });
+    const handleFilterChange = (e) => {
+        const selected = e.target.value;
+        setSelectedMonth(selected);
+        
+        // Harvest vs Sales Chart එක filter කිරීම
+        if (selected === "All") {
+            setDisplayChartData(originalChartData);
         } else {
-            const s = getDataForMonth(selectedMonth);
-            tableData.push([selectedMonth, s.harvest, s.salesKg, s.rev.toLocaleString(), s.exp.toLocaleString(), s.profit.toLocaleString()]);
-            grandTotalRev = s.rev; grandTotalExp = s.exp;
+            const filtered = originalChartData.filter(item => item.name === selected);
+            setDisplayChartData(filtered);
         }
 
-        doc.autoTable({
-            startY: 50,
-            head: [['Month', 'Harvest (kg)', 'Sales (kg)', 'Revenue (LKR)', 'Expenses (LKR)', 'Net Profit (LKR)']],
-            body: tableData,
-            theme: 'grid',
-            headStyles: { fillColor: [51, 65, 85], halign: 'center' },
-            columnStyles: { 3: { halign: 'right' }, 4: { halign: 'right' }, 5: { halign: 'right', fontStyle: 'bold' } }
-        });
-
-        const finalY = doc.lastAutoTable.finalY + 15;
-        doc.setFontSize(12);
-        doc.setTextColor(0);
-        doc.text(`Total Revenue: LKR ${grandTotalRev.toLocaleString()}`, 130, finalY);
-        doc.text(`Total Expenses: LKR ${grandTotalExp.toLocaleString()}`, 130, finalY + 10);
-        const netProfit = grandTotalRev - grandTotalExp;
-        doc.setTextColor(netProfit >= 0 ? [22, 101, 52] : [185, 28, 28]);
-        doc.text(`Net Profit: LKR ${netProfit.toLocaleString()}`, 130, finalY + 20);
-        doc.save(`${reportTitle}.pdf`);
+        // Pie Chart එක filter කිරීම
+        processPieData(rawFinancials, selected);
     };
 
-    if (loading) return <div className="admin-view-content"><p className="loading-text">Loading Real-time Analytics...</p></div>;
+    if (loading) return <div className="admin-main-content"><p className="loading-text">Loading...</p></div>;
 
     return (
         <div className="admin-view-content">
-            <h2 className="view-title">Production & Business Analytics</h2>
+            <h2 className="view-title">Production & Operational Analytics</h2>
             
             <div className="admin-charts-grid">
+                {/* 1. Harvest vs Sales Chart (Monthly/Annually Filterable) */}
                 <div className="admin-chart-card">
-                    <h4 className="chart-label">Annual Production vs Sales (kg)</h4>
-                    <div className="chart-wrapper"> {/* Added wrapper to prevent error */}
+                    <div className="chart-header">
+                        <h4 className="chart-label" style={{ margin: 0 }}>Harvest vs Sales (kg)</h4>
+                        <select className="month-filter-dropdown" value={selectedMonth} onChange={handleFilterChange}>
+                            <option value="All">Annual (All Months)</option>
+                            {months.map(m => <option key={m} value={m}>{m}</option>)}
+                        </select>
+                    </div>
+                    <div className="chart-wrapper">
                         <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={chartData}>
+                            <LineChart data={displayChartData}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                                 <XAxis dataKey="name" />
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" dataKey="Harvest" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} name="Harvest" />
-                                <Line type="monotone" dataKey="Sales" stroke="#10b981" strokeWidth={3} dot={{ r: 4 }} name="Sales" />
+                                <Line type="monotone" dataKey="Harvest" stroke="#3b82f6" strokeWidth={3} name="Harvest (kg)" />
+                                <Line type="monotone" dataKey="Sales" stroke="#10b981" strokeWidth={3} name="Sales (kg)" />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
+                    <p className="viewing-label">Showing: <strong>{selectedMonth === "All" ? "Full Year 2026" : selectedMonth}</strong></p>
                 </div>
 
+                {/* 2. Operational Cost Pie Chart */}
                 <div className="admin-chart-card">
-                    <div className="chart-header">
-                        <h4 className="chart-label" style={{ margin: 0 }}>Expense Distribution</h4>
-                        <select className="month-filter-dropdown" value={selectedMonth} onChange={handleMonthChange}>
-                            <option value="All">All Months</option>
-                            {months.map(m => <option key={m} value={m}>{m}</option>)}
-                        </select>
-                    </div>
-                    <div style={{ height: '280px', width: '100%' }}>
+                    <h4 className="chart-label">Operational Cost Distribution</h4>
+                    <div className="chart-wrapper" style={{ height: '300px' }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
-                                <Pie
-                                    data={expenseData}
-                                    dataKey="value"
-                                    nameKey="name"
-                                    cx="50%" cy="50%"
-                                    outerRadius={80}
-                                    label={({ name, percent }) => percent > 0 ? `${name} ${(percent * 100).toFixed(0)}%` : ""}
-                                >
-                                    {expenseData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
+                                <Pie data={expensePieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                                    {expensePieData.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
                                 </Pie>
                                 <Tooltip formatter={(value) => `LKR ${value.toLocaleString()}`} />
                                 <Legend />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
-                    <p className="viewing-label">Viewing: <strong>{selectedMonth === "All" ? "Yearly Summary" : selectedMonth}</strong></p>
-                    <button className="manage-btn" style={{ marginTop: '20px', width: '100%', background: '#1e293b', color: 'white' }} onClick={handleDownloadReport}>
-                        📄 Download {selectedMonth === "All" ? "Annual" : selectedMonth} Report
-                    </button>
+                    <p className="viewing-label">Cost Breakdown for: <strong>{selectedMonth === "All" ? "Annual" : selectedMonth}</strong></p>
                 </div>
-            </div>
-
-            <h3 className="view-title" style={{ fontSize: '1.4rem' }}>Product Trends</h3>
-            <div className="admin-charts-grid">
-                {['Salt', 'Jipsum', 'Agriculture Salt', 'Artemiya'].map(item => (
-                    <div key={item} className="admin-chart-card">
-                        <div className="graph-box-placeholder"><span>{item} Trend Analytics</span></div>
-                        <p className="chart-label">{item}</p>
-                    </div>
-                ))}
             </div>
         </div>
     );

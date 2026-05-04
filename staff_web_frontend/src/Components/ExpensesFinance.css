@@ -28,13 +28,6 @@
   margin-bottom: 5px;
 }
 
-.header-logo {
-  font-size: 24px;
-  background: rgba(255, 215, 0, 0.15);
-  padding: 8px;
-  border-radius: 12px;
-}
-
 .sidebar-header h3 {
   color: #FFD700;
   margin: 0;
@@ -42,12 +35,6 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
   font-weight: 700;
-}
-
-.sidebar-divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
-  margin: 15px 15px 25px 15px;
 }
 
 .nav-btn {
@@ -61,7 +48,7 @@
   border-radius: 12px;
   transition: all 0.3s ease;
   margin-bottom: 8px;
-  border-left: 4px solid transparent; /* Default state for line */
+  border-left: 4px solid transparent;
 }
 
 .nav-btn:hover {
@@ -73,7 +60,7 @@
   background-color: #006D5B;
   color: #FFD700;
   font-weight: 700;
-  border-left: 4px solid #FFD700; /* Sidebar active line (කහ පාට ඉර) */
+  border-left: 4px solid #FFD700;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
@@ -93,6 +80,36 @@
   border-bottom: 3px solid #FFD700;
   display: inline-block;
   padding-bottom: 5px;
+}
+
+/* --- Search Bar --- */
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 25px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar {
+  padding: 12px 20px;
+  width: 320px;
+  border-radius: 50px;
+  border: 2px solid #00A693;
+  background: white;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-bar:focus {
+  width: 360px;
+  border-color: #FFD700;
+  box-shadow: 0 4px 15px rgba(0, 166, 147, 0.1);
 }
 
 /* --- Form --- */
@@ -134,43 +151,7 @@
 
 .add-btn:hover { background: #00897b; transform: translateY(-1px); }
 
-/* --- Search Bar with Fixed Border & Icon --- */
-.search-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 25px;
-}
-
-.search-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.search-icon-svg {
-  position: absolute;
-  left: 18px;
-  pointer-events: none;
-}
-
-.search-bar {
-  padding: 12px 20px 12px 48px; 
-  width: 320px;
-  border-radius: 50px;
-  border: 2px solid #00A693; /* Search bar border fixed */
-  background: rgb(239, 238, 238);
-  font-size: 14px;
-  outline: none;
-  transition: 0.3s;
-}
-
-.search-bar:focus {
-  width: 360px;
-  border-color: #FFD700;
-  box-shadow: 0 4px 15px rgba(0, 166, 147, 0.1);
-}
-
-/* --- Table & Actions --- */
+/* --- Table --- */
 .table-container {
   background: white;
   border-radius: 16px;
@@ -188,7 +169,6 @@
   color: white;
   padding: 18px;
   font-size: 0.85rem;
-  letter-spacing: 0.5px;
 }
 
 .finance-table td {
@@ -199,7 +179,7 @@
 
 .action-buttons {
   display: flex;
-  gap: 12px; /* Gap between buttons fixed */
+  gap: 12px;
   justify-content: center;
 }
 
@@ -210,7 +190,6 @@
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
 }
 
 .btn-delete {
@@ -220,10 +199,9 @@
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
 }
 
-/* --- Badges --- */
+/* --- Status Badges --- */
 .status {
   padding: 5px 12px;
   border-radius: 6px;
@@ -236,11 +214,44 @@
 .status.pending { background: #ffebee; color: #c62828; }
 .status.ongoing { background: #fff3e0; color: #ef6c00; }
 
-.chart-box {
-  background: white;
+/* --- Profit & Loss Report Styles --- */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  padding: 25px;
   border-radius: 16px;
-  padding: 80px;
   text-align: center;
-  border: 2px dashed #00A693;
-  color: #006D5B;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.card.income { background: linear-gradient(135deg, #42e695 0%, #3bb2b8 100%); }
+.card.expense { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.card.net.profit { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #333; }
+.card.net.loss { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); color: white; }
+
+.charts-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.chart-container-box {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+}
+
+.chart-container-box h3 {
+  color: #004d40;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
 }

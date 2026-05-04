@@ -4,8 +4,9 @@
 .admin-container {
     display: flex;
     width: 100%;
-    margin-top: 50px; /* Navbar එකේ උසට සමාන ඉඩක් ඉහළින් තැබීමෙන් Gap එක නැති වේ */
-    min-height: calc(100vh - 50px);
+    /* Navbar එකේ උසට සමාන ඉඩක් ඉහළින් තැබීම (පින්තූරය අනුව 80px වඩාත් සුදුසුයි) */
+    margin-top: 80px; 
+    min-height: calc(100vh - 80px);
     background-color: #f8fafc;
 }
 
@@ -13,16 +14,19 @@
 .admin-sidebar {
     width: 280px;
     min-width: 280px;
-    background-color: #4b7274ea; /* ඔබේ වර්ණය */
+    background-color: #4b7274ea; /* මුල් වර්ණය */
     padding: 20px;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 50px);
-    position: fixed; /* Sidebar එක ස්ථාවරව තැබීමට */
-    top: 50px;
+    /* Sidebar එකේ උස Navbar එකේ උස අඩු කර ගණනය කිරීම */
+    height: calc(100vh - 80px); 
+    position: fixed; 
+    /* Navbar එකට යටින් පටන් ගැනීමට */
+    top: 80px; 
     left: 0;
     border-right: 1px solid #94a3b8;
-    z-index: 100;
+    /* Footer එකට යටින් යාමට z-index එක අවශ්‍ය පරිදි සකසා ඇත */
+    z-index: 100; 
     overflow-y: auto; 
     scrollbar-width: thin;
 }
@@ -34,7 +38,7 @@
     color: #1e293b;
     margin-bottom: 30px;
     text-align: center;
-    background: rgba(0, 0, 0, 0.1); /* කළු තීරුවක් වැනි පෙනුම */
+    background: rgba(0, 0, 0, 0.1); 
     padding: 15px;
     border-radius: 8px;
 }
@@ -66,21 +70,32 @@
 /* --- Content Area --- */
 .admin-main-content {
     flex: 1;
-    margin-left: 280px; /* Sidebar එකේ පළලට සමාන ඉඩක් වමෙන් තැබීම */
+    /* Sidebar එකේ පළලට සමාන ඉඩක් වමෙන් තැබීම */
+    margin-left: 280px; 
     padding: 40px;
     background-color: #f8fafc;
-    min-height: calc(100vh - 50px);
+    min-height: calc(100vh - 80px);
 }
 
-/* අනෙක් සියලුම Table, Status Badges, Charts styles පෙර තිබූ ලෙසම තබා ගන්න */
-.view-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 30px; }
-.admin-charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; }
+/* Title & Grid Layouts */
+.view-title { 
+    font-size: 1.8rem; 
+    font-weight: 700; 
+    margin-bottom: 30px; 
+}
 
+.admin-charts-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
+    gap: 25px; 
+}
+
+/* Chart Cards */
 .admin-chart-card { 
     background: white;
     padding: 25px;
     border-radius: 16px; 
-    height: 450px; 
+    min-height: 400px; 
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -92,32 +107,89 @@
 
 .chart-wrapper {
     width: 100%;
-    height: 300px; /* මෙහිදී chart එකට අවශ්‍ය උස ලබා දෙන්න */
-    min-height: 300px;
-    display: block;
-}
-
-
-.chart-wrapper {
-    width: 100%;
     height: 350px;
     min-height: 300px;
     margin-top: 15px;
     display: block;
 }
 
-.admin-chart-card {
-    min-height: 400px;
+.chart-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
-/* Responsive */
+.month-filter-dropdown {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    outline: none;
+}
+
+.viewing-label {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.manage-btn {
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.manage-btn:hover {
+    opacity: 0.9;
+}
+
+/* Placeholder for small charts */
+.graph-box-placeholder {
+    width: 100%;
+    height: 150px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #94a3b8;
+    margin-bottom: 10px;
+}
+
+.loading-text {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #64748b;
+    margin-top: 50px;
+}
+
+/* --- Responsive Design --- */
 @media (max-width: 1024px) {
-    .admin-sidebar { width: 220px; min-width: 220px; }
-    .admin-main-content { margin-left: 220px; }
+    .admin-sidebar { 
+        width: 220px; 
+        min-width: 220px; 
+    }
+    .admin-main-content { 
+        margin-left: 220px; 
+    }
 }
 
 @media (max-width: 768px) {
-    .admin-container { flex-direction: column; margin-top: 50px; }
-    .admin-sidebar { position: static; width: 100%; height: auto; }
-    .admin-main-content { margin-left: 0; padding: 20px; }
+    .admin-container { 
+        flex-direction: column; 
+        margin-top: 80px; 
+    }
+    .admin-sidebar { 
+        position: static; 
+        width: 100%; 
+        height: auto; 
+    }
+    .admin-main-content { 
+        margin-left: 0; 
+        padding: 20px; 
+    }
 }

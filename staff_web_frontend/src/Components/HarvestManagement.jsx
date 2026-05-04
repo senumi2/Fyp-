@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
+import WeatherDashboard from './WeatherDashboard';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -131,6 +132,7 @@ const HarvestManagement = () => {
                 <nav>
                     <button className={activeTab === 'management' ? 'active' : ''} onClick={() => setActiveTab('management')}>📋 Management</button>
                     <button className={activeTab === 'tracking' ? 'active' : ''} onClick={() => setActiveTab('tracking')}>📈 Analytics</button>
+                    <button className={activeTab === 'weatherdashboard'? 'active' : ''} onClick={() => setActiveTab('weatherdashboard')}>💧Weather Prediction</button>
                 </nav>
                 <div className="unit-toggle-container">
                     <span className={unit === 'kg' ? 'active-u' : ''}>KG</span>
@@ -157,7 +159,9 @@ const HarvestManagement = () => {
                     </div>
                 </header>
 
-                {activeTab === 'management' ? (
+                {/* --- Logic For Switching Tabs --- */}
+                
+                {activeTab === 'management' && (
                     <div className="fade-in">
                         <div className="search-bar-container">
                             <input 
@@ -184,13 +188,11 @@ const HarvestManagement = () => {
                                     new Date(r.date).toLocaleDateString().includes(searchTerm)
                                 ).reverse();
 
-                                // SCROLLER එක සඳහා මෙතැනින් .slice(0, 10) ඉවත් කර ඇත
                                 const displayData = filteredRecords;
 
                                 return (
                                     <section key={cat} id={cat.replace(/\s+/g, '')} className="table-card">
                                         <h3>{cat}</h3>
-                                        {/* මෙම table-wrapper එක හරහා දැන් Scroll වේ */}
                                         <div className="table-wrapper">
                                             <table>
                                                 <thead>
@@ -235,7 +237,9 @@ const HarvestManagement = () => {
                             })}
                         </div>
                     </div>
-                ) : (
+                )}
+
+                {activeTab === 'tracking' && (
                     <div className="analytics-view fade-in">
                         <h2 className="section-title">Visual Production Analytics ({unit.toUpperCase()})</h2>
                         <div className="chart-grid">
@@ -260,6 +264,12 @@ const HarvestManagement = () => {
                                 </div>
                             ))}
                         </div>
+                    </div>
+                )}
+
+                {activeTab === 'weatherdashboard' && (
+                    <div className="fade-in">
+                        <WeatherDashboard />
                     </div>
                 )}
             </main>

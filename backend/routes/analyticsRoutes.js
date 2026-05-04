@@ -5,6 +5,6 @@ const { getProductionVsSalesStats, getFinancialStats } = require("../controllers
 
 // Admin හට පමණක් දත්ත ලබා ගත හැකි පරිදි Routes සකසා ඇත
 router.get("/production-vs-sales", authMiddleware, authMiddleware.admin, getProductionVsSalesStats);
-router.get("/financial-stats", authMiddleware, authMiddleware.admin, getFinancialStats);
+router.get("/financial-stats", authMiddleware, getFinancialStats);
 
 module.exports = router;
