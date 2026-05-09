@@ -9,8 +9,10 @@ exports.getProducts = async (req, res) => {
     // එක් එක් Product එක සඳහා Inward/Outward ගණනය කර Live Stock එක ලබා ගැනීම
     const productsWithLiveStock = await Promise.all(
       products.map(async (product) => {
-        // Stock model එකේ itemName එක Product name එකට සමාන ඒවා සොයයි
-        const transactions = await Stock.find({ itemName: product.name });
+        // ✅ UPDATE: Case-insensitive search එකක් භාවිතා කරitemName එක හරියටම ගලපනවා
+        const transactions = await Stock.find({ 
+          itemName: { $regex: new RegExp(`^${product.name.trim()}$`, "i") } 
+        });
 
         const totalInward = transactions
           .filter((t) => t.transactionType === "Inward")
@@ -49,8 +51,11 @@ exports.getProductById = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Single item stock calculation
-    const transactions = await Stock.find({ itemName: product.name });
+    // ✅ UPDATE: Single item stock calculation with case-insensitive match
+    const transactions = await Stock.find({ 
+      itemName: { $regex: new RegExp(`^${product.name.trim()}$`, "i") } 
+    });
+
     const liveStock = transactions.reduce((total, t) => {
       return t.transactionType === "Inward"
         ? total + t.quantity
