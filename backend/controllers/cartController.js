@@ -1,6 +1,5 @@
 const Cart = require("../models/Cart");
 
-// Cart එකට Item එකතු කිරීම හෝ පවතින Item එකක Qty වැඩි කිරීම
 exports.addToCart = async (req, res) => {
   const { userId, productId, name, price, image, qty } = req.body;
   try {
@@ -26,7 +25,7 @@ exports.addToCart = async (req, res) => {
   }
 };
 
-// User ID එක අනුව Cart එක ලබා ගැනීම
+
 exports.getCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.params.userId });
@@ -36,13 +35,13 @@ exports.getCart = async (req, res) => {
   }
 };
 
-// Cart එකෙන් Item එකක් ඉවත් කිරීම
+
 exports.removeFromCart = async (req, res) => {
     const { userId, productId } = req.params;
     try {
       let cart = await Cart.findOne({ userId });
       if (cart) {
-        // අදාළ productId එක නොවන අනෙක් සියලුම අයිතම පමණක් ඉතිරි කරයි
+       
         cart.items = cart.items.filter(item => item.productId !== productId);
         await cart.save();
         return res.status(200).json(cart);

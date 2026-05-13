@@ -14,13 +14,10 @@ function ProductDetail() {
   const [review, setReview] = useState({ rating: 5, comment: "" });
   const [loading, setLoading] = useState(true);
 
-  // --- 🧂 Dynamic Specs Logic (New) ---
-  // මෙය නිෂ්පාදනයේ නම අනුව specs වෙනස් කරයි
+  // --- 🧂 Dynamic Specs Logic ---
   const getDynamicSpecs = (prod) => {
     if (!prod) return {};
-    
     const name = prod.name.toLowerCase();
-      
     if (name.includes("agriculture")) {
       return { purity: "95.0%", iodine: "N/A", moisture: "< 2.0%" };
     } else if (name.includes("gypsum")) {
@@ -30,8 +27,6 @@ function ProductDetail() {
     } else if (name.includes("table salt") || name.includes("edible")) {
       return { purity: "99.5%", iodine: "30-50 ppm", moisture: "< 0.2%" };
     }
-    
-    // Default values if no match
     return { 
       purity: prod.purity || "98.5%", 
       iodine: prod.iodine || "25-30 ppm", 
@@ -42,17 +37,25 @@ function ProductDetail() {
   const currentSpecs = getDynamicSpecs(product);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`http://localhost:5000/api/productdetail/${id}`)
       .then(res => {
         if (!res.ok) throw new Error("Product not found");
         return res.json();
       })
       .then(data => {
+        // --- 🔍 DEBUG LOGS (මෙය පමණක් අලුතින් එක් කරන ලදී) ---
+        console.log("-----------------------------------------");
+        console.log("✅ API FETCH SUCCESSFUL");
+        console.log("📦 PRODUCT NAME:", data.name);
+        console.log("🔢 STOCK VALUE FROM DB:", data.stock);
+        console.log("🆔 PRODUCT ID:", data._id);
+        console.log("-----------------------------------------");
+        
         setProduct(data);
         setLoading(false);
       })
       .catch(err => {
-        console.error(err);
+        console.error("❌ FETCH ERROR:", err);
         setLoading(false);
       });
   }, [id]);
@@ -162,7 +165,6 @@ function ProductDetail() {
             )}
           </div>
 
-          {/* Quality Specs - පවතින CSS එලෙසම භාවිතා කර ඇත */}
           <div className="quality-specs-box">
              <h4><FiShield /> Quality Specifications</h4>
              <div className="specs-grid">

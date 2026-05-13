@@ -2,7 +2,7 @@ const Order = require("../models/Order");
 const mongoose = require("mongoose");
 const sendEmail = require("../utils/sendEmail");
 
-// --- 1. නව ඇණවුමක් සෑදීම ---
+
 exports.createOrder = async (req, res) => {
   try {
     const { items, quantity, amount, paymentMethod, status, shippingAddress } = req.body;
@@ -25,7 +25,7 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-// --- 2. පරිශීලකයාගේ සියලු ඇණවුම් ලබා ගැනීම ---
+
 exports.getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.user.id }).populate("shippingAddress").sort({ date: -1 });
@@ -35,7 +35,7 @@ exports.getMyOrders = async (req, res) => {
   }
 };
 
-// --- 3. Invoice ලබා ගැනීම ---
+// ---   get Invoice  ---
 exports.getInvoiceById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate("shippingAddress").populate("userId", "fullName email");
@@ -46,7 +46,7 @@ exports.getInvoiceById = async (req, res) => {
   }
 };
 
-// --- 4. ඇණවුමක් මකා දැමීම ---
+// --- Deleting an order ---
 exports.deleteOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -59,7 +59,7 @@ exports.deleteOrder = async (req, res) => {
   }
 };
 
-// --- 5. Dashboard Stats ---
+// ---  Dashboard Stats ---
 exports.getUserDashboardStats = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -79,7 +79,7 @@ exports.getUserDashboardStats = async (req, res) => {
   }
 };
 
-// --- 6. ඇඩ්මින් Tracking Update (Update with assignedDriver) ---
+// ---  Admin Tracking Update (Update with assignedDriver) ---
 exports.updateOrderTracking = async (req, res) => {
   try {
     const { status, truckNumber, driverName, estimatedDelivery, assignedDriver } = req.body;
@@ -94,10 +94,10 @@ exports.updateOrderTracking = async (req, res) => {
   }
 };
 
-// --- 🚀 7. රියදුරුට අදාළ Tasks ලබා ගැනීම (Driver Dashboard සඳහා) ---
+// ---   Getting Tasks Related to the Driver (For Driver Dashboard)) ---
 exports.getDriverTasks = async (req, res) => {
   try {
-    // Driver ට Assign කරපු සහ තවම Deliver නොකරපු දේවල්
+    // Items assigned to the driver but not yet delivered
     const tasks = await Order.find({ 
       assignedDriver: req.user.id,
       status: { $ne: "Delivered" }
@@ -108,13 +108,13 @@ exports.getDriverTasks = async (req, res) => {
   }
 };
 
-// --- 🚀 8. රියදුරු විසින් භාණ්ඩ භාරදුන් බව Mark කිරීම ---
+// ---  Marking that the driver has delivered the goods ---
 exports.markAsDelivered = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: "Order not found" });
 
-    // ආරක්ෂාව සඳහා: Assign කරපු Driver ටම විතරයි මේක කරන්න පුළුවන්
+    // For security reasons: Only the assigned driver can do this.
     if (order.assignedDriver.toString() !== req.user.id) {
         return res.status(403).json({ message: "Unauthorized: You are not assigned to this order" });
     }
@@ -133,9 +133,9 @@ exports.markAsDelivered = async (req, res) => {
 exports.getAllOrdersForAdmin = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate("userId", "fullName email") // Customer ගේ නම සහ Email එක ගමු
+      .populate("userId", "fullName email") 
       .populate("shippingAddress")
-      .sort({ date: -1 }); // අලුත්ම ගනුදෙනු උඩට එන ලෙස
+      .sort({ date: -1 }); 
     res.json(orders);
   } catch (err) {
     res.status(500).json({ message: "Error fetching payment history" });

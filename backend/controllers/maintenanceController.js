@@ -1,7 +1,7 @@
 const Maintenance = require("../models/Maintenance");
-const MaintenanceLog = require("../models/MaintenanceRepairLogs"); // 🚀 අලුත් Model එකත් මෙතනට ගත්තා
+const MaintenanceLog = require("../models/MaintenanceRepairLogs"); 
 
-// --- 🔧 පරණ Maintenance Functions (මූලික නඩත්තු සඳහා) ---
+
 
 exports.createMaintenance = async (req, res) => {
     try {
@@ -44,7 +44,7 @@ exports.deleteMaintenance = async (req, res) => {
     }
 };
 
-// --- 📝 අලුත් Maintenance & Repair Logs Functions (ඔයා අලුතින් ඉල්ලපු ඒවා) ---
+
 
 exports.addLog = async (req, res) => {
     try {

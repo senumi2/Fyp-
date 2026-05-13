@@ -6,10 +6,10 @@ exports.getProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
 
-    // එක් එක් Product එක සඳහා Inward/Outward ගණනය කර Live Stock එක ලබා ගැනීම
+    // Calculate Inward/Outward for each product and obtain Live Stock
     const productsWithLiveStock = await Promise.all(
       products.map(async (product) => {
-        // ✅ UPDATE: Case-insensitive search එකක් භාවිතා කරitemName එක හරියටම ගලපනවා
+        
         const transactions = await Stock.find({ 
           itemName: { $regex: new RegExp(`^${product.name.trim()}$`, "i") } 
         });
@@ -26,7 +26,7 @@ exports.getProducts = async (req, res) => {
 
         return {
           ...product._doc,
-          stock: liveStock > 0 ? liveStock : 0, // සෘණ අගයන් පෙන්වීම වැලැක්වීමට
+          stock: liveStock > 0 ? liveStock : 0, // To prevent negative values ​​from being displayed
         };
       })
     );
@@ -85,7 +85,7 @@ exports.createProduct = async (req, res) => {
       name,
       description,
       price,
-      // stock එක manually දාන්නේ නැත, එය auto-calculate වේ
+      // The stock is not entered manually, it is auto-calculated.
       purity: purity || "98.5%",
       iodine: iodine || "25-30 ppm",
       moisture: moisture || "< 0.5%",

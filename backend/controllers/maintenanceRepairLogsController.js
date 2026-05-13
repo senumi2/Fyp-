@@ -1,6 +1,6 @@
 const Maintenance = require("../models/MaintenanceRepairLogs");
 
-// 1. අලුත් Log එකක් එකතු කිරීම
+
 const addLog = async (req, res) => {
     try {
         const newLog = new Maintenance(req.body);
@@ -11,13 +11,13 @@ const addLog = async (req, res) => {
     }
 };
 
-// 2. සියලුම Logs ලබා ගැනීම (Search පහසුකම සහිතව)
+
 const getAllLogs = async (req, res) => {
     try {
-        const { search } = req.query; // Frontend එකෙන් එවන search parameter එක ලබා ගැනීම
+        const { search } = req.query;
         let query = {};
 
-        // සෙවුම් පදයක් තිබේ නම්, එය equipment හෝ issue යන ක්ෂේත්‍ර තුළ සෙවීමට සකස් කිරීම
+        
         if (search) {
             query = {
                 $or: [
@@ -34,7 +34,7 @@ const getAllLogs = async (req, res) => {
     }
 };
 
-// 3. ලොගයක් Update කිරීම
+
 const updateLog = async (req, res) => {
     try {
         const updatedLog = await Maintenance.findByIdAndUpdate(
@@ -42,25 +42,25 @@ const updateLog = async (req, res) => {
             req.body,
             { new: true }
         );
-        if (!updatedLog) return res.status(404).json({ message: "දත්තය හමු නොවීය" });
+        if (!updatedLog) return res.status(404).json({ message: "Data not found." });
         res.status(200).json(updatedLog);
     } catch (error) {
-        res.status(500).json({ message: "Update කිරීමේදී දෝෂයක් ඇති විය", error });
+        res.status(500).json({ message: "An error occurred while updating.", error });
     }
 };
 
-// 4. ලොගයක් Delete කිරීම
+
 const deleteLog = async (req, res) => {
     try {
         const deletedLog = await Maintenance.findByIdAndDelete(req.params.id);
-        if (!deletedLog) return res.status(404).json({ message: "දත්තය හමු නොවීය" });
-        res.status(200).json({ message: "සාර්ථකව මකා දැමුවා" });
+        if (!deletedLog) return res.status(404).json({ message: "Data not found" });
+        res.status(200).json({ message: "Deleted successfully." });
     } catch (error) {
-        res.status(500).json({ message: "මකා දැමීමේදී දෝෂයක් ඇති විය", error });
+        res.status(500).json({ message: "An error occurred while deleting.", error });
     }
 };
 
-// සියලුම functions එකවර export කිරීම
+
 module.exports = {
     addLog,
     getAllLogs,

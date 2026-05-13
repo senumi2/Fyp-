@@ -7,7 +7,7 @@ const wageSchema = new mongoose.Schema({
     wageRate: { type: Number, required: true },
     total: { type: Number, required: true },
     status: { type: String, default: "Pending" },
-    date: { type: Date, default: Date.now } // Auto fill date
+    date: { type: Date, default: Date.now } 
 });
 
 module.exports = mongoose.model("Wage", wageSchema);

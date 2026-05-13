@@ -24,7 +24,7 @@ const wageRoutes = require("./routes/wageRoutes");
 const transportRoutes = require("./routes/transportRoutes");
 const maintenanceRepairLogsRoutes = require("./routes/maintenanceRepairLogsRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
-const operationalExpenseRoutes = require("./routes/OperationalExpenseRoutes");
+const operationalExpenseRoutes = require("/routes/operationalExpenseRoutes");
 
 const noticeRoutes = require("./routes/noticeRoutes");
 
@@ -32,6 +32,10 @@ const payhereRoutes = require("./routes/payhereRoute");
 
 const weatherRoutes = require("./routes/weatherRoutes");
 const predictionRoute = require("./routes/predictionRoute");
+
+const productDetailsRoutes = require("./routes/productDetailRoute");
+
+const emailRoute = require("./routes/emailRoute");
 
 // Finance/Expenses Route
 const financeRoutes = require("./routes/financeRoutes"); 
@@ -64,6 +68,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ✅ API Routes Mount
 app.use("/api/products", productRoutes);
+app.use("/api/productdetail", productDetailsRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/directors", directorRoutes);
 app.use("/api/auth", authRoutes);
@@ -87,6 +92,7 @@ app.use("/api/cart", require("./routes/cartRoutes"));
 app.use("/api/weather", weatherRoutes);
 app.use("/api/prediction", predictionRoute);
 app.use("/api/operational-expenses", operationalExpenseRoutes);
+app.use("/api/email", emailRoute);
 
 // Finance API
 app.use("/api/finance", financeRoutes); 

@@ -5,7 +5,7 @@ const StockSchema = new mongoose.Schema({
     transactionType: { type: String, enum: ['Inward', 'Outward'], required: true },
     date: { type: Date, required: true },
     subType: { type: String }, 
-    partyName: { type: String }, // <--- Aluthen add kala (Supplier/Customer)
+    partyName: { type: String }, 
     quantity: { type: Number, required: true },
     no: { type: String,unique: true } 
 }, { timestamps: true });

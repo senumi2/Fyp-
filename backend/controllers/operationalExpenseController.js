@@ -1,6 +1,6 @@
 const OperationalExpense = require('../models/OperationalExpense');
 
-// සියලුම වියදම් ලබා ගැනීම
+// Getting all the expenses
 exports.getOperationalExpenses = async (req, res) => {
     try {
         const expenses = await OperationalExpense.find().sort({ date: -1 });
@@ -10,7 +10,7 @@ exports.getOperationalExpenses = async (req, res) => {
     }
 };
 
-// අලුත් වියදමක් එකතු කිරීම
+// Adding a new expense
 exports.addOperationalExpense = async (req, res) => {
     const expense = new OperationalExpense({
         description: req.body.description,
@@ -26,7 +26,7 @@ exports.addOperationalExpense = async (req, res) => {
     }
 };
 
-// වියදමක් යාවත්කාලීන කිරීම (Update)
+// Update a expense
 exports.updateOperationalExpense = async (req, res) => {
     try {
         const updatedExpense = await OperationalExpense.findByIdAndUpdate(
@@ -40,7 +40,7 @@ exports.updateOperationalExpense = async (req, res) => {
     }
 };
 
-// වියදමක් මකා දැමීම (Delete)
+// Delete a expense
 exports.deleteOperationalExpense = async (req, res) => {
     try {
         await OperationalExpense.findByIdAndDelete(req.params.id);

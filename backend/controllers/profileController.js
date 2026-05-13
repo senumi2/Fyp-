@@ -1,9 +1,9 @@
 const User = require("../models/User");
-const bcrypt = require("bcryptjs"); // Password hash කිරීමට අවශ්‍යයි
+const bcrypt = require("bcryptjs"); 
 
-// --- පවතින getProfile සහ updateProfile functions එලෙසම තබන්න ---
 
-// Profile දත්ත ලබා ගැනීම
+
+
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -14,7 +14,7 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// Profile දත්ත Update කිරීම
+
 exports.updateProfile = async (req, res) => {
   try {
     const { fullName, contact } = req.body;
@@ -33,7 +33,7 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-// --- 🔐 අලුතින් එක් කරන Password Update Function එක ---
+
 exports.updatePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
@@ -43,13 +43,13 @@ exports.updatePassword = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // 1. දැනට තියෙන Password එක නිවැරදිදැයි බැලීම
+   
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Current password is incorrect" });
     }
 
-    // 2. අලුත් Password එක Hash කිරීම
+  
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
 

@@ -5,7 +5,7 @@ const Weather = require('../models/Weather');
 
 exports.getNextDayPrediction = async (req, res) => {
     try {
-        // පහුගිය දත්ත 60ක් ලබා ගැනීම (මාසයක දත්ත පමණ)
+        // Retrieving 60 past data (about a month's worth of data)
         const history = await Weather.find().sort({ timestamp: 1 }).limit(100);
 
         if (history.length < 10) {
@@ -16,7 +16,7 @@ exports.getNextDayPrediction = async (req, res) => {
         
         let resultData = "";
 
-        // Python එකට දත්ත යැවීම
+        
         pythonProcess.stdin.write(JSON.stringify(history));
         pythonProcess.stdin.end();
 
@@ -40,19 +40,19 @@ exports.getNextDayPrediction = async (req, res) => {
 
 exports.getWeeklyAveragePrediction = async (req, res) => {
     try {
-        // පහුගිය දත්ත 150ක් ලබා ගැනීම
+        // Retrieving past 150 data
         const history = await Weather.find().sort({ timestamp: 1 }).limit(150);
 
         if (history.length < 20) {
             return res.status(400).json({ message: "Need at least 20 records for weekly analysis" });
         }
 
-        // Python script එක ක්‍රියාත්මක කිරීම
+       
         const pythonProcess = spawn('python', ['python/predictor_weekly.py']);
         
         let resultData = "";
 
-        // Python එකට දත්ත යැවීම
+       
         pythonProcess.stdin.write(JSON.stringify(history));
         pythonProcess.stdin.end();
 
@@ -60,7 +60,7 @@ exports.getWeeklyAveragePrediction = async (req, res) => {
             resultData += data.toString();
         });
 
-        // දත්ත කියවා අවසන් වූ පසු JSON ප්‍රතිඵලය ලබා දීම
+        
         pythonProcess.stdout.on('end', () => {
             try {
                 const predictions = JSON.parse(resultData);
@@ -75,22 +75,21 @@ exports.getWeeklyAveragePrediction = async (req, res) => {
     }
 };
 
-// මාසික සාමාන්‍ය පුරෝකථනය ලබා දෙන Controller එක
+
 exports.getMonthlyAveragePrediction = async (req, res) => {
     try {
-        // පහුගිය දත්ත 200ක් පමණ ලබා ගැනීම (මාස 3ක පමණ දත්ත)
+      
         const history = await Weather.find().sort({ timestamp: 1 }).limit(200);
 
         if (history.length < 30) {
             return res.status(400).json({ message: "Need at least 30 records for monthly analysis" });
         }
 
-        // සතිපතා ස්ක්‍රිප්ට් එකම මෙහිදීද භාවිතා කළ හැක
         const pythonProcess = spawn('python', ['python/predictor_weekly.py']);
         
         let resultData = "";
 
-        // Python එකට දත්ත යැවීම
+        
         pythonProcess.stdin.write(JSON.stringify(history));
         pythonProcess.stdin.end();
 
@@ -98,7 +97,7 @@ exports.getMonthlyAveragePrediction = async (req, res) => {
             resultData += data.toString();
         });
 
-        // දත්ත කියවා අවසන් වූ පසු ප්‍රතිඵලය ලබා දීම
+        
         pythonProcess.stdout.on('end', () => {
             try {
                 const predictions = JSON.parse(resultData);

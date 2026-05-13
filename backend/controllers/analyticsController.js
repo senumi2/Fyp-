@@ -5,7 +5,7 @@ const Transport = require("../models/Transport");
 const Maintenance = require("../models/MaintenanceRepairLogs");
 const Operational = require("../models/OperationalExpense");
 
-const getFinancialStats = async (req, res) => {
+exports.getFinancialStats = async (req, res) => {
     try {
         const { year, month } = req.query;
         let matchStage = {};
@@ -14,7 +14,6 @@ const getFinancialStats = async (req, res) => {
             const startYear = parseInt(year);
             if (month && month !== "") {
                 const m = parseInt(month);
-                // Javascript months are 0-indexed, but Mongo $month is 1-indexed
                 matchStage = {
                     $match: {
                         date: {
@@ -38,22 +37,15 @@ const getFinancialStats = async (req, res) => {
         const aggregateWithFilter = async (Model, sumField) => {
             const pipeline = [];
             if (Object.keys(matchStage).length > 0) pipeline.push(matchStage);
-            
-            pipeline.push({ 
-                $group: { 
-                    _id: { $month: "$date" }, 
-                    totalAmount: { $sum: `$${sumField}` } 
-                } 
-            });
+            pipeline.push({ $group: { _id: { $month: "$date" }, totalAmount: { $sum: `$${sumField}` } } });
             pipeline.push({ $sort: { "_id": 1 } });
             return await Model.aggregate(pipeline);
         };
 
-        // Models වල තිබෙන නිවැරදි Field Names මෙහි ඇතුළත් කර ඇත
         const incomeStats = await aggregateWithFilter(Order, "amount");
         const wageStats = await aggregateWithFilter(Wage, "total");
         const transportStats = await aggregateWithFilter(Transport, "total");
-        const maintenanceStats = await aggregateWithFilter(Maintenance, "cost"); // Schema එකේ 'cost' ලෙස තිබිය යුතුය
+        const maintenanceStats = await aggregateWithFilter(Maintenance, "cost");
         const operationalStats = await aggregateWithFilter(Operational, "amount");
 
         res.json({ incomeStats, wageStats, transportStats, maintenanceStats, operationalStats });
@@ -62,14 +54,47 @@ const getFinancialStats = async (req, res) => {
     }
 };
 
-const getProductionVsSalesStats = async (req, res) => {
+exports.getProductionVsSalesStats = async (req, res) => {
     try {
-        // ඔබගේ logic එක මෙහි ලියන්න
-        res.json({ message: "Production vs Sales Stats" });
+        const requestedYear = parseInt(req.query.year) || 2026;
+        const startOfYear = new Date(Date.UTC(requestedYear, 0, 1));
+        const endOfYear = new Date(Date.UTC(requestedYear + 1, 0, 1));
+
+        // Harvest Stats: Adding the values ​​inside the records array
+        const harvestStats = await Harvest.aggregate([
+            { $unwind: "$records" }, 
+            {
+                $match: {
+                    "records.date": { $gte: startOfYear, $lt: endOfYear }
+                }
+            },
+            {
+                $group: {
+                    _id: { $month: "$records.date" },
+                    totalHarvest: { $sum: "$records.quantity" }
+                }
+            },
+            { $sort: { "_id": 1 } }
+        ]);
+
+        
+        const salesStats = await Order.aggregate([
+            {
+                $match: {
+                    date: { $gte: startOfYear, $lt: endOfYear }
+                }
+            },
+            {
+                $group: {
+                    _id: { $month: "$date" },
+                    totalQuantity: { $sum: "$quantity" }
+                }
+            },
+            { $sort: { "_id": 1 } }
+        ]);
+
+        res.json({ harvestStats, salesStats });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
-
-// analyticsController.js අවසානයට මෙය යොදන්න
-module.exports = {  getFinancialStats,  getProductionVsSalesStats };

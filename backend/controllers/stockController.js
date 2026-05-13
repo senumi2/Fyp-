@@ -23,27 +23,52 @@ const generateRefNo = async (itemName, type) => {
 // 1. Add Stock & Update Product Collection
 exports.addStock = async (req, res) => {
     try {
-        const { itemName, subType, transactionType, quantity } = req.body;
+        const { subType, transactionType, quantity } = req.body;
 
+        
+        const targetName = subType.trim();
+        
+        
+        const safeName = targetName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+       
+        let product = await Product.findOne({ 
+            name: { $regex: new RegExp("^" + safeName + "$", "i") } 
+        });
+
+       
+        if (!product) {
+            product = await Product.findOne({ 
+                name: { $regex: new RegExp(safeName, "i") } 
+            });
+        }
+
+        if (!product) {
+            console.error(`❌ DEBUG: Product NOT Found for subType: "${subType}"`);
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        console.log(`✅ DEBUG: Target Product Found! Name: ${product.name} | ID: ${product._id}`);
+       
+
+        
         const newEntry = new Stock(req.body);
-        newEntry.no = await generateRefNo(itemName, transactionType);
+        newEntry.no = await generateRefNo(req.body.itemName, transactionType); 
         await newEntry.save();
 
+        
         const qtyChange = transactionType === 'Inward' ? Number(quantity) : -Number(quantity);
         
-        // Regex භාවිතා කර අකුරු වල ලොකු කුඩා බව (Case-insensitive) සහ trim කර සෙවීම
-        const updatedProduct = await Product.findOneAndUpdate(
-            { name: { $regex: new RegExp("^" + subType.trim() + "$", "i") } }, 
-            { $inc: { stock: qtyChange } }, 
+        await Product.findByIdAndUpdate(
+            product._id,
+            { $inc: { stock: qtyChange } },
             { new: true }
         );
 
-        if (!updatedProduct) {
-            console.error(`Error: "${subType}" නමින් Product එකක් හමු නොවීය.`);
-        }
-
+        console.log(`✅ SUCCESS: ${product.name} | Stock Updated by: ${qtyChange}`);
         res.status(201).json(newEntry);
     } catch (err) {
+        console.error("System Error:", err.message);
         res.status(500).json({ error: err.message });
     }
 };
@@ -54,25 +79,24 @@ exports.updateStock = async (req, res) => {
         const oldRecord = await Stock.findById(req.params.id);
         if (!oldRecord) return res.status(404).json({ error: "Record not found" });
 
-        // පරණ අගය Reset කිරීම (Regex භාවිතයෙන්)
-        const resetQty = oldRecord.transactionType === 'Inward' ? -oldRecord.quantity : oldRecord.quantity;
+        const resetQty = oldRecord.transactionType === 'Inward' ? -Number(oldRecord.quantity) : Number(oldRecord.quantity);
         await Product.findOneAndUpdate(
             { name: { $regex: new RegExp("^" + oldRecord.subType.trim() + "$", "i") } }, 
             { $inc: { stock: resetQty } }
         );
 
-        // අලුත් දත්ත Update කිරීම
         const updated = await Stock.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
-        // අලුත් අගය Update කිරීම (Regex භාවිතයෙන්)
-        const newQty = updated.transactionType === 'Inward' ? updated.quantity : -updated.quantity;
+        const newQty = updated.transactionType === 'Inward' ? Number(updated.quantity) : -Number(updated.quantity);
         await Product.findOneAndUpdate(
             { name: { $regex: new RegExp("^" + updated.subType.trim() + "$", "i") } }, 
             { $inc: { stock: newQty } }
         );
 
+        console.log(`✅ UPDATE SUCCESS: ${updated.subType} Stock Synced`);
         res.status(200).json(updated);
     } catch (err) {
+        console.error("Update Error:", err.message);
         res.status(500).json({ error: err.message });
     }
 };
@@ -83,16 +107,17 @@ exports.deleteStock = async (req, res) => {
         const record = await Stock.findById(req.params.id);
         if (!record) return res.status(404).json({ error: "Record not found" });
 
-        // මකා දමන වාර්තාව නිසා වෙනස් වූ තොගය නිවැරදි කිරීම (Regex භාවිතයෙන්)
-        const reverseQty = record.transactionType === 'Inward' ? -record.quantity : record.quantity;
+        const reverseQty = record.transactionType === 'Inward' ? -Number(record.quantity) : Number(record.quantity);
         await Product.findOneAndUpdate(
             { name: { $regex: new RegExp("^" + record.subType.trim() + "$", "i") } }, 
             { $inc: { stock: reverseQty } }
         );
 
         await Stock.findByIdAndDelete(req.params.id);
+        console.log(`✅ DELETE SUCCESS: ${record.subType} Stock Reversed`);
         res.status(200).json({ message: "Deleted successfully" });
     } catch (err) {
+        console.error("Delete Error:", err.message);
         res.status(500).json({ error: err.message });
     }
 };

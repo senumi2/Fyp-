@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  description: { type: String }, // 'details' වෙනුවට පොදුවේ description පාවිච්චි කරමු
-  imageUrl: { type: String, required: true }, // 'image' path එක මෙතන තියෙනවා
+  description: { type: String }, 
+  imageUrl: { type: String, required: true }, 
   price: { type: Number, required: true },
-  stock: { type: Number, default: 0 }, // 'availableStock' එකටත් මේකම පාවිච්චි වේ
+  stock: { type: Number, default: 0 }, 
   
   // --- 🧂 Quality Specs (New) ---
   purity: { type: String, default: "98.5%" },

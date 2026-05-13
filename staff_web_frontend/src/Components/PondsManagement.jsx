@@ -124,8 +124,7 @@ const PondsManagement = () => {
                     <button className={`nav-item ${activeTab === 'salinity' ? 'active' : ''}`} onClick={() => setActiveTab('salinity')}>Brine Control</button>
                     <button className={`nav-item ${activeTab === 'maintenance' ? 'active' : ''}`} onClick={() => setActiveTab('maintenance')}>Maintenance</button>
                     <button className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}>AI Analytics</button>
-                    <button className={`nav-item ${activeTab === 'weather-prediction' ? 'active' : ''}`} onClick={() => setActiveTab('weather-prediction')}>weather prediction</button>
-                </nav>
+                    </nav>
             </aside>
 
             <main className="ponds-main-content">

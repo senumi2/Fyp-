@@ -1,10 +1,8 @@
-/* AdminDashboard.css */
 
 /* --- Base Container --- */
 .admin-container {
     display: flex;
     width: 100%;
-    /* Navbar එකේ උසට සමාන ඉඩක් ඉහළින් තැබීම (පින්තූරය අනුව 80px වඩාත් සුදුසුයි) */
     margin-top: 80px; 
     min-height: calc(100vh - 80px);
     background-color: #f8fafc;
@@ -14,24 +12,21 @@
 .admin-sidebar {
     width: 280px;
     min-width: 280px;
-    background-color: #4b7274ea; /* මුල් වර්ණය */
+    background-color: #4b7274ea; 
     padding: 20px;
     display: flex;
     flex-direction: column;
-    /* Sidebar එකේ උස Navbar එකේ උස අඩු කර ගණනය කිරීම */
     height: calc(100vh - 80px); 
     position: fixed; 
-    /* Navbar එකට යටින් පටන් ගැනීමට */
     top: 80px; 
     left: 0;
     border-right: 1px solid #94a3b8;
-    /* Footer එකට යටින් යාමට z-index එක අවශ්‍ය පරිදි සකසා ඇත */
     z-index: 100; 
     overflow-y: auto; 
     scrollbar-width: thin;
 }
 
-/* කළු තීරුව/Header කොටස */
+
 .sidebar-header {
     font-size: 1.2rem;
     font-weight: 800;
@@ -70,7 +65,6 @@
 /* --- Content Area --- */
 .admin-main-content {
     flex: 1;
-    /* Sidebar එකේ පළලට සමාන ඉඩක් වමෙන් තැබීම */
     margin-left: 280px; 
     padding: 40px;
     background-color: #f8fafc;

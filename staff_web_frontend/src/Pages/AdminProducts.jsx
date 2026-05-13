@@ -13,7 +13,6 @@ function AdminProducts() {
     image: null,
   });
 
-  // Fetch products and sync auto-calculated stock from backend
   const fetchProducts = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/products");
@@ -74,13 +73,11 @@ function AdminProducts() {
     <div className="admin-products-page">
       <div className="content-wrapper">
         
-        {/* Header Section with Compact Stats */}
         <header className="admin-header-row">
           <div className="glass-header">
             <h1>Saltern Products</h1>
             <p>Monitor real-time inventory and salt varieties</p>
           </div>
-          
           <div className="stats-mini-pill">
             <div className="pill-icon">📦</div>
             <div className="pill-info">
@@ -90,7 +87,6 @@ function AdminProducts() {
           </div>
         </header>
 
-        {/* Management Form Card */}
         <section className="management-section">
           <div className="management-card">
             <div className="card-header-flex">
@@ -134,7 +130,6 @@ function AdminProducts() {
           </div>
         </section>
 
-        {/* Live Inventory Table */}
         <section className="table-section">
           <div className="table-card">
             <div className="table-header-info">
@@ -148,7 +143,6 @@ function AdminProducts() {
                     <th>Product Image</th>
                     <th>Name & Specifications</th>
                     <th>Market Price</th>
-                    <th>Live Stock</th>
                     <th className="text-center">Manage</th>
                   </tr>
                 </thead>
@@ -157,7 +151,7 @@ function AdminProducts() {
                     <tr key={p._id}>
                       <td>
                         <div className="table-img-box">
-                        <img src={`http://localhost:5000${p.imageUrl}`} alt={p.name} />
+                          <img src={`http://localhost:5000${p.imageUrl}`} alt={p.name} />
                         </div>
                       </td>
                       <td>
@@ -167,12 +161,6 @@ function AdminProducts() {
                         </div>
                       </td>
                       <td className="price-tag">Rs. {parseFloat(p.price).toLocaleString()}</td>
-                      // AdminProducts.jsx Table Row 
-                      <td>
-                        <div className={`stock-badge ${p.stock > 100 ? 'high' : 'low'}`}>
-                            {p.stock || 0} kg
-                        </div>
-                      </td>
                       <td>
                         <div className="btn-flex-actions">
                           <button className="btn-action edit" onClick={() => handleEdit(p)}>Edit</button>

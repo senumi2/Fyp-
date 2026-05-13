@@ -19,7 +19,7 @@ const orderSchema = new mongoose.Schema({
     ref: "ShippingAddress",
     required: true
   },
-  // --- පවරන ලද රියදුරු (අලුතින් එක් කළා) ---
+ 
   assignedDriver: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

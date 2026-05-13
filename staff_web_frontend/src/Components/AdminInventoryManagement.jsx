@@ -1,34 +1,31 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Download, Search, ChevronDown, ChevronUp, BarChart3 } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import "./AdminInventoryManagement.css";
+import './AdminInventoryManagement.css';
 
-const AdminInventory = () => {
-    const [activeTab, setActiveTab] = useState('Inward');
-    const [allData, setAllData] = useState([]);
+const AdminInventoryManagement = () => {
+    const [inventoryData, setInventoryData] = useState([]);
+    const [activeTab, setActiveTab] = useState('Inward'); // Inward, Outward, Reports
+    const [unit, setUnit] = useState('kg');
     const [searchTerm, setSearchTerm] = useState("");
     const [reportType, setReportType] = useState('Monthly'); 
-    const [unit, setUnit] = useState('kg'); 
-    const [showFullTable, setShowFullTable] = useState({}); 
     const [loading, setLoading] = useState(true);
     
-    const items = ["Salt", "Jipsum", "Artemiya", "Agriculture Salt"];
+    const items = ['Salt', 'Gypsum', 'Artemia', 'Agriculture Salt'];
+    const tableRefs = useRef({});
     const API_URL = "http://localhost:5000/api/stocks";
 
     useEffect(() => {
-        fetchData();
+        fetchInventory();
     }, []);
 
-    const fetchData = async () => {
+    const fetchInventory = async () => {
         try {
             const res = await axios.get(API_URL);
-            setAllData(Array.isArray(res.data) ? res.data : []);
+            setInventoryData(res.data);
             setLoading(false);
-        } catch (err) { 
-            console.error("Error:", err); 
+        } catch (err) {
+            console.error("Fetch error:", err);
             setLoading(false);
         }
     };
@@ -40,147 +37,146 @@ const AdminInventory = () => {
     };
 
     const getBalance = (itemName) => {
-        const itemData = allData.filter(d => d.itemName === itemName);
-        const totalIn = itemData.filter(d => d.transactionType === 'Inward').reduce((sum, d) => sum + (Number(d.quantity) || 0), 0);
-        const totalOut = itemData.filter(d => d.transactionType === 'Outward').reduce((sum, d) => sum + (Number(d.quantity) || 0), 0);
-        return totalIn - totalOut;
+        const inward = inventoryData
+            .filter(d => d.itemName === itemName && d.transactionType === 'Inward')
+            .reduce((sum, d) => sum + (Number(d.quantity) || 0), 0);
+        const outward = inventoryData
+            .filter(d => d.itemName === itemName && d.transactionType === 'Outward')
+            .reduce((sum, d) => sum + (Number(d.quantity) || 0), 0);
+        return inward - outward;
     };
 
-    // Chart Logic
+    // Analysis Report සඳහා දත්ත සකස් කිරීම (Stock.jsx හි logic එකට අනුව)
     const getChartData = (itemName) => {
-        const filtered = allData.filter(d => d.itemName === itemName);
+        const filtered = inventoryData.filter(d => d.itemName === itemName);
         const summary = {};
         filtered.forEach(entry => {
-            if (!entry.date) return;
             const dateObj = new Date(entry.date);
             const period = reportType === 'Monthly' 
                 ? `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`
                 : `${dateObj.getFullYear()}`;
             
             if (!summary[period]) summary[period] = { period, inward: 0, outward: 0 };
-            const qty = unit === 'Tons' ? (Number(entry.quantity) || 0) / 1000 : (Number(entry.quantity) || 0);
+            const qty = unit === 'Tons' ? entry.quantity / 1000 : entry.quantity;
             
             if (entry.transactionType === 'Inward') summary[period].inward += qty;
-            else summary[period].outward += qty;
+            else if (entry.transactionType === 'Outward') summary[period].outward += qty;
         });
         return Object.values(summary).sort((a, b) => a.period.localeCompare(b.period));
     };
 
-    const renderStockTable = (itemName) => {
-        const filtered = allData.filter(d => 
-            d.itemName === itemName && d.transactionType === activeTab &&
-            (d.no?.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-             d.partyName?.toLowerCase().includes(searchTerm.toLowerCase()))
-        ).sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        const isFull = showFullTable[itemName];
-        const displayRecords = isFull ? filtered : filtered.slice(0, 5);
-        const balance = getBalance(itemName);
-
-        return (
-            <div key={`${activeTab}-${itemName}`} className="admin-inventory-card">
-                <div className="admin-card-header">
-                    <div className="title-border">
-                        <h4>{itemName}</h4>
-                        <span className="admin-balance">Current: {formatWeight(balance)} {unit}</span>
-                    </div>
-                </div>
-                <div className="table-container">
-                    <table className="admin-table">
-                        <thead>
-                            <tr><th>REF</th><th>DATE</th><th>PARTY</th><th>QTY ({unit})</th></tr>
-                        </thead>
-                        <tbody>
-                            {displayRecords.map(record => (
-                                <tr key={record._id}>
-                                    <td>#{record.no}</td>
-                                    <td>{new Date(record.date).toLocaleDateString()}</td>
-                                    <td className="party-name-cell">{record.partyName || '-'}</td>
-                                    <td className="qty-cell"><strong>{formatWeight(record.quantity)}</strong></td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                {filtered.length > 5 && (
-                    <button className="view-more-action" onClick={() => setShowFullTable(prev => ({ ...prev, [itemName]: !prev[itemName] }))}>
-                        {isFull ? <ChevronUp size={14}/> : <ChevronDown size={14}/>} {isFull ? "Show Less" : "View All"}
-                    </button>
-                )}
-            </div>
-        );
-    };
-
-    if (loading) return <div className="loading-screen">Syncing Data...</div>;
+    if (loading) return <div className="inventory-loading">Loading Inventory...</div>;
 
     return (
-        <div className="inventory-view-root">
-            <aside className="inventory-side-nav">
-                <div className="nav-icon-stack">
-                    <div className={`nav-box ${activeTab === 'Inward' ? 'active' : ''}`} onClick={() => setActiveTab('Inward')}><span className="icon-emoji">🧂</span></div>
-                    <div className={`nav-box ${activeTab === 'Outward' ? 'active' : ''}`} onClick={() => setActiveTab('Outward')}><span className="icon-emoji">📋</span></div>
-                    <div className={`nav-box ${activeTab === 'Reports' ? 'active' : ''}`} onClick={() => setActiveTab('Reports')}><span className="icon-emoji">📈</span></div>
-                    <div className="nav-divider"></div>
-                    <div className="unit-switch-container">
-                        <span className="unit-text">K</span>
-                        <label className="unit-toggle">
+        <div className="inventory-container-root">
+            <aside className="inventory-mini-sidebar">
+                <div className="sidebar-brand"><h2>Inventory</h2></div>
+                <nav className="mini-nav-menu">
+                    <button className={`mini-nav-item ${activeTab === 'Inward' ? 'active' : ''}`} onClick={() => setActiveTab('Inward')}>Inward Stock</button>
+                    <button className={`mini-nav-item ${activeTab === 'Outward' ? 'active' : ''}`} onClick={() => setActiveTab('Outward')}>Outward Stock</button>
+                    <button className={`mini-nav-item ${activeTab === 'Reports' ? 'active' : ''}`} onClick={() => setActiveTab('Reports')}>Analysis Reports</button>
+                </nav>
+                <div className="mini-sidebar-footer">
+                    <div className="unit-toggle-wrapper">
+                        <span>{unit}</span>
+                        <label className="ui-switch">
                             <input type="checkbox" checked={unit === 'Tons'} onChange={() => setUnit(unit === 'kg' ? 'Tons' : 'kg')} />
-                            <span className="unit-slider"></span>
+                            <span className="ui-slider round"></span>
                         </label>
-                        <span className="unit-text">T</span>
                     </div>
                 </div>
             </aside>
 
-            <main className="inventory-body">
-                <header className="inventory-main-header">
-                    <div className="header-text">
-                        <h2>{activeTab} Analytics</h2>
-                        <p>Inventory Intelligence</p>
-                    </div>
+            <main className="inventory-content-wrapper">
+                <header className="inventory-header">
+                    <h2 className="tab-display-title">{activeTab} Management</h2>
+                    {activeTab !== 'Reports' && (
+                        <input 
+                            type="text" 
+                            placeholder="Search by Ref, Name or Product..." 
+                            className="inventory-search"
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    )}
                 </header>
 
-                {/* Summary Cards */}
-                <section className="inventory-stats-row">
-                    <div className="stat-card card-gold">
-                        <span className="stat-label">MONTHLY ACTIVITY</span>
-                        <h3 className="stat-value">{formatWeight(allData.length)} Records</h3>
-                    </div>
-                    <div className="stat-card card-teal">
-                        <span className="stat-label">MAIN STOCK</span>
-                        <h3 className="stat-value">Salt</h3>
-                    </div>
-                    <div className="stat-card card-dark">
-                        <span className="stat-label">SYSTEM</span>
-                        <h3 className="stat-value">LIVE</h3>
-                    </div>
-                </section>
-
-                <div className="inventory-content">
-                    {activeTab !== 'Reports' ? (
-                        <div className="inventory-grid-display">
-                            {items.map(item => renderStockTable(item))}
-                        </div>
-                    ) : (
-                        <div className="reports-section">
-                            <div className="report-controls">
-                                <button className={reportType === 'Monthly' ? 'btn-active' : ''} onClick={() => setReportType('Monthly')}>Monthly</button>
-                                <button className={reportType === 'Annually' ? 'btn-active' : ''} onClick={() => setReportType('Annually')}>Annually</button>
-                            </div>
-                            <div className="charts-grid">
+                <div className="scrollable-area">
+                    {/* --- INWARD & OUTWARD SECTIONS --- */}
+                    {activeTab !== 'Reports' && (
+                        <>
+                            <div className="inventory-stats-grid">
                                 {items.map(item => (
-                                    <div className="chart-card" key={item}>
-                                        <h5>{item} Flow ({unit})</h5>
-                                        <ResponsiveContainer width="100%" height={220}>
-                                            <LineChart data={getChartData(item)}>
-                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
-                                                <XAxis dataKey="period" fontSize={10} />
-                                                <YAxis fontSize={10} />
-                                                <Tooltip contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 5px 15px rgba(0,0,0,0.1)' }} />
-                                                <Legend />
-                                                <Line type="monotone" dataKey="inward" stroke="#008080" strokeWidth={3} dot={{ r: 3 }} name="Inward" />
-                                                <Line type="monotone" dataKey="outward" stroke="#1C39BB" strokeWidth={3} dot={{ r: 3 }} name="Outward" />
-                                            </LineChart>
+                                    <div key={item} className="inventory-card-stat" onClick={() => tableRefs.current[item]?.scrollIntoView({behavior: 'smooth'})}>
+                                        <span className="card-title">{item} Balance</span>
+                                        <h2 className="card-amount">{formatWeight(getBalance(item))} <small>{unit}</small></h2>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="inventory-tables-container">
+                                {items.map(item => (
+                                    <div key={item} className="inventory-data-table-card" ref={el => tableRefs.current[item] = el}>
+                                        <div className="table-card-header">
+                                            <h3>{item} Logs</h3>
+                                        </div>
+                                        <div className="table-responsive">
+                                            <table className="custom-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Ref No</th>
+                                                        <th>Date</th>
+                                                        <th>{activeTab === 'Inward' ? 'Supplier' : 'Customer'}</th>
+                                                        <th>Product</th>
+                                                        <th>Qty ({unit})</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {inventoryData
+                                                        .filter(d => d.itemName === item && d.transactionType === activeTab)
+                                                        .filter(d => `${d.no} ${d.partyName} ${d.subType}`.toLowerCase().includes(searchTerm.toLowerCase()))
+                                                        .map(row => (
+                                                            <tr key={row._id}>
+                                                                <td><span className="ref-chip">{row.no}</span></td>
+                                                                <td>{new Date(row.date).toLocaleDateString()}</td>
+                                                                <td>{row.partyName}</td>
+                                                                <td>{row.subType}</td>
+                                                                <td><b>{formatWeight(row.quantity)}</b></td>
+                                                            </tr>
+                                                        ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {/* --- ANALYSIS REPORTS SECTION --- */}
+                    {activeTab === 'Reports' && (
+                        <div className="admin-reports-view">
+                            <div className="report-controls-bar">
+                                <div className="report-btn-group">
+                                    <button onClick={() => setReportType('Monthly')} className={reportType === 'Monthly' ? 'btn-active' : ''}>Monthly</button>
+                                    <button onClick={() => setReportType('Annually')} className={reportType === 'Annually' ? 'btn-active' : ''}>Annually</button>
+                                </div>
+                            </div>
+
+                            <div className="charts-grid-container">
+                                {items.map(item => (
+                                    <div className="admin-chart-card" key={item}>
+                                        <h4>{item} Trend ({unit})</h4>
+                                        <ResponsiveContainer width="100%" height={250}>
+                                        <LineChart data={getChartData(item)}>
+    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+    <XAxis dataKey="period" fontSize={11} stroke="#666" />
+    <YAxis fontSize={11} stroke="#666" />
+    <Tooltip contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }} />
+    <Legend verticalAlign="top" height={36}/>
+    {/* Persian Green සහ Teal Green වර්ණ භාවිතා කර ඇත */}
+    <Line type="monotone" dataKey="inward" stroke="#00A693" strokeWidth={3} dot={{ r: 4 }} name="Inward Stock" />
+    <Line type="monotone" dataKey="outward" stroke="#008080" strokeWidth={3} dot={{ r: 4 }} name="Outward Stock" />
+</LineChart>
                                         </ResponsiveContainer>
                                     </div>
                                 ))}
@@ -193,4 +189,4 @@ const AdminInventory = () => {
     );
 };
 
-export default AdminInventory;
+export default AdminInventoryManagement;

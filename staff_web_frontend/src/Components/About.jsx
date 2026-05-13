@@ -4,7 +4,7 @@ import { FiTarget, FiAward, FiTrendingUp } from "react-icons/fi";
 import { useInView } from "react-intersection-observer";
 
 function About() {
-  // Intersection Observer options
+  
   const { ref, inView } = useInView({
     triggerOnce: true, 
     threshold: 0.2,    

@@ -20,9 +20,9 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // --- LOGIC FOR CUSTOMER VS STAFF ---
-    // 1. පලවෙනි user නම් Admin වෙනවා (Approved).
-    // 2. එවන role එක "Customer" නම් එයා auto Approved වෙනවා (Approval ඕනේ නෑ).
-    // 3. වෙනත් Staff role එකක් (Driver, Inventory, etc.) නම් Approval ඕනේ (False).
+    // 1. The first user is Admin (Approved).
+   // 2. If the role is "Customer", he/she is auto Approved (No Approval Required).
+  // 3. If it is another Staff role (Driver, Inventory, etc.), Approval Required (False).
     let approvalStatus = false;
     let finalRole = jobRole;
 
@@ -30,9 +30,9 @@ exports.register = async (req, res) => {
       approvalStatus = true;
       finalRole = "Admin";
     } else if (jobRole === "Customer") {
-      approvalStatus = true; // Customer ලාට approval අවශ්‍ය නැත
+      approvalStatus = true; 
     } else {
-      approvalStatus = false; // අනෙකුත් Staff roles සඳහා approval අවශ්‍යයි
+      approvalStatus = false; 
     }
 
     user = new User({ 
@@ -57,6 +57,7 @@ exports.register = async (req, res) => {
       user: { 
         id: user._id, 
         fullName, 
+        email,
         jobRole: user.jobRole,
         isApproved: user.isApproved 
       } 
@@ -93,7 +94,8 @@ exports.login = async (req, res) => {
       user: { 
         id: user._id, 
         fullName: user.fullName, 
-        jobRole: user.jobRole 
+        jobRole: user.jobRole,
+        email: user.email,
       } 
     });
   } catch (err) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { 
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
@@ -82,73 +82,89 @@ const ProductionVsSalesView = () => {
     const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+    
+    const processPieData = useCallback((data, monthLabel) => {
+        if (!data) return;
+        let w = 0, t = 0, m = 0, o = 0;
+
+        if (monthLabel === "All") {
+            w = (data.wageStats || []).reduce((a, b) => a + (Number(b.total) || 0), 0);
+            t = (data.transportStats || []).reduce((a, b) => a + (Number(b.total) || 0), 0);
+            m = (data.maintenanceStats || []).reduce((a, b) => a + (Number(b.cost) || 0), 0);
+            o = (data.operationalStats || []).reduce((a, b) => a + (Number(b.amount) || 0), 0);
+        } else {
+            const mIdx = months.indexOf(monthLabel) + 1;
+            w = data.wageStats?.find(s => Number(s._id) === mIdx)?.total || 0;
+            t = data.transportStats?.find(s => Number(s._id) === mIdx)?.total || 0;
+            m = data.maintenanceStats?.find(s => Number(s._id) === mIdx)?.cost || 0;
+            o = data.operationalStats?.find(s => Number(s._id) === mIdx)?.amount || 0;
+        }
+
+        setExpensePieData([
+            { name: "Wages", value: Number(w) },
+            { name: "Transport", value: Number(t) },
+            { name: "Maintenance", value: Number(m) },
+            { name: "Operational", value: Number(o) }
+        ]);
+    }, [months]);
+
     useEffect(() => {
         const fetchAllStats = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const config = { headers: { Authorization: `Bearer ${token}` } };
+                if (!token) {
+                    console.error("No authorization token found");
+                    setLoading(false);
+                    return;
+                }
+                
+                
+                const config = { 
+                    headers: { 
+                        'Authorization': `Bearer ${token.trim()}`,
+                        'Content-Type': 'application/json'
+                    } 
+                };
 
                 const [resProd, resFin] = await Promise.all([
-                    axios.get("http://localhost:5000/api/analytics/production-vs-sales", config),
+                    axios.get("http://localhost:5000/api/analytics/production-vs-sales?year=2026", config),
                     axios.get("http://localhost:5000/api/analytics/financial-stats?year=2026", config)
                 ]);
 
                 const sales = resProd.data.salesStats || [];
                 const harvest = resProd.data.harvestStats || [];
                 
+                
                 const formatted = months.map((m, index) => {
                     const mNum = index + 1;
+                    const hEntry = harvest.find(h => Number(h._id) === mNum);
+                    const sEntry = sales.find(s => Number(s._id) === mNum);
+
                     return {
                         name: m,
-                        Harvest: harvest.find(h => h._id === mNum)?.totalHarvest || 0,
-                        Sales: sales.find(s => s._id === mNum)?.totalQuantity || 0
+                        Harvest: hEntry ? Number(hEntry.totalHarvest) : 0,
+                        Sales: sEntry ? Number(sEntry.totalQuantity) : 0
                     };
                 });
 
                 setOriginalChartData(formatted);
-                setDisplayChartData(formatted); // මුලින්ම වාර්ෂික දත්ත පෙන්වයි
+                setDisplayChartData(formatted); 
                 setRawFinancials({ ...resFin.data, salesStats: sales });
                 processPieData(resFin.data, "All");
                 
                 setLoading(false);
             } catch (err) {
-                console.error("Dashboard error:", err);
+                console.error("Dashboard error:", err.response?.data || err.message);
                 setLoading(false);
             }
         };
         fetchAllStats();
-    }, []);
-
-    const processPieData = (data, monthLabel) => {
-        if (!data) return;
-        let w = 0, t = 0, m = 0, o = 0;
-
-        if (monthLabel === "All") {
-            w = (data.wageStats || []).reduce((a, b) => a + (b.total || 0), 0);
-            t = (data.transportStats || []).reduce((a, b) => a + (b.total || 0), 0);
-            m = (data.maintenanceStats || []).reduce((a, b) => a + (b.total || 0), 0);
-            o = (data.operationalStats || []).reduce((a, b) => a + (b.total || 0), 0);
-        } else {
-            const mIdx = months.indexOf(monthLabel) + 1;
-            w = data.wageStats?.find(s => s._id === mIdx)?.total || 0;
-            t = data.transportStats?.find(s => s._id === mIdx)?.total || 0;
-            m = data.maintenanceStats?.find(s => s._id === mIdx)?.total || 0;
-            o = data.operationalStats?.find(s => s._id === mIdx)?.total || 0;
-        }
-
-        setExpensePieData([
-            { name: "Wages", value: w },
-            { name: "Transport", value: t },
-            { name: "Maintenance", value: m },
-            { name: "Operational", value: o }
-        ]);
-    };
+    }, [processPieData]);
 
     const handleFilterChange = (e) => {
         const selected = e.target.value;
         setSelectedMonth(selected);
         
-        // Harvest vs Sales Chart එක filter කිරීම
         if (selected === "All") {
             setDisplayChartData(originalChartData);
         } else {
@@ -156,18 +172,16 @@ const ProductionVsSalesView = () => {
             setDisplayChartData(filtered);
         }
 
-        // Pie Chart එක filter කිරීම
         processPieData(rawFinancials, selected);
     };
 
-    if (loading) return <div className="admin-main-content"><p className="loading-text">Loading...</p></div>;
+    if (loading) return <div className="admin-main-content"><p className="loading-text">Loading Analytics...</p></div>;
 
     return (
         <div className="admin-view-content">
             <h2 className="view-title">Production & Operational Analytics</h2>
             
             <div className="admin-charts-grid">
-                {/* 1. Harvest vs Sales Chart (Monthly/Annually Filterable) */}
                 <div className="admin-chart-card">
                     <div className="chart-header">
                         <h4 className="chart-label" style={{ margin: 0 }}>Harvest vs Sales (kg)</h4>
@@ -184,15 +198,14 @@ const ProductionVsSalesView = () => {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" dataKey="Harvest" stroke="#3b82f6" strokeWidth={3} name="Harvest (kg)" />
-                                <Line type="monotone" dataKey="Sales" stroke="#10b981" strokeWidth={3} name="Sales (kg)" />
+                                <Line type="monotone" dataKey="Harvest" stroke="#3b82f6" strokeWidth={3} name="Harvest (kg)" dot={{ r: 4 }} />
+                                <Line type="monotone" dataKey="Sales" stroke="#10b981" strokeWidth={3} name="Sales (kg)" dot={{ r: 4 }} />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
                     <p className="viewing-label">Showing: <strong>{selectedMonth === "All" ? "Full Year 2026" : selectedMonth}</strong></p>
                 </div>
 
-                {/* 2. Operational Cost Pie Chart */}
                 <div className="admin-chart-card">
                     <h4 className="chart-label">Operational Cost Distribution</h4>
                     <div className="chart-wrapper" style={{ height: '300px' }}>
@@ -201,7 +214,7 @@ const ProductionVsSalesView = () => {
                                 <Pie data={expensePieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
                                     {expensePieData.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
                                 </Pie>
-                                <Tooltip formatter={(value) => `LKR ${value.toLocaleString()}`} />
+                                <Tooltip formatter={(value) => `LKR ${Number(value).toLocaleString()}`} />
                                 <Legend />
                             </PieChart>
                         </ResponsiveContainer>

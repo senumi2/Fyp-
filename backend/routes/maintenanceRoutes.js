@@ -9,7 +9,7 @@ const {
     deleteMaintenance 
 } = require("../controllers/maintenanceController");
 
-// දැන් මේ Routes වලටත් Token එක අවශ්‍යයි
+
 router.post("/", authMiddleware, authMiddleware.admin, createMaintenance);
 router.get("/", authMiddleware, getMaintenance);
 router.put("/:id", authMiddleware, authMiddleware.admin, updateMaintenance);

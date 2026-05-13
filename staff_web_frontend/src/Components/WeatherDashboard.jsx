@@ -45,13 +45,13 @@ const WeatherDashboard = () => {
         let advice = "";
         
         if (d.rainfall > 2) {
-            advice = "වැසි සහිත කාලගුණයක් පවතින බැවින් ලුණු අස්වනු නෙලීමෙන් වලකින්න. ලුණු ලේවායන් ආවරණය කිරීමට පියවර ගන්න.";
+            advice = "Avoid harvesting salt as it is rainy. Take steps to cover salt pans..";
         } else if (d.temperature > 30 && d.humidity < 60) {
-            advice = "ලුණු නිෂ්පාදනයට ඉතා හිතකර කාලගුණයකි. වාෂ්පීකරණ වේගය ඉහළ බැවින් ක්‍රියාවලිය වේගවත් කළ හැක.";
+            advice = "The weather is very favorable for salt production. The process can be accelerated because the evaporation rate is high..";
         } else if (d.windSpeed > 8) {
-            advice = "තද සුළං පවතින බැවින් ජලය පොම්ප කිරීමේදී සහ නඩත්තු කටයුතු වලදී ප්‍රවේශම් වන්න.";
+            advice = "Be careful when pumping water and carrying out maintenance work due to strong winds..";
         } else {
-            advice = "සාමාන්‍ය කාලගුණික තත්ත්වයක් පවතී. නියමිත කාලසටහනට අනුව කටයුතු කරගෙන යන්න.";
+            advice = "Normal weather conditions prevail. Proceed as per the scheduled schedule..";
         }
         return advice;
     };
@@ -84,7 +84,7 @@ const WeatherDashboard = () => {
             {data && (
                 <main className="dashboard-content">
                     <div className="conclusion-box">
-                        <h4>නිගමනය සහ උපදෙස් (Conclusion)</h4>
+                        <h4>Conclusion and advice</h4>
                         <p>{getConclusion(data)}</p>
                     </div>
 

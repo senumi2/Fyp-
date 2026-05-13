@@ -10,7 +10,7 @@ const sendEmail = async (options) => {
   });
 
   const mailOptions = {
-    from: `"Senumi Furniture" <${process.env.EMAIL_USER}>`,
+    from: `"Salter Hambantota" <${process.env.EMAIL_USER}>`,
     to: options.email,
     subject: options.subject,
     html: options.html, // අපිට ලස්සන Design එකක් යවන්න පුළුවන් HTML වලින්

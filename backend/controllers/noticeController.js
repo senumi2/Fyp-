@@ -1,6 +1,6 @@
 const Notice = require("../models/Notice");
 
-// Active වෙලා තියෙන දැනුම්දීම් ලබා ගැනීම
+// Get active notifications
 exports.getPublicNotices = async (req, res) => {
   try {
     const notices = await Notice.find({ active: true }).sort({ date: -1 }).limit(3);

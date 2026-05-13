@@ -2,7 +2,7 @@ const Report = require("../models/Report");
 const fs = require("fs");
 const path = require("path");
 
-// 1. සියලුම වාර්තා ලබා ගැනීම
+
 exports.getAllReports = async (req, res) => {
   try {
     const reports = await Report.find().sort({ createdAt: -1 });
@@ -12,12 +12,12 @@ exports.getAllReports = async (req, res) => {
   }
 };
 
-// 2. නව වාර්තාවක් නිර්මාණය කිරීම (Create)
+
 exports.createReport = async (req, res) => {
   try {
     const { title } = req.body;
 
-    // files පවතිනවාදැයි ඉතා හොඳින් පරීක්ෂා කිරීම
+    
     const imageFile = req.files && req.files['image'] ? req.files['image'][0] : null;
     const pdfFile = req.files && req.files['pdf'] ? req.files['pdf'][0] : null;
 
@@ -42,7 +42,7 @@ exports.createReport = async (req, res) => {
   }
 };
 
-// 3. වාර්තාවක් යාවත්කාලීන කිරීම (Update)
+
 exports.updateReport = async (req, res) => {
   try {
     const { title } = req.body;
@@ -52,7 +52,6 @@ exports.updateReport = async (req, res) => {
       return res.status(404).json({ message: "Report not found" });
     }
 
-    // අලුත් ගොනු තිබේ නම් ඒවා ලබා ගැනීම
     const imageFile = req.files && req.files['image'] ? req.files['image'][0] : null;
     const pdfFile = req.files && req.files['pdf'] ? req.files['pdf'][0] : null;
 
@@ -70,13 +69,13 @@ exports.updateReport = async (req, res) => {
   }
 };
 
-// 4. වාර්තාවක් මකා දැමීම (Delete)
+
 exports.deleteReport = async (req, res) => {
   try {
     const report = await Report.findById(req.params.id);
     if (!report) return res.status(404).json({ message: "Report not found" });
 
-    // Files folder එකෙන් ඉවත් කිරීම
+    
     [report.imageUrl, report.pdfUrl].forEach(filePath => {
       if (filePath) {
         const fullPath = path.join(__dirname, "..", filePath);

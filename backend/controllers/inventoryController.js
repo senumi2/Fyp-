@@ -15,13 +15,13 @@ exports.getInventory = async (req, res) => {
     const { search } = req.query;
     let query = {};
 
-    // Search query ekak thibunොth pamanak filter apply karanawa
+    
     if (search && search.trim() !== "") {
         query.items = { $regex: search, $options: "i" };
     }
 
     try {
-        // Date filter eka ain kara search eka broad karanna
+        
         const data = await Inventory.find(query).sort({ createdAt: -1 });
         res.json(data);
     } catch (err) { 

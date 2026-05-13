@@ -3,7 +3,7 @@ const router = express.Router();
 const crypto = require("crypto");
 const Order = require("../models/Order");
 
-// --- 1. Hash එක ජනනය කිරීම (Frontend එකට) ---
+
 router.post("/generate-hash", (req, res) => {
     const { order_id, amount, currency } = req.body;
 
@@ -45,4 +45,4 @@ router.post("/notify", async (req, res) => {
     res.status(200).send();
 });
 
-module.exports = router; // 👈 මේක අනිවාර්යයි!
+module.exports = router; 

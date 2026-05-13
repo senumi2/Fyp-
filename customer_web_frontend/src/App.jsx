@@ -14,7 +14,7 @@ import Invoice from "./Components/Invoice";
 import Cart from "./Components/Cart";
 import CartIcon from "./Components/CartIcon";
 
-import Login from "./pages/Login";
+import Login from "./Pages/Login";
 import Register from "./pages/Register";
 import Contact_us from "./pages/Contact_us";
 import Shipping_address from "./pages/Shipping_address";
