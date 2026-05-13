@@ -1,35 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 .profile-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 90vh;
-  background: #f8fafc;
-  padding: 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8 0%, #dbeafe 100%);
+  padding: 40px 20px;
+  font-family: 'Inter', sans-serif;
 }
 
 .profile-glass-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   width: 100%;
-  max-width: 500px;
+  max-width: 550px;
   padding: 40px;
-  border-radius: 24px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: transform 0.3s ease;
 }
 
-.profile-header-ui h2 { margin: 0; font-size: 24px; color: #1e293b; }
-.profile-header-ui p { color: #64748b; font-size: 14px; margin-top: 5px; }
+.profile-header-ui {
+  text-align: center;
+  margin-bottom: 30px;
+}
 
+.profile-header-ui h2 {
+  font-size: 28px;
+  color: #1e293b;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.profile-header-ui p {
+  color: #64748b;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+/* --- Avatar Section --- */
 .avatar-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 30px 0;
+  margin-bottom: 35px;
 }
 
 .avatar-wrapper {
   position: relative;
-  width: 110px;
-  height: 110px;
+  width: 130px;
+  height: 130px;
+  padding: 5px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .profile-img, .avatar-placeholder {
@@ -37,7 +63,7 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #f1f5f9;
+  transition: 0.3s ease;
 }
 
 .avatar-placeholder {
@@ -45,63 +71,207 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 40px;
+  font-size: 50px;
   color: #cbd5e1;
 }
 
 .upload-badge {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 5px;
+  right: 5px;
   background: #2563eb;
   color: white;
-  padding: 8px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
   cursor: pointer;
+  border: 3px solid white;
   box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+  transition: 0.3s;
 }
 
-.input-group { margin-bottom: 20px; }
+.upload-badge:hover {
+  transform: scale(1.1);
+  background: #1d4ed8;
+}
+
+.user-display-name {
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* --- Form Controls --- */
+.profile-fields-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .input-group label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 14px;
   font-weight: 600;
   color: #475569;
   margin-bottom: 8px;
 }
 
+.input-group label svg {
+  color: #2563eb;
+  font-size: 16px;
+}
+
 .input-group input {
   width: 100%;
-  padding: 12px;
+  padding: 14px 16px;
   border: 1.5px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 14px;
   font-size: 15px;
-  transition: 0.3s;
+  color: #1e293b;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #2563eb;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  outline: none;
 }
 
 .input-group input.edit-active {
+  background: white;
   border-color: #2563eb;
-  background: #fff;
+}
+
+.disabled-input {
+  background: #f1f5f9 !important;
+  color: #94a3b8 !important;
+  cursor: not-allowed;
+}
+
+/* --- Password Reset Section --- */
+.password-reset-section {
+  margin-top: 10px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+.toggle-pw-btn {
+  background: #f1f5f9;
+  border: none;
+  color: #2563eb;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.toggle-pw-btn:hover {
+  background: #e2e8f0;
+}
+
+.pw-input-container {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.confirm-pw-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: 0.3s;
+  margin-top: 5px;
+}
+
+.confirm-pw-btn:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* --- Action Buttons --- */
+.profile-footer-actions {
+  margin-top: 35px;
 }
 
 .edit-main-btn, .save-main-btn, .cancel-main-btn {
   width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
+  padding: 16px;
+  border-radius: 14px;
   font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  transition: 0.3s;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.edit-main-btn { background: #263d62fe; color: white; }
-.save-main-btn { background: #09467ff3; color: white; }
-.cancel-main-btn { background: #ef4444; color: white; }
+.edit-main-btn {
+  background: #1e293b;
+  color: white;
+}
 
-.action-btn-group { display: flex; gap: 15px; width: 100%; }
+.edit-main-btn:hover {
+  background: #0f172a;
+  transform: translateY(-2px);
+}
+
+.save-main-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.save-main-btn:hover {
+  background: #1d4ed8;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  transform: translateY(-2px);
+}
+
+.cancel-main-btn {
+  background: #f1f5f9;
+  color: #ef4444;
+  border: 1.5px solid #fee2e2;
+}
+
+.cancel-main-btn:hover {
+  background: #fef2f2;
+}
+
+.action-btn-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* Responsive UI */
+@media (max-width: 500px) {
+  .profile-glass-card {
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+  
+  .action-btn-group {
+    flex-direction: column;
+  }
+}

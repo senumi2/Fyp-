@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FiEdit2, FiMail, FiPhone, FiUser, FiCamera, FiCheck, FiX } from "react-icons/fi";
+import { FiEdit2, FiMail, FiPhone, FiUser, FiCamera, FiCheck, FiX, FiLock } from "react-icons/fi";
 import "./Profile.css";
 
 function Profile() {
@@ -12,6 +12,13 @@ function Profile() {
   const [editMode, setEditMode] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  // --- 🔒 Password Reset States (New) ---
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: ""
+  });
 
   const token = localStorage.getItem("token");
   const cleanToken = token && token.startsWith("Bearer ") ? token.split(" ")[1] : token;
@@ -48,14 +55,11 @@ function Profile() {
   };
 
   const handleSave = async () => {
-    // 1. මුලින්ම UI එක update වෙන්න පටන් ගන්නවා කියලා confirm කරගමු
     console.log("Saving process started...");
-
     const formData = new FormData();
     formData.append("fullName", user.fullName || "");
     formData.append("contact", user.contact || "");
     
-    // Backend එකේ නම අනිවාර්යයෙන්ම "image" විය යුතුයි
     if (image) {
       formData.append("image", image);
     }
@@ -70,14 +74,10 @@ function Profile() {
       const data = await res.json();
 
       if (res.ok) {
-        console.log("Server updated successfully:", data);
-        
-        // 2. දත්ත update කරලා Edit Mode එක අයින් කරනවා
         setUser(data); 
-        setEditMode(false); // <--- මේක තමයි බටන් මාරු කරන්නේ
+        setEditMode(false);
         setPreview(null);
         setImage(null);
-        
         alert("Profile updated successfully!");
       } else {
         alert("Server Error: " + (data.message || "Failed to save"));
@@ -88,12 +88,39 @@ function Profile() {
     }
   };
 
-  // Image URL එක හරියටම හදාගන්න logic එක
+  // --- 🔐 Handle Password Reset Logic (New) ---
+  const handlePasswordUpdate = async () => {
+    if (!passwordData.currentPassword || !passwordData.newPassword) {
+      return alert("Please fill both password fields");
+    }
+
+    try {
+      const res = await fetch("http://localhost:5000/api/profile/update-password", {
+        method: "PUT",
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cleanToken}` 
+        },
+        body: JSON.stringify(passwordData),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Password updated successfully!");
+        setPasswordData({ currentPassword: "", newPassword: "" });
+        setShowPasswordFields(false);
+      } else {
+        alert(data.message || "Error updating password");
+      }
+    } catch (err) {
+      console.error("Password Update Error:", err);
+      alert("Network Error. Please try again.");
+    }
+  };
+
   const getImageUrl = () => {
     if (preview) return preview;
     if (user.profileImage) {
-      // සමහර විට Backend එකෙන් එන්නේ "/uploads/..." කියලා. 
-      // ඒක නිසා double "/" එන්නේ නැති වෙන්න මෙහෙම කරමු.
       const baseUrl = "http://localhost:5000";
       return user.profileImage.startsWith("/") 
         ? `${baseUrl}${user.profileImage}` 
@@ -154,6 +181,42 @@ function Profile() {
               disabled={!editMode}
               className={editMode ? "edit-active" : ""}
             />
+          </div>
+
+          {/* --- 🔐 Password Section (New UI) --- */}
+          <div className="password-reset-section">
+            <button 
+              className="toggle-pw-btn" 
+              onClick={() => setShowPasswordFields(!showPasswordFields)}
+            >
+              <FiLock /> {showPasswordFields ? "Cancel Password Reset" : "Change Password"}
+            </button>
+
+            {showPasswordFields && (
+              <div className="pw-input-container">
+                <div className="input-group">
+                  <label>Current Password</label>
+                  <input 
+                    type="password" 
+                    placeholder="Enter current password"
+                    value={passwordData.currentPassword}
+                    onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                  />
+                </div>
+                <div className="input-group">
+                  <label>New Password</label>
+                  <input 
+                    type="password" 
+                    placeholder="Enter new password"
+                    value={passwordData.newPassword}
+                    onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                  />
+                </div>
+                <button className="confirm-pw-btn" onClick={handlePasswordUpdate}>
+                  Update Password
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

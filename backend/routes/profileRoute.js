@@ -4,7 +4,7 @@ const auth = require("../middleware/authMiddleware");
 const multer = require("multer");
 const path = require("path");
 
-const { getProfile, updateProfile } = require("../controllers/profileController");
+const { getProfile, updateProfile,updatePassword } = require("../controllers/profileController");
 
 const storage = multer.diskStorage({
     destination: "uploads/",
@@ -18,5 +18,7 @@ const storage = multer.diskStorage({
 
 router.get("/", auth, getProfile);
 router.put("/", auth, upload.single("image"), updateProfile);
+
+router.put("/update-password", auth, updatePassword);
 
 module.exports = router;

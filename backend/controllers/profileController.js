@@ -1,17 +1,15 @@
 const User = require("../models/User");
+const bcrypt = require("bcryptjs"); // Password hash කිරීමට අවශ්‍යයි
+
+// --- පවතින getProfile සහ updateProfile functions එලෙසම තබන්න ---
 
 // Profile දත්ත ලබා ගැනීම
 exports.getProfile = async (req, res) => {
   try {
-    // req.user.id භාවිතා කර Database එකෙන් සෙවීම
     const user = await User.findById(req.user.id).select("-password");
-    
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (err) {
-    console.error("Get Profile Error:", err.message);
     res.status(500).json({ message: "Server Error" });
   }
 };
@@ -20,29 +18,46 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const { fullName, contact } = req.body;
-    
-    // Update කිරීමට අවශ්‍ය දත්ත පමණක් වෙන් කර ගැනීම
     let updateFields = { fullName, contact };
-
-    // පින්තූරයක් ඇත්නම් පමණක් path එක එක් කිරීම
     if (req.file) {
       updateFields.profileImage = `/uploads/${req.file.filename}`;
     }
-
-    // $set භාවිතා කිරීමෙන් අනිත් fields (email, role, password) ආරක්ෂා වේ
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       { $set: updateFields },
       { new: true, runValidators: true }
     ).select("-password");
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found to update" });
-    }
-
     res.json(updatedUser);
   } catch (err) {
-    console.error("Update Profile Error:", err.message);
     res.status(500).json({ message: "Update failed" });
+  }
+};
+
+// --- 🔐 අලුතින් එක් කරන Password Update Function එක ---
+exports.updatePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // 1. දැනට තියෙන Password එක නිවැරදිදැයි බැලීම
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Current password is incorrect" });
+    }
+
+    // 2. අලුත් Password එක Hash කිරීම
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    await user.save();
+    res.json({ message: "Password updated successfully" });
+
+  } catch (err) {
+    console.error("Password Update Error:", err.message);
+    res.status(500).json({ message: "Server error during password update" });
   }
 };

@@ -1,15 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext"; 
-import { 
-  FiTrash2, 
-  FiShoppingCart, 
-  FiCreditCard, 
-  FiMessageSquare, 
-  FiStar, 
-  FiAlertCircle, 
-  FiShield 
-} from "react-icons/fi";
+import {FiTrash2,  FiShoppingCart, FiCreditCard, FiMessageSquare, FiStar, FiAlertCircle, FiShield } from "react-icons/fi";
 import "./ProductDetail.css";
 
 function ProductDetail() {
@@ -21,6 +13,33 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [review, setReview] = useState({ rating: 5, comment: "" });
   const [loading, setLoading] = useState(true);
+
+  // --- 🧂 Dynamic Specs Logic (New) ---
+  // මෙය නිෂ්පාදනයේ නම අනුව specs වෙනස් කරයි
+  const getDynamicSpecs = (prod) => {
+    if (!prod) return {};
+    
+    const name = prod.name.toLowerCase();
+      
+    if (name.includes("agriculture")) {
+      return { purity: "95.0%", iodine: "N/A", moisture: "< 2.0%" };
+    } else if (name.includes("gypsum")) {
+      return { purity: "92.0%", iodine: "0 ppm", moisture: "< 15.0%" };
+    } else if (name.includes("artemia")) {
+      return { purity: "99.0%", iodine: "Variable", moisture: "< 0.1%" };
+    } else if (name.includes("table salt") || name.includes("edible")) {
+      return { purity: "99.5%", iodine: "30-50 ppm", moisture: "< 0.2%" };
+    }
+    
+    // Default values if no match
+    return { 
+      purity: prod.purity || "98.5%", 
+      iodine: prod.iodine || "25-30 ppm", 
+      moisture: prod.moisture || "< 0.5%" 
+    };
+  };
+
+  const currentSpecs = getDynamicSpecs(product);
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/products/${id}`)
@@ -38,7 +57,6 @@ function ProductDetail() {
       });
   }, [id]);
 
-  // 🛒 Add to Cart Logic (Database + LocalStorage)
   const addToCart = async () => {
     const currentQty = quantity < 1 ? 1 : quantity;
     const cartItem = { 
@@ -49,7 +67,6 @@ function ProductDetail() {
       qty: currentQty 
     };
 
-    // 1. Database එකට යැවීම (User ලොග් වී ඇත්නම් පමණි)
     if (user) {
       try {
         await fetch("http://localhost:5000/api/cart/add", {
@@ -62,7 +79,6 @@ function ProductDetail() {
       }
     }
 
-    // 2. Local Storage එක update කිරීම (සැමවිටම සිදු වේ)
     const localCart = JSON.parse(localStorage.getItem("cart")) || [];
     const existIndex = localCart.findIndex(i => i.productId === product._id);
     
@@ -73,19 +89,15 @@ function ProductDetail() {
     }
 
     localStorage.setItem("cart", JSON.stringify(localCart));
-
-    // 🔔 CartIcon එකට පණිවිඩයක් යැවීම
     window.dispatchEvent(new Event("cartUpdated"));
     alert("Product added to cart!");
   };
 
-  // ⚡ Buy Now Logic
   const buyNow = () => {
     addToCart();
     navigate("/payment");
   };
 
-  // 📝 Review Actions
   const handleAddReview = async () => {
     if (!user) return alert("Please login first");
     if (!review.comment) return alert("Please write a comment");
@@ -150,13 +162,13 @@ function ProductDetail() {
             )}
           </div>
 
-          {/* Quality Specs */}
+          {/* Quality Specs - පවතින CSS එලෙසම භාවිතා කර ඇත */}
           <div className="quality-specs-box">
              <h4><FiShield /> Quality Specifications</h4>
              <div className="specs-grid">
-                <div className="spec-item"><span>Purity</span><strong>{product.purity || "98.5%"}</strong></div>
-                <div className="spec-item"><span>Iodine</span><strong>{product.iodine || "25-30 ppm"}</strong></div>
-                <div className="spec-item"><span>Moisture</span><strong>{product.moisture || "< 0.5%"}</strong></div>
+                <div className="spec-item"><span>Purity</span><strong>{currentSpecs.purity}</strong></div>
+                <div className="spec-item"><span>Iodine</span><strong>{currentSpecs.iodine}</strong></div>
+                <div className="spec-item"><span>Moisture</span><strong>{currentSpecs.moisture}</strong></div>
              </div>
           </div>
 
@@ -178,6 +190,12 @@ function ProductDetail() {
               }}
               onBlur={() => { if (quantity < 1) setQuantity(1); }}
               className="custom-qty-input"
+              placeholder="      " 
+              style={{
+                 width: '120px',
+                 textAlign: 'center',
+                 outline: 'none'
+                }}
             />
           </div>
 
@@ -194,7 +212,6 @@ function ProductDetail() {
 
       <hr className="section-divider" />
 
-      {/* Feedbacks */}
       <div className="feedback-area">
         <div className="title-row"><FiMessageSquare /> <h3>Customer Feedbacks</h3></div>
         <div className="feedbacks-grid">

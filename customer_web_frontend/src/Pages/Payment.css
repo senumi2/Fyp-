@@ -267,6 +267,28 @@
     transform: scale(1.02);
 }
 
+/* Chrome, Safari, Edge, සහ Opera සඳහා ඊතල ඉවත් කිරීම */
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox සඳහා ඊතල ඉවත් කිරීම */
+.no-spinners {
+  -moz-appearance: textfield;
+}
+/* Chrome, Safari, Edge, Opera සඳහා ඊතල සම්පූර්ණයෙන්ම ඉවත් කිරීම */
+.qty-input-field::-webkit-outer-spin-button,
+.qty-input-field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox සඳහා */
+.qty-input-field {
+  -moz-appearance: textfield;
+}
 /* --- Responsive Layout --- */
 @media (max-width: 900px) {
     .payment-page-container { flex-direction: column; padding: 20px; }

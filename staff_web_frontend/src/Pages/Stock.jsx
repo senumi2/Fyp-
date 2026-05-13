@@ -3,7 +3,7 @@ import axios from "axios";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import toast, { Toaster } from 'react-hot-toast'; 
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable'; // මෙතැන import එක වෙනස් කළා
+import autoTable from 'jspdf-autotable'; 
 import "./Stock.css";
 
 const Stock = () => {
@@ -15,12 +15,33 @@ const Stock = () => {
     const [showFullTable, setShowFullTable] = useState({}); 
     const [unit, setUnit] = useState('kg'); 
 
-    const items = ["Salt", "Jipsum", "Artemiya", "Agriculture Salt"];
-    const tableRefs = useRef({});
+    // නිෂ්පාදන කාණ්ඩ සහ ඔබ ලබා දුන් නිශ්චිත නිෂ්පාදන නාමයන්
+    const items = ["Salt", "Gypsum", "Artemia", "Agriculture Salt"];
+    
+    const productMapping = {
+        "Salt": [
+            "Iodized Edible CommonSalt 1kg",
+            "Iodized Edible CommonSalt 400g",
+            "Refined iodized Table Salt 400g",
+            "Refined iodized Table Salt 1kg"
+        ],
+        "Gypsum": [
+            "Gypsum (Crude) 500g", 
+            "Gypsum (Industrial) 500g"
+        ],
+        "Artemia": [
+            "Artemia Cysts 500g",
+            "Artemia Biomass 500g"
+        ],
+        "Agriculture Salt": [
+            "Agriculture Salt (Fertilizer Grade Salt) 500g",
+            "Agriculture Salt (Soil Amendment Salt) 500g"
+        ]
+    };
 
+    const tableRefs = useRef({});
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 10;
-
     const today = new Date().toISOString().split('T')[0];
 
     const [formData, setFormData] = useState({
@@ -128,46 +149,39 @@ const Stock = () => {
         tableRefs.current[itemName]?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // FIXED DOWNLOAD PDF FUNCTION
     const downloadPDF = () => {
         try {
             if (!allData || allData.length === 0) {
                 toast.error("No data to export");
                 return;
             }
-
             const doc = new jsPDF();
             doc.setFontSize(18);
             doc.setTextColor(28, 57, 187);
             doc.text("Inventory Status Report", 14, 20);
-            
             doc.setFontSize(10);
-            doc.setTextColor(100);
             doc.text(`Generated on: ${new Date().toLocaleString()} | Unit: ${unit}`, 14, 28);
 
             const tableData = allData.map(d => [
                 d.no ? String(d.no) : '-', 
                 d.itemName || '-', 
-                d.transactionType || '-', 
+                d.subType || '-',
                 d.partyName || '-', 
                 `${formatWeight(d.quantity || 0)} ${unit}`, 
                 d.date ? new Date(d.date).toLocaleDateString() : '-'
             ]);
 
-            // doc.autoTable වෙනුවට කෙලින්ම autoTable function එක භාවිතා කිරීම වඩාත් සුදුසුයි
             autoTable(doc, {
-                head: [['REF NO', 'Item', 'Type', 'Party', `Qty (${unit})`, 'Date']],
+                head: [['REF NO', 'Category', 'Product Name', 'Party', `Qty (${unit})`, 'Date']],
                 body: tableData,
                 startY: 35,
                 theme: 'grid',
                 headStyles: { fillColor: [28, 57, 187], textColor: [255, 255, 255] },
                 alternateRowStyles: { fillColor: [240, 244, 248] }
             });
-
             doc.save(`Stock_Report_${today}.pdf`);
             toast.success("PDF Downloaded!");
         } catch (error) {
-            console.error("PDF Error:", error); // මොකක්ද error එක කියලා console එකේ බලාගන්න
             toast.error("Error generating PDF");
         }
     };
@@ -181,9 +195,7 @@ const Stock = () => {
                 ? `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`
                 : `${dateObj.getFullYear()}`;
             if (!summary[period]) summary[period] = { period, inward: 0, outward: 0 };
-            
             const qty = unit === 'Tons' ? entry.quantity / 1000 : entry.quantity;
-            
             if (entry.transactionType === 'Inward') summary[period].inward += qty;
             else summary[period].outward += qty;
         });
@@ -193,21 +205,13 @@ const Stock = () => {
     const renderTable = (itemName) => {
         let filtered = allData.filter(d => 
             d.itemName === itemName && d.transactionType === activeTab &&
-            `${d.no} ${d.partyName}`.toLowerCase().includes(searchTerm.toLowerCase())
+            `${d.no} ${d.partyName} ${d.subType}`.toLowerCase().includes(searchTerm.toLowerCase())
         ).sort((a, b) => new Date(b.date) - new Date(a.date)); 
 
         const isFull = showFullTable[itemName];
         const balance = getBalance(itemName);
-        let displayRecords = [];
-        let totalPages = 0;
-
-        if (isFull) {
-            const indexOfLast = currentPage * recordsPerPage;
-            displayRecords = filtered.slice(indexOfLast - recordsPerPage, indexOfLast);
-            totalPages = Math.ceil(filtered.length / recordsPerPage);
-        } else {
-            displayRecords = filtered.slice(0, 20);
-        }
+        let displayRecords = isFull ? filtered.slice((currentPage - 1) * recordsPerPage, currentPage * recordsPerPage) : filtered.slice(0, 20);
+        let totalPages = Math.ceil(filtered.length / recordsPerPage);
 
         return (
             <div key={itemName} className="inventory-card" ref={el => tableRefs.current[itemName] = el}>
@@ -215,10 +219,6 @@ const Stock = () => {
                     <div className="title-stack">
                         <h4>{itemName}</h4>
                         <span className="balance-tag">Available: {formatWeight(balance)} {unit}</span>
-                    </div>
-                    <div className="header-badges">
-                        {balance < 1000 && <span className="low-stock-warning">⚠️ Low Stock</span>}
-                        {!isFull && filtered.length > 20 && <span className="view-mode-tag">Latest 20</span>}
                     </div>
                 </div>
                 <div className="table-responsive">
@@ -228,7 +228,7 @@ const Stock = () => {
                                 <th>REF NO</th>
                                 <th>Date</th>
                                 <th>{activeTab === 'Inward' ? 'Supplier Name' : 'Customer Name'}</th>
-                                <th>Sub Type</th>
+                                <th>Product Name</th>
                                 <th>Qty ({unit})</th>
                                 <th>Actions</th>
                             </tr>
@@ -250,20 +250,12 @@ const Stock = () => {
                         </tbody>
                     </table>
                 </div>
-
+                
                 <div className="table-footer-actions">
-                    {filtered.length > 20 ? (
+                    {filtered.length > 20 && (
                         <button className="view-all-btn" onClick={() => toggleTableMode(itemName)}>
                             {isFull ? "Show Less" : `View All (${filtered.length})`}
                         </button>
-                    ) : <div></div>}
-
-                    {isFull && totalPages > 1 && (
-                        <div className="pagination-wrapper">
-                            <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Prev</button>
-                            <span>{currentPage} / {totalPages}</span>
-                            <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Next</button>
-                        </div>
                     )}
                 </div>
             </div>
@@ -275,46 +267,28 @@ const Stock = () => {
             <Toaster position="top-right" />
             <div className="stock-layout">
                 <aside className="stock-sidebar">
-                    <div className="sidebar-header">
-                        <span className="header-icon">📦</span> INVENTORY
-                    </div>
-                    
+                    <div className="sidebar-header"><span className="header-icon">📦</span> INVENTORY</div>
                     <nav className="sidebar-nav">
-                        <button className={activeTab === 'Inward' ? 'active' : ''} onClick={() => {setActiveTab('Inward'); setEditId(null);}}>Inward Stock</button>
-                        <button className={activeTab === 'Outward' ? 'active' : ''} onClick={() => {setActiveTab('Outward'); setEditId(null);}}>Outward Stock</button>
+                        <button className={activeTab === 'Inward' ? 'active' : ''} onClick={() => setActiveTab('Inward')}>Inward Stock</button>
+                        <button className={activeTab === 'Outward' ? 'active' : ''} onClick={() => setActiveTab('Outward')}>Outward Stock</button>
                         <button className={activeTab === 'Reports' ? 'active' : ''} onClick={() => setActiveTab('Reports')}>Analysis Reports</button>
                     </nav>
-
                     <div className="sidebar-footer">
                         <div className="unit-toggle-container">
-                            <span className={unit === 'kg' ? 'unit-label active' : 'unit-label'}>kg</span>
+                            <span className={unit === 'kg' ? 'active' : ''}>kg</span>
                             <label className="switch">
-                                <input 
-                                    type="checkbox" 
-                                    checked={unit === 'Tons'} 
-                                    onChange={() => setUnit(unit === 'kg' ? 'Tons' : 'kg')} 
-                                />
+                                <input type="checkbox" checked={unit === 'Tons'} onChange={() => setUnit(unit === 'kg' ? 'Tons' : 'kg')} />
                                 <span className="slider round"></span>
                             </label>
-                            <span className={unit === 'Tons' ? 'unit-label active' : 'unit-label'}>Tons</span>
+                            <span className={unit === 'Tons' ? 'active' : ''}>Tons</span>
                         </div>
-                        <div className="sidebar-copyright">Stock System v1.0</div>
                     </div>
                 </aside>
 
                 <main className="stock-content">
                     <header className="content-top-bar">
                         <h2 className="tab-title">{activeTab} Management</h2>
-                        {activeTab !== 'Reports' && (
-                            <div className="search-wrapper">
-                                <input 
-                                    type="text" 
-                                    placeholder="Search entries..." 
-                                    className="search-input" 
-                                    onChange={(e) => setSearchTerm(e.target.value)} 
-                                />
-                            </div>
-                        )}
+                        <input type="text" placeholder="Search..." className="search-input" onChange={(e) => setSearchTerm(e.target.value)} />
                     </header>
 
                     {activeTab !== 'Reports' && (
@@ -324,7 +298,6 @@ const Stock = () => {
                                     <div key={item} className="item-nav-card" onClick={() => scrollToTable(item)}>
                                         <h3>{item}</h3>
                                         <p>Balance: <strong>{formatWeight(getBalance(item))} {unit}</strong></p>
-                                        <button className="nav-view-btn">View Log</button>
                                     </div>
                                 ))}
                             </div>
@@ -336,37 +309,31 @@ const Stock = () => {
                                         <input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} required />
                                     </div>
                                     <div className="input-group">
-                                        <label>Product Item</label>
-                                        <select name="itemName" value={formData.itemName} onChange={(e) => setFormData({...formData, itemName: e.target.value})}>
+                                        <label>Category</label>
+                                        <select value={formData.itemName} onChange={(e) => setFormData({...formData, itemName: e.target.value, subType: ''})}>
                                             {items.map(item => <option key={item} value={item}>{item}</option>)}
                                         </select>
                                     </div>
-                                    {formData.itemName === 'Salt' && (
-                                        <div className="input-group">
-                                            <label>Salt Category</label>
-                                            <select value={formData.subType} onChange={(e) => setFormData({...formData, subType: e.target.value})} required>
-                                                <option value="">Select Category</option>
-                                                <option value="Table Salt">Table Salt</option>
-                                                <option value="Industrial Salt">Industrial Salt</option>
-                                                <option value="Crushed Salt">Crushed Salt</option>
-                                            </select>
-                                        </div>
-                                    )}
+                                    <div className="input-group">
+                                        <label>Product Name</label>
+                                        <select value={formData.subType} onChange={(e) => setFormData({...formData, subType: e.target.value})} required>
+                                            <option value="">Select Product</option>
+                                            {/* (productMapping[formData.itemName] || []) මඟින් error එක වළක්වා ඇත */}
+                                            {(productMapping[formData.itemName] || []).map(prod => (
+                                                <option key={prod} value={prod}>{prod}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                     <div className="input-group">
                                         <label>{activeTab === 'Inward' ? "Supplier" : "Customer"}</label>
-                                        <input type="text" placeholder="Enter name..." value={formData.partyName} onChange={(e) => setFormData({...formData, partyName: e.target.value})} required />
+                                        <input type="text" value={formData.partyName} onChange={(e) => setFormData({...formData, partyName: e.target.value})} required />
                                     </div>
                                     <div className="input-group">
                                         <label>Quantity (kg)</label>
-                                        <input type="number" placeholder="0.00" value={formData.quantity} onChange={(e) => setFormData({...formData, quantity: e.target.value})} required />
+                                        <input type="number" value={formData.quantity} onChange={(e) => setFormData({...formData, quantity: e.target.value})} required />
                                     </div>
                                 </div>
-                                <div className="form-actions">
-                                    <button type="submit" className={editId ? "update-btn" : "form-add-btn"}>
-                                        {editId ? '💾 Save Changes' : `➕ Add ${activeTab} Record`}
-                                    </button>
-                                    {editId && <button type="button" className="cancel-btn" onClick={() => {setEditId(null); setFormData({itemName:'Salt', date:today, subType:'', quantity:'', partyName:''})}}>Cancel</button>}
-                                </div>
+                                <button type="submit" className="form-add-btn">{editId ? 'Save' : `Add ${activeTab} Record`}</button>
                             </form>
 
                             <div className="stock-tables-grid">
@@ -402,7 +369,7 @@ const Stock = () => {
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                                                 <XAxis dataKey="period" stroke="#64748b" fontSize={12} />
                                                 <YAxis stroke="#64748b" fontSize={12} />
-                                                <Tooltip contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
+                                                <Tooltip contentStyle={{ borderRadius: '10px', border: 'none' }} />
                                                 <Legend iconType="circle" />
                                                 <Line type="monotone" dataKey="inward" stroke="#008080" strokeWidth={3} dot={{r: 5, fill: "#008080"}} name={`Inward (${unit})`} />
                                                 <Line type="monotone" dataKey="outward" stroke="#1C39BB" strokeWidth={3} dot={{r: 5, fill: "#1C39BB"}} name={`Outward (${unit})`} />

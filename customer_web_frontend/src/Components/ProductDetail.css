@@ -61,8 +61,8 @@
 }
 
 .specs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-.spec-item span { font-size: 0.7rem; color: #004B87; text-transform: uppercase; font-weight: 700; opacity: 0.7; }
-.spec-item strong { font-size: 1.05rem; color: #001F3F; font-weight: 700; }
+.spec-item span { font-size: 0.7rem; color: #004B87; text-transform: uppercase; font-weight: 700; opacity: 0.7;letter-spacing: 1.5px; }
+.spec-item strong { font-size: 1.00rem; color: #001F3F; font-weight: 700;letter-spacing: 1.5px; margin-left: 5px;}
 
 /* --- Quantity & Buttons --- */
 .quantity-box { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }

@@ -5,7 +5,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis
 
 const ExpensesFinance = () => {
   const [activeTab, setActiveTab] = useState('wages');
-  const [searchTerm, setSearchTerm] = useState(""); // පොදු Search term එක
+  const [searchTerm, setSearchTerm] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [currentId, setCurrentId] = useState(null);
 
@@ -156,12 +156,33 @@ const ExpensesFinance = () => {
             <div className="search-container"><input type="text" className="search-bar" placeholder="Search by name..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} /></div>
             <div className="table-container">
               <table className="finance-table">
-                <thead><tr><th>Date</th><th>Worker</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Worker</th>
+                    <th>Role</th>
+                    <th>Hours</th>
+                    <th>Rate</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {wages.filter(w => w.workerName.toLowerCase().includes(searchTerm.toLowerCase())).map(w => (
-                    <tr key={w._id}><td>{new Date(w.date).toLocaleDateString()}</td><td>{w.workerName}</td><td>Rs.{w.total}</td>
-                    <td><span className={`status ${w.status?.toLowerCase()}`}>{w.status}</span></td>
-                    <td className="action-buttons"><button className="btn-edit" onClick={() => startEdit(w, 'wages')}>Edit</button><button className="btn-delete" onClick={() => handleDelete('wages', w._id)}>Delete</button></td></tr>
+                    <tr key={w._id}>
+                      <td>{new Date(w.date).toLocaleDateString()}</td>
+                      <td>{w.workerName}</td>
+                      <td>{w.role}</td>
+                      <td>{w.hoursWorked}h</td>
+                      <td>Rs.{w.wageRate}</td>
+                      <td>Rs.{w.total}</td>
+                      <td><span className={`status ${w.status?.toLowerCase()}`}>{w.status}</span></td>
+                      <td className="action-buttons">
+                        <button className="btn-edit" onClick={() => startEdit(w, 'wages')}>Edit</button>
+                        <button className="btn-delete" onClick={() => handleDelete('wages', w._id)}>Delete</button>
+                      </td>
+                    </tr>
                   ))}
                 </tbody>
               </table>
@@ -183,11 +204,31 @@ const ExpensesFinance = () => {
             <div className="search-container"><input type="text" className="search-bar" placeholder="Search vehicle or route..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} /></div>
             <div className="table-container">
               <table className="finance-table">
-                <thead><tr><th>Date</th><th>Vehicle</th><th>Route</th><th>Total Cost</th><th>Actions</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Vehicle</th>
+                    <th>Route</th>
+                    <th>Fuel</th>
+                    <th>Maint.</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {transports.filter(t => t.vehicle.toLowerCase().includes(searchTerm.toLowerCase()) || t.route.toLowerCase().includes(searchTerm.toLowerCase())).map(t => (
-                    <tr key={t._id}><td>{new Date(t.date).toLocaleDateString()}</td><td>{t.vehicle}</td><td>{t.route}</td><td>Rs.{t.total}</td>
-                    <td className="action-buttons"><button className="btn-edit" onClick={() => startEdit(t, 'transport')}>Edit</button><button className="btn-delete" onClick={() => handleDelete('transport', t._id)}>Delete</button></td></tr>
+                    <tr key={t._id}>
+                      <td>{new Date(t.date).toLocaleDateString()}</td>
+                      <td>{t.vehicle}</td>
+                      <td>{t.route}</td>
+                      <td>Rs.{t.fuelCost}</td>
+                      <td>Rs.{t.maintenance}</td>
+                      <td>Rs.{t.total}</td>
+                      <td className="action-buttons">
+                        <button className="btn-edit" onClick={() => startEdit(t, 'transport')}>Edit</button>
+                        <button className="btn-delete" onClick={() => handleDelete('transport', t._id)}>Delete</button>
+                      </td>
+                    </tr>
                   ))}
                 </tbody>
               </table>
@@ -195,34 +236,68 @@ const ExpensesFinance = () => {
           </div>
         )}
 
-        {/* Maintenance Tab */}
-        {activeTab === 'maintenance' && (
-          <div className="tab-pane">
-            <h2>Maintenance & Repair Logs</h2>
-            <form className="finance-form" onSubmit={(e) => handleFormSubmit(e, 'maintenance')}>
-              <input type="text" placeholder="Equipment/Machine" value={maintForm.equipment} onChange={(e)=>setMaintForm({...maintForm, equipment: e.target.value})} required />
-              <input type="text" placeholder="Issue Details" value={maintForm.issue} onChange={(e)=>setMaintForm({...maintForm, issue: e.target.value})} required />
-              <input type="number" placeholder="Cost" value={maintForm.cost} onChange={(e)=>setMaintForm({...maintForm, cost: e.target.value})} required />
-              <select value={maintForm.status} onChange={(e)=>setMaintForm({...maintForm, status: e.target.value})}>
-                <option value="Pending">Pending</option><option value="Completed">Completed</option>
-              </select>
-              <button type="submit" className="add-btn">{isEditing ? "Update" : "Add"}</button>
-            </form>
-            <div className="search-container"><input type="text" className="search-bar" placeholder="Search equipment or issue..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} /></div>
-            <div className="table-container">
-              <table className="finance-table">
-                <thead><tr><th>Date</th><th>Equipment</th><th>Cost</th><th>Status</th><th>Actions</th></tr></thead>
-                <tbody>
-                  {maintenances.filter(m => m.equipment.toLowerCase().includes(searchTerm.toLowerCase()) || m.issue.toLowerCase().includes(searchTerm.toLowerCase())).map(m => (
-                    <tr key={m._id}><td>{new Date(m.date).toLocaleDateString()}</td><td>{m.equipment}</td><td>Rs.{m.cost}</td>
-                    <td><span className={`status ${m.status?.toLowerCase()}`}>{m.status}</span></td>
-                    <td className="action-buttons"><button className="btn-edit" onClick={() => startEdit(m, 'maintenance')}>Edit</button><button className="btn-delete" onClick={() => handleDelete('maintenance', m._id)}>Delete</button></td></tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+
+
+{/* Maintenance & Repair Logs Tab */}
+{activeTab === 'maintenance' && (
+  <div className="tab-pane">
+    <h2>Maintenance & Repair Logs</h2>
+    <form className="finance-form" onSubmit={(e) => handleFormSubmit(e, 'maintenance')}>
+      <input type="text" placeholder="Equipment/Machine" value={maintForm.equipment} onChange={(e)=>setMaintForm({...maintForm, equipment: e.target.value})} required />
+      <input type="text" placeholder="Issue Details" value={maintForm.issue} onChange={(e)=>setMaintForm({...maintForm, issue: e.target.value})} required />
+      <input type="number" placeholder="Cost" value={maintForm.cost} onChange={(e)=>setMaintForm({...maintForm, cost: e.target.value})} required />
+      
+      {/* මෙහි value එක නිවැරදිව පවතින බව සහතික කරගන්න */}
+      <select value={maintForm.status} onChange={(e)=>setMaintForm({...maintForm, status: e.target.value})}>
+        <option value="Pending">Pending</option>
+        <option value="Completed">Completed</option>
+        <option value="Fixed">Fixed</option>
+        <option value="Ongoing">Ongoing</option>
+      </select>
+      
+      <button type="submit" className="add-btn">{isEditing ? "Update" : "Add"}</button>
+    </form>
+
+    <div className="search-container">
+      <input type="text" className="search-bar" placeholder="Search equipment or issue..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+    </div>
+
+    <div className="table-container">
+      <table className="finance-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Equipment</th>
+            <th>Issue</th>
+            <th>Cost</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {maintenances.filter(m => m.equipment.toLowerCase().includes(searchTerm.toLowerCase()) || m.issue.toLowerCase().includes(searchTerm.toLowerCase())).map(m => (
+            <tr key={m._id}>
+              <td>{new Date(m.date).toLocaleDateString()}</td>
+              <td>{m.equipment}</td>
+              <td>{m.issue}</td>
+              <td>Rs.{m.cost}</td>
+              <td>
+                {/* m.status සහ m.statuse යන දෙකම පරීක්ෂා කරයි */}
+                <span className={`status ${(m.status || m.statuse || "").toLowerCase()}`}>
+                  {m.status || m.statuse} 
+                </span>
+              </td>
+              <td className="action-buttons">
+                <button className="btn-edit" onClick={() => startEdit(m, 'maintenance')}>Edit</button>
+                <button className="btn-delete" onClick={() => handleDelete('maintenance', m._id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+)}
 
         {/* Operational Costs Tab */}
         {activeTab === 'operational' && (

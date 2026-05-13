@@ -64,27 +64,21 @@ function Payment() {
 
   const removeItem = async (id) => {
     try {
-      // 1. User ලොග් වී ඇත්නම් Database එකෙන් ඉවත් කරන්න
       if (user) {
         const userId = user._id || user.id;
-        // Backend එකේ අපි හැදූ නව URL එක: /api/cart/remove/USER_ID/PRODUCT_ID
         const response = await axios.delete(`http://localhost:5000/api/cart/remove/${userId}/${id}`);
         
         if (response.status === 200) {
-          // Database එකෙන් සාර්ථකව මැකුණොත් පමණක් UI එක Update කරන්න
           const updatedCart = cartItems.filter((item) => item.id !== id);
           setCartItems(updatedCart);
-          // Local storage එකත් sync කරන්න
           localStorage.setItem("cart", JSON.stringify(updatedCart));
         }
       } else {
-        // 2. ලොග් වී නැතිනම් Local Storage එකෙන් පමණක් ඉවත් කරන්න
         const updatedCart = cartItems.filter((item) => item.id !== id);
         setCartItems(updatedCart);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
       }
   
-      // Badge එක update කිරීමට event එක trigger කිරීම
       window.dispatchEvent(new Event("cartUpdated"));
   
     } catch (err) {
@@ -95,6 +89,8 @@ function Payment() {
 
   const updateQty = (id, newQty) => {
     if (newQty < 1) return;
+    if (newQty > 999999) return;
+    
     const updatedCart = cartItems.map((item) =>
       item.id === id ? { ...item, qty: newQty } : item
     );
@@ -233,7 +229,30 @@ function Payment() {
                     <p>Quantity</p>
                     <div className="qty-selector">
                       <button onClick={() => updateQty(item.id, item.qty + 1)}>+</button>
-                      <span>{item.qty}</span>
+                      
+                      <input 
+                        type="number" 
+                        value={item.qty} 
+                        onChange={(e) => updateQty(item.id, parseInt(e.target.value) || 0)}
+                        placeholder= "000000" 
+                        className="no-spinners" // CSS එක හරියටම වැඩ කිරීමට මෙය වැදගත්
+                        style={{
+                          width: '100px',
+                          textAlign: 'center',
+                          background: 'transparent',
+                          border: 'none',
+                          color: 'black', // පින්තූරයේ පසුබිමට ගැළපෙන ලෙස කළු කර ඇත
+                          fontSize: '1rem',
+                          fontWeight: '800',
+                          outline: 'none',
+                          appearance: 'none',
+                          margin: 0
+                        }}
+                        onInput={(e) => {
+                          if (e.target.value.length > 6) e.target.value = e.target.value.slice(0, 6);
+                        }}
+                      />
+
                       <button onClick={() => updateQty(item.id, item.qty - 1)}>-</button>
                     </div>
                   </div>
