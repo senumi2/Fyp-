@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
+import Navbar from "./Components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Products from "./components/Products";
@@ -15,10 +15,10 @@ import Cart from "./Components/Cart";
 import CartIcon from "./Components/CartIcon";
 
 import Login from "./Pages/Login";
-import Register from "./pages/Register";
+import Register from "./Pages/Register";
 import Contact_us from "./pages/Contact_us";
-import Shipping_address from "./pages/Shipping_address";
-import OrderTracking from "./Pages/orderTracking";
+import Shipping_address from "./Pages/Shipping_address";
+import OrderTracking from "./Pages/OrderTracking";
 import PaymentHistory from "./Pages/PaymentHistory";
 import Payment from "./Pages/Payment";
 import OrderHistory from "./Pages/OrderHistory";
@@ -31,7 +31,7 @@ import Profile from "./Pages/Profile";
 function App() {
   const location = useLocation();
 
-  // Footer එක සැඟවිය යුතු Routes
+  // Routes that should hide the footer
   const hideFooterRoutes = [
     "/login",
     "/register", 
@@ -42,10 +42,10 @@ function App() {
     "/dashboard",
     "/payment",
     "/QualityReports",
-    "/products" // මෙතනට /products එකතු කළා, එවිට Products page එකේදී footer එක පෙන්නන්නේ නැහැ
+    "/products" 
   ];
 
-  // Navbar එක සහ CartIcon එක සැඟවිය යුතු Routes
+  // Routes that should hide the Navbar and CartIcon
   const hideNavbarRoutes = ["/login", "/register"];
 
   const shouldHideFooter = 
@@ -57,7 +57,7 @@ function App() {
 
   return (
     <> 
-      {/* Login සහ Register වලදී Navbar සහ CartIcon නොපෙන්වයි */}
+      {/* Navbar and CartIcon not showing during Login and Register*/}
       {!shouldHideNavbar && <Navbar />}
       {!shouldHideNavbar && <CartIcon />}
 

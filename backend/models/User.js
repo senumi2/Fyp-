@@ -27,10 +27,10 @@ const userSchema = new mongoose.Schema(
     },
     isApproved: {
       type: Boolean,
-      default: false // මුලින්ම register වෙද්දී false වේ
+      default: false 
     },
 
-    //  profile image path
+    
     profileImage: {
       type: String
     }

@@ -12,7 +12,7 @@ const {
 // Public
 router.get("/", getEvents);
 
-// Admin only (මෙතන authMiddleware.admin පාවිච්චි කළා)
+
 router.post("/", authMiddleware, authMiddleware.admin, upload.single("image"), createEvent);
 router.delete("/:id", authMiddleware, authMiddleware.admin, deleteEvent);
 

@@ -1,12 +1,12 @@
-/* OrderTracking.css */
+
 
 .tracking-wrapper {
     width: 100%;
     min-height: 100vh;
-    background-color: #F1FAEE; /* Off-white background */
+    background-color: #F1FAEE; 
     padding: 40px 20px;
     font-family: 'Inter', sans-serif;
-    color: #001F3F; /* Deep Navy */
+    color: #001F3F; 
   }
   
   .order-list-container, .tracking-detail-card {

@@ -83,7 +83,7 @@
 
 .admin-usage-header {
     display: flex;
-    flex-direction: column; /* Title එකට යටින් Search Bar එක එන ලෙස */
+    flex-direction: column; 
     margin-bottom: 40px;
 }
 
@@ -100,14 +100,14 @@
     font-size: 1rem;
 }
 
-/* Search Bar Wrapper - Title එක සහ මෙතන අතර පරතරය වැඩි කර ඇත */
+
 .admin-header-controls {
-    margin-top: 30px; /* Gap between Title and Search Bar */
+    margin-top: 30px; 
     display: flex;
     justify-content: flex-start;
 }
 
-/* Modern Styled Search Bar */
+
 .admin-modern-search {
     background: var(--white);
     border: 2px solid var(--persian-green);
@@ -115,7 +115,7 @@
     padding: 0 22px;
     display: flex;
     align-items: center;
-    width: 420px; /* පෙනුම වැඩි කිරීමට පළල වැඩි කරන ලදී */
+    width: 420px; 
     height: 50px;
     box-shadow: 0 4px 12px rgba(0, 168, 150, 0.12);
     transition: all 0.3s ease;
@@ -143,7 +143,7 @@
     font-family: inherit;
 }
 
-/* View-Only Table Styling */
+
 .admin-table-container {
     background: var(--white);
     border-radius: 20px;
@@ -180,10 +180,10 @@
 }
 
 .admin-table-row:hover {
-    background: #f0fdfa; /* ඉතා ලා පැහැති පර්සියානු කොළ ටින්ට් එකක් */
+    background: #f0fdfa; 
 }
 
-/* Row Data Highlighting */
+
 .admin-bold-text {
     font-weight: 700;
     color: var(--teal-green);
@@ -203,7 +203,6 @@
     color: var(--persian-green);
 }
 
-/* Status Badges - Theme Based */
 .admin-status-pill {
     padding: 6px 14px;
     border-radius: 8px;
@@ -218,7 +217,7 @@
 .admin-status-pill.ongoing, .admin-status-pill.fair { background: var(--teal-green); color: white; }
 .admin-status-pill.poor { background: #fee2e2; color: #991b1b; }
 
-/* Empty States & Loader */
+
 .admin-loader, .admin-no-data {
     padding: 60px;
     text-align: center;

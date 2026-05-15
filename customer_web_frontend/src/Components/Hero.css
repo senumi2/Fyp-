@@ -7,10 +7,10 @@
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
-  background-color: #000; /* Till load the image */
+  background-color: #000; 
 }
 
-/* Background Image Animation - Zoom effect  */
+
 .hero-container::before {
   content: "";
   position: absolute;
@@ -19,7 +19,6 @@
   background-size: cover;
   background-position: center;
   z-index: 0;
-  /* Zoom  within 25seconds */
   animation: ultraZoom 25s ease-in-out infinite alternate;
 }
 

@@ -1,4 +1,4 @@
-/* මුළු පිටුවේ පසුබිම - Deep Sea Gradient */
+
 .login-page {
   height: 100vh;
   width: 100%;
@@ -8,10 +8,10 @@
   align-items: center;
   overflow: hidden;
   position: relative;
-  font-family: 'Poppins', sans-serif; /* වඩාත් professional පෙනුමක් සඳහා */
+  font-family: 'Poppins', sans-serif; 
 }
 
-/* පාවෙන ජල බින්දු (Realistic Water Drops in Background) */
+
 .bg-drop {
   position: absolute;
   background: rgba(255, 255, 255, 0.05);
@@ -96,7 +96,7 @@
 
 .login-input {
   width: 100%;
-  box-sizing: border-box; /* Padding නිසා size එක වෙනස් වීම වැළැක්වීමට */
+  box-sizing: border-box; 
   padding: 14px 20px;
   background: rgba(241, 250, 238, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -117,7 +117,7 @@
   box-shadow: 0 0 15px rgba(0, 150, 214, 0.3);
 }
 
-/* Button - Professional Salt/Cyan Style */
+/* Button  */
 .login-btn {
   width: 100%;
   padding: 14px;

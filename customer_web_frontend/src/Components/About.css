@@ -5,10 +5,10 @@
   font-family: 'Plus Jakarta Sans', sans-serif; 
 }
 
-/* Animation for Section 1 - Time increased to 1.2s for smoothness */
+
 .animate-fade {
   opacity: 0;
-  transform: translateY(60px); /* මදක් වැඩි කළා පෙනුම ලස්සන වීමට */
+  transform: translateY(60px); 
   transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
               transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -155,7 +155,7 @@
   color: #555; 
 }
 
-/* Animations for Cards - Duration increased to 1s */
+/* Animations for Cards  */
 .animate-up { 
   opacity: 0; 
   transform: translateY(60px); 
@@ -165,7 +165,7 @@
   animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; 
 }
 
-/* Delay කාලය වැඩි කළා එකින් එක පැහැදිලිව එන ලෙස */
+
 .visible .delay-1 { animation-delay: 0.4s; }
 .visible .delay-2 { animation-delay: 0.7s; }
 

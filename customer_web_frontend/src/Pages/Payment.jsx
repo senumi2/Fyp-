@@ -235,13 +235,13 @@ function Payment() {
                         value={item.qty} 
                         onChange={(e) => updateQty(item.id, parseInt(e.target.value) || 0)}
                         placeholder= "000000" 
-                        className="no-spinners" // CSS එක හරියටම වැඩ කිරීමට මෙය වැදගත්
+                        className="no-spinners" 
                         style={{
                           width: '100px',
                           textAlign: 'center',
                           background: 'transparent',
                           border: 'none',
-                          color: 'black', // පින්තූරයේ පසුබිමට ගැළපෙන ලෙස කළු කර ඇත
+                          color: 'black', 
                           fontSize: '1rem',
                           fontWeight: '800',
                           outline: 'none',

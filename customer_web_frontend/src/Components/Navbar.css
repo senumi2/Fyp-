@@ -1,9 +1,8 @@
-/* NAVBAR MAIN CONTAINER */
+
 .navbar {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Deep Navy Professional Gradient */
   background: linear-gradient(135deg, #001F3F 0%, #004a87e3 50%, #386b94df 100%);
   padding: 0 40px;
   height: 75px;
@@ -13,7 +12,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   
-  /* Refresh එකේදී සිදුවන animation එක තවත් smooth කර ඇත */
+ 
   animation: navbarReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: transform, opacity;
 }
@@ -24,7 +23,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* Navbar එක පෙන්වූ පසු ඇතුළත items ලස්සනට fade-in වීමට */
   animation: contentFade 1s ease-out 0.2s both;
 }
 
@@ -36,7 +34,7 @@
 
 .nav-link {
   position: relative;
-  color: #F1FAEE; /* Off-white text */
+  color: #F1FAEE; 
   text-decoration: none;
   font-weight: 500;
   padding: 10px 22px;
@@ -109,7 +107,7 @@
 /* CYAN BLUE BUTTON STYLES (Login/Dashboard) */
 .login-btn-navi,
 .profile-btn-navi {
-  background: #0096D6; /* Cyan Blue */
+  background: #0096D6; 
   color: #FFFFFF;
   padding: 10px 26px;
   border: none;
@@ -122,7 +120,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* LOGOUT BUTTON STYLE (Minimalist) */
+/* LOGOUT BUTTON STYLE  */
 .logout-btn-navi {
   background: transparent;
   color: #F1FAEE;
@@ -138,14 +136,14 @@
 /* HOVER EFFECTS */
 .login-btn-navi:hover,
 .profile-btn-navi:hover {
-  background: #F1FAEE; /* Changes to Off-white */
-  color: #001F3F; /* Text changes to Navy */
+  background: #F1FAEE;
+  color: #001F3F; 
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(241, 250, 238, 0.3);
 }
 
 .logout-btn-navi:hover {
-  background: rgba(230, 57, 71, 0.877); /* Subtle Red tint */
+  background: rgba(230, 57, 71, 0.877); 
   border-color: #E63946;
   color: #f7eff0;
   transform: translateY(-2px);
@@ -153,7 +151,7 @@
 
 /* --- ANIMATIONS --- */
 
-/* මූලික Navbar එක පෑදෙන ආකාරය */
+
 @keyframes navbarReveal {
   from {
     opacity: 0;
@@ -165,7 +163,7 @@
   }
 }
 
-/* Navbar එක ඇතුළේ ඇති Content එක පෑදෙන ආකාරය */
+
 @keyframes contentFade {
   from {
     opacity: 0;

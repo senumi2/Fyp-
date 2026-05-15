@@ -31,18 +31,18 @@ function Invoice() {
   if (loading) return <div className="loading-screen">Generating Your Invoice...</div>;
   if (!order) return <div className="error-screen">Invoice not found or access denied.</div>;
 
-  // ✅ ලිපිනය පෙන්වන තැන Object එකක් වුණත් String එකක් වුණත් හරියට පෙන්වන ක්‍රමය
+ 
   const renderAddress = () => {
-    // Backend එකෙන් එන shippingAddress එක Object එකක් නම්:
+    
     const addr = order.shippingAddress;
     if (addr && typeof addr === 'object') {
       return `${addr.address || ''}, ${addr.district || ''}, ${addr.province || ''} ${addr.postalCode || ''}`;
     }
-    // එහෙම නැතිනම් පරණ විදිහට ඇඩ්‍රස් එක තිබේ නම්:
+    
     return order.fullAddress || order.address || "Address not available";
   };
 
-  // ✅ පාරිභෝගිකයාගේ නම ලබා ගැනීම
+  
   const getCustomerName = () => {
     if (order.shippingAddress && order.shippingAddress.warehouseName) {
       return order.shippingAddress.warehouseName;
@@ -83,7 +83,7 @@ function Invoice() {
             <div className="address-details">
               <p className="customer-name"><strong>{getCustomerName()}</strong></p>
               
-              {/* ✅ වැදගත්ම කොටස: මෙතන දැන් Object Error එන්නේ නැහැ */}
+             
               <p className="full-address">{renderAddress()}</p>
 
               <p className="contact-no">

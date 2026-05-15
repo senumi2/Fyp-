@@ -1,23 +1,23 @@
-/* AdminStaffRegisterAccess.css - Full Width Version */
+
 
 .approval-container {
     padding: 40px;
     background: linear-gradient(135deg, #f0f4f3 0%, #e0e9e8 100%);
-    min-height: 100vh; /* මුළු පිටුවේම උස ආවරණය කිරීමට */
-    width: 100%; /* සම්පූර්ණ පළල */
-    box-sizing: border-box; /* Padding නිසා පිටතට පැනීම වැළැක්වීමට */
+    min-height: 100vh; 
+    width: 100%;
+    box-sizing: border-box; 
     font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 /* Header Section */
 .approval-container h2 {
-    color: #28666E; /* Teal Green */
+    color: #28666E; 
     font-size: 2.2rem;
     font-weight: 800;
     margin-bottom: 30px;
-    border-left: 6px solid #FEDC97; /* Yellow accent on side */
+    border-left: 6px solid #FEDC97; 
     padding-left: 15px;
-    text-align: left; /* වම් පසට පෙළගැස්වීම වඩාත් Professional */
+    text-align: left; 
 }
 
 /* Table Wrapper for Glassmorphism effect */
@@ -36,7 +36,7 @@ table {
 
 /* Table Header */
 thead tr {
-    background-color: #28666E; /* Teal Green */
+    background-color: #28666E; 
     color: #ffffff;
     text-align: left;
 }
@@ -64,12 +64,12 @@ tbody tr:hover {
 /* Job Role styling */
 td:nth-child(3) {
     font-weight: 700;
-    color: #00A693; /* Persian Green */
+    color: #00A693; 
 }
 
 /* Approve Button */
 .approve-btn {
-    background: linear-gradient(135deg, #00A693 0%, #28666E 100%); /* Persian to Teal gradient */
+    background: linear-gradient(135deg, #00A693 0%, #28666E 100%); 
     color: white;
     border: none;
     padding: 10px 24px;
@@ -88,7 +88,7 @@ td:nth-child(3) {
     filter: brightness(1.1);
 }
 
-/* No data message */
+
 .approval-container p {
     text-align: center;
     color: #64748b;

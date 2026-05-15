@@ -9,6 +9,6 @@ const auth = require("../middleware/authMiddleware");
 
 router.get("/", auth, getShippingAddresses);
 router.post("/", auth, saveShippingAddress);
-router.delete("/:id", auth, deleteShippingAddress); // ID එකෙන් Delete කිරීමට
+router.delete("/:id", auth, deleteShippingAddress); 
 
 module.exports = router;

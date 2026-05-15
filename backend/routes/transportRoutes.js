@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router(); // 🚀 මෙන්න මේ පේළිය අඩුවෙලයි තිබුණේ
+const router = express.Router(); 
 const { addTransport, getAllTransports } = require("../controllers/TransportController");
 const authMiddleware = require("../middleware/authMiddleware");
 

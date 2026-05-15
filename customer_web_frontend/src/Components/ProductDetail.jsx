@@ -14,7 +14,7 @@ function ProductDetail() {
   const [review, setReview] = useState({ rating: 5, comment: "" });
   const [loading, setLoading] = useState(true);
 
-  // --- 🧂 Dynamic Specs Logic ---
+  
   const getDynamicSpecs = (prod) => {
     if (!prod) return {};
     const name = prod.name.toLowerCase();
@@ -43,7 +43,7 @@ function ProductDetail() {
         return res.json();
       })
       .then(data => {
-        // --- 🔍 DEBUG LOGS (මෙය පමණක් අලුතින් එක් කරන ලදී) ---
+        
         console.log("-----------------------------------------");
         console.log("✅ API FETCH SUCCESSFUL");
         console.log("📦 PRODUCT NAME:", data.name);

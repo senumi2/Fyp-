@@ -1,7 +1,7 @@
 const Product = require("../models/Product");
 const Stock = require("../models/Stock");
 
-// 🌐 Get All Products (Public) - Auto-calculates stock from Stock transactions
+//  Get All Products (Public) - Auto-calculates stock from Stock transactions
 exports.getProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
@@ -37,7 +37,7 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-// 🔍 Get Product By ID (Public) - Includes calculated stock
+//  Get Product By ID (Public) - Includes calculated stock
 exports.getProductById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -51,7 +51,7 @@ exports.getProductById = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // ✅ UPDATE: Single item stock calculation with case-insensitive match
+    // UPDATE: Single item stock calculation with case-insensitive match
     const transactions = await Stock.find({ 
       itemName: { $regex: new RegExp(`^${product.name.trim()}$`, "i") } 
     });
@@ -74,7 +74,7 @@ exports.getProductById = async (req, res) => {
   }
 };
 
-// ➕ Create Product (Admin) - Supports Quality Specs
+//  Create Product (Admin) - Supports Quality Specs
 exports.createProduct = async (req, res) => {
   try {
     const { name, description, price, purity, iodine, moisture } = req.body;
@@ -99,7 +99,7 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// 🔄 Update Product (Admin)
+//  Update Product (Admin)
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -118,7 +118,7 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-// 🗑️ Delete Product (Admin)
+//  Delete Product (Admin)
 exports.deleteProduct = async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
@@ -128,7 +128,7 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-// ⭐ Add Review (Public/User)
+//  Add Review (Public/User)
 exports.addReview = async (req, res) => {
   try {
     const { user, rating, comment } = req.body;

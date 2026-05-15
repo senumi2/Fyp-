@@ -5,9 +5,9 @@ const Weather = require('../models/Weather');
 const cron = require('node-cron');
 
 const API_KEY = '9e4e711afbb1d681576b13273c7a0d5e';
-const CITY = 'Hambantota'; // හෝ ඔබේ ස්ථානය
+const CITY = 'Hambantota'; 
 
-// දත්ත ලබාගෙන Save කරන පොදු Function එක
+
 const fetchAndSaveWeather = async (type = 'Scheduled') => {
     try {
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`;
@@ -33,12 +33,12 @@ const fetchAndSaveWeather = async (type = 'Scheduled') => {
     }
 };
 
-// 1. Scheduler: පෙ.ව. 9:00 සහ ප.ව. 3:00 ට වැඩ කිරීමට
+// 1. Scheduler: To work at 9:00 AM and 3:00 PM
 cron.schedule('0 9,15 * * *', () => {
     fetchAndSaveWeather('Scheduled');
 });
 
-// 2. Manual Entry: Button එක click කළ විට වැඩ කිරීමට ඇති API එක
+// 2. Manual Entry: The API to work when the button is clicked
 router.post('/fetch-now', async (req, res) => {
     const data = await fetchAndSaveWeather('Manual');
     if (data) res.status(200).json(data);

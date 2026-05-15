@@ -15,11 +15,11 @@ const Register = () => {
   
   const navigate = useNavigate();
 
-  // සියලුම input වල දත්ත නිවැරදිව state එකට ඇතුළු වන සේ සකස් කරන ලදී
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // මෙහිදී name එක 'reg_user_email' වැනි එකක් වුවද නිවැරදි state key එකට data යවයි
+    
     if (name === "reg_user_email") {
       setFormData({ ...formData, email: value });
     } else if (name === "reg_user_password") {
@@ -36,7 +36,7 @@ const Register = () => {
     }
     
     try {
-      // Backend එකට යන්නේ නිවැරදි email සහ password සහිත formData එකයි
+      
       await axios.post('http://localhost:5000/api/auth/register', formData);
       
       alert("Registration submitted! Please wait for Admin approval before logging in.");
@@ -87,7 +87,7 @@ const Register = () => {
             />
             <input 
               type="email" 
-              name="reg_user_email" // Auto-fill වැළැක්වීමට නම වෙනස්
+              name="reg_user_email" 
               placeholder="Email Address" 
               onChange={handleChange} 
               required 
@@ -119,7 +119,7 @@ const Register = () => {
           <div className="password-wrapper">
             <input 
               type={showPassword ? "text" : "password"} 
-              name="reg_user_password" // Auto-fill වැළැක්වීමට නම වෙනස්
+              name="reg_user_password" 
               placeholder="Password" 
               onChange={handleChange} 
               required 

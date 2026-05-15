@@ -7,12 +7,12 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   stock: { type: Number, default: 0 }, 
   
-  // --- 🧂 Quality Specs (New) ---
+  // ---  Quality Specs  ---
   purity: { type: String, default: "98.5%" },
   iodine: { type: String, default: "25-30 ppm" },
   moisture: { type: String, default: "< 0.5%" },
   
-  // --- ⭐ Reviews (Array format is better) ---
+  // ---  Reviews  ---
   reviews: [
     {
       user: { type: String },

@@ -6,14 +6,32 @@ function DriverDashboard() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  
   const fetchTasks = async () => {
     try {
+    
+      const currentToken = sessionStorage.getItem("token");
+      
+      if (!currentToken) {
+        console.error("No token found in sessionStorage. Please login again.");
+        setLoading(false);
+        return;
+      }
+
       const res = await fetch("http://localhost:5000/api/orders/driver-tasks", {
         headers: { 
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          
+          "Authorization": `Bearer ${currentToken.trim()}`,
           "Content-Type": "application/json"
         }
       });
+
+      if (res.status === 401) {
+        console.error("Unauthorized access - check token validity");
+        setLoading(false);
+        return;
+      }
+
       const data = await res.json();
       if (Array.isArray(data)) {
         setTasks(data);
@@ -29,13 +47,22 @@ function DriverDashboard() {
     if (!window.confirm("Confirm that this order has been delivered?")) return;
 
     try {
+      const currentToken = sessionStorage.getItem("token");
+      
       const res = await fetch(`http://localhost:5000/api/orders/mark-delivered/${orderId}`, {
         method: "PUT",
-        headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+        headers: { 
+          "Authorization": `Bearer ${currentToken}`,
+          "Content-Type": "application/json"
+        }
       });
+
       if (res.ok) {
         alert("Order status updated to Delivered! ✅");
-        fetchTasks(); // List එක refresh කරන්න
+        fetchTasks();
+      } else {
+        const errorData = await res.json();
+        alert(`Update failed: ${errorData.message || "Something went wrong"}`);
       }
     } catch (err) {
       alert("Update failed. Please try again.");
@@ -65,7 +92,9 @@ function DriverDashboard() {
             <div key={order._id} className="task-card-glass">
               <div className="card-top">
                 <span className="order-id-tag">#{order._id.slice(-6).toUpperCase()}</span>
-                <span className={`status-badge ${order.status.toLowerCase()}`}>{order.status}</span>
+                <span className={`status-badge ${order.status?.toLowerCase() || 'pending'}`}>
+                  {order.status}
+                </span>
               </div>
 
               <div className="card-body">

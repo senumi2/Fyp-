@@ -151,7 +151,7 @@
 }
 
 .custom-table th {
-    background-color: #f8f9fa;
+    background-color: #cde8dc;
     color: var(--teal-green);
     text-align: left;
     padding: 15px 25px;
@@ -174,10 +174,10 @@
     color: var(--persian-green);
 }
 
-/* --- Analytics Reports (2 per row) --- */
+/* --- Analytics Reports  --- */
 .charts-grid-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* එක පේළියකට දෙකයි */
+    grid-template-columns: repeat(2, 1fr); 
     gap: 25px;
 }
 

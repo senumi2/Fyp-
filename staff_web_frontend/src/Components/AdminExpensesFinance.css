@@ -46,7 +46,7 @@
 
 .admin-view-table {
     width: 100%;
-    border-collapse: collapse; /* Column වෙන් වීමට මෙය අත්‍යවශ්‍යයි */
+    border-collapse: collapse; 
     min-width: 800px;
 }
 
@@ -56,12 +56,12 @@
     font-weight: 700;
     text-align: left;
     padding: 15px;
-    border: 1px solid #e2e8f0; /* Heading වලට border */
+    border: 1px solid #e2e8f0; 
 }
 
 .admin-view-table td {
     padding: 14px 15px;
-    border: 1px solid #f1f5f9; /* Row වලට ලා පැහැති border */
+    border: 1px solid #f1f5f9; 
     color: #334155;
     font-size: 0.95rem;
 }

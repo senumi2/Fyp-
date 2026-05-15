@@ -194,24 +194,23 @@ exports.updateTank = async (req, res) => {
     }
 };
 
-// Delete a specific tank
-// tankController.js හි අවසානයට එකතු කරන්න
+
 
 exports.deleteTank = async (req, res) => {
     try {
         const { id } = req.params;
         
-        // ටැංකිය සොයා මකා දැමීම
+        
         const tank = await Tank.findByIdAndDelete(id);
         
         if (!tank) {
-            // ID එක database එකේ නැති විට 404 පණිවිඩය ලබා දෙයි
+            
             return res.status(404).json({ message: "Tank not found in Database." });
         }
         
         res.status(200).json({ message: "Tank deleted successfully from National Salt system." });
     } catch (err) {
-        // ID එකේ format එක වැරදි නම් (CastError) 400 status එක ලබා දෙයි
+      
         if (err.kind === 'ObjectId') {
             return res.status(400).json({ message: "Invalid Tank ID format." });
         }

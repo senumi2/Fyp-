@@ -15,7 +15,6 @@ const Stock = () => {
     const [showFullTable, setShowFullTable] = useState({}); 
     const [unit, setUnit] = useState('kg'); 
 
-    // නිෂ්පාදන කාණ්ඩ සහ ඔබ ලබා දුන් නිශ්චිත නිෂ්පාදන නාමයන්
     const items = ["Salt", "Gypsum", "Artemia", "Agriculture Salt"];
     
     const productMapping = {
@@ -211,7 +210,6 @@ const Stock = () => {
         const isFull = showFullTable[itemName];
         const balance = getBalance(itemName);
         let displayRecords = isFull ? filtered.slice((currentPage - 1) * recordsPerPage, currentPage * recordsPerPage) : filtered.slice(0, 20);
-        let totalPages = Math.ceil(filtered.length / recordsPerPage);
 
         return (
             <div key={itemName} className="inventory-card" ref={el => tableRefs.current[itemName] = el}>
@@ -250,7 +248,6 @@ const Stock = () => {
                         </tbody>
                     </table>
                 </div>
-                
                 <div className="table-footer-actions">
                     {filtered.length > 20 && (
                         <button className="view-all-btn" onClick={() => toggleTableMode(itemName)}>
@@ -288,7 +285,14 @@ const Stock = () => {
                 <main className="stock-content">
                     <header className="content-top-bar">
                         <h2 className="tab-title">{activeTab} Management</h2>
-                        <input type="text" placeholder="Search..." className="search-input" onChange={(e) => setSearchTerm(e.target.value)} />
+                        {activeTab !== 'Reports' && (
+                            <input 
+                                type="text" 
+                                placeholder="Search..." 
+                                className="search-input" 
+                                onChange={(e) => setSearchTerm(e.target.value)} 
+                            />
+                        )}
                     </header>
 
                     {activeTab !== 'Reports' && (
@@ -318,7 +322,6 @@ const Stock = () => {
                                         <label>Product Name</label>
                                         <select value={formData.subType} onChange={(e) => setFormData({...formData, subType: e.target.value})} required>
                                             <option value="">Select Product</option>
-                                            {/* (productMapping[formData.itemName] || []) මඟින් error එක වළක්වා ඇත */}
                                             {(productMapping[formData.itemName] || []).map(prod => (
                                                 <option key={prod} value={prod}>{prod}</option>
                                             ))}
@@ -352,14 +355,28 @@ const Stock = () => {
                                     <button onClick={downloadPDF} className="pdf-btn">📥 Export PDF</button>
                                 </div>
                             </div>
-                            <div className="summary-cards-row">
+                            
+                            {/* Summary Cards with Enhanced Inline CSS */}
+                            <div className="summary-cards-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px' }}>
                                 {items.map(item => (
-                                    <div className="stat-card" key={item}>
-                                        <span>{item} Stock</span>
-                                        <h4>{formatWeight(getBalance(item))} <span>{unit}</span></h4>
+                                    <div className="stat-card" key={item} style={{ 
+                                        background: '#ffffff', 
+                                        padding: '20px', 
+                                        borderRadius: '15px', 
+                                        boxShadow: '0 4px 15px rgba(0,0,0,0.05)', 
+                                        borderLeft: '5px solid #1C39BB',
+                                        transition: 'transform 0.2s ease-in-out',
+                                        cursor: 'default'
+                                    }}>
+                                        <span style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{item} Stock</span>
+                                        <h4 style={{ margin: '10px 0 0', fontSize: '1.6rem', color: '#1e293b', fontWeight: 'bold' }}>
+                                            {formatWeight(getBalance(item))} 
+                                            <span style={{ fontSize: '0.9rem', marginLeft: '5px', color: '#94a3b8' }}>{unit}</span>
+                                        </h4>
                                     </div>
                                 ))}
                             </div>
+
                             <div className="charts-container">
                                 {items.map(item => (
                                     <div className="chart-wrapper-card" key={item}>

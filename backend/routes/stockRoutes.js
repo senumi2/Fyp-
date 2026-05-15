@@ -4,7 +4,7 @@ const { addStock, getStocks,updateStock,deleteStock } = require('../controllers/
 
 router.post('/add', addStock);
 router.get('/', getStocks);
-router.put('/:id', updateStock);    // Update route එක
+router.put('/:id', updateStock);    
 router.delete('/:id', deleteStock);
 
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Contact_us.css";
 
 function Contact_us() {
-  // 1. LocalStorage eken logged in user ge email eka ganna
+ 
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const loggedInEmail = storedUser ? storedUser.email : "";
 
@@ -13,18 +13,17 @@ function Contact_us() {
   });
 
   const handleChange = (e) => {
-    // Input fields update kirima
+    
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // --- Validation Bug Fix ---
-    // trim() use kirimen empty spaces pamanak thibe nam ewa check karai
+    
     if (!form.name.trim() || !form.subject.trim() || !form.message.trim()) {
       alert("Please fill in all the required fields.");
-      return; // Validation fail nam methanin nawathinawa
+      return; 
     }
 
     if (!loggedInEmail) {
@@ -32,7 +31,7 @@ function Contact_us() {
       return;
     }
 
-    // Backend ekata yawana data (Requirement 2 & 3 anuwa)
+   
     const formData = {
       name: form.name.trim(),
       userEmail: loggedInEmail, 
@@ -51,7 +50,7 @@ function Contact_us() {
 
       if (res.ok) {
         alert("Your message has been sent to Salte Hambantota!");
-        // Form eka reset kirima
+       
         setForm({ name: "", subject: "", message: "" });
       } else {
         alert(data.message || "Something went wrong. Please try again.");

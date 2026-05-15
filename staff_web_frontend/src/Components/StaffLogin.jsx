@@ -5,13 +5,13 @@ import './StaffLogin.css';
 const StaffLogin = () => {
   const navigate = useNavigate();
   
-  // ✅ 2 වෙනි ප්‍රශ්නය සඳහා: sessionStorage භාවිතයෙන් Role එක ලබා ගැනීම
+
   const userRole = (sessionStorage.getItem('role') || "").toLowerCase().trim();
 
   const menuItems = [
     { id: 1, title: 'Admin Panel', path: '/adminDashboard', role: 'admin' },
     { id: 2, title: 'Ponds Management', path: '/pondsManagement', role: 'ponds management' },
-    { id: 3, title: 'Harvesting', path: '/harvestManagement', role: 'harvest management' },
+    { id: 3, title: 'Harvest', path: '/harvestManagement', role: 'harvest management' },
     { id: 4, title: 'Equipment', path: '/equpmentUsage', role: 'equipment usage' },
     { id: 5, title: 'Inventory', path: '/inventoryManagement', role: 'inventory management' },
     { id: 6, title: 'Finance', path: '/expensesFinance', role: 'expenses & finance' },
@@ -22,7 +22,7 @@ const StaffLogin = () => {
     <div className="staff-container">
       <div className="card-grid">
         {menuItems.map((item) => {
-          // ✅ Login වූ User ට අදාළ Card එක පමණක් Unblock කිරීමේ logic එක
+          
           const isDisabled = userRole !== item.role;
 
           return (

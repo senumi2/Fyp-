@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './AdminStaffRegisterAccess.css'; // ඔබට අවශ්‍ය පරිදි style කරගන්න
+import './AdminStaffRegisterAccess.css'; 
 
 const AdminApproval = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
@@ -27,7 +27,7 @@ const AdminApproval = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("User Approved Successfully!");
-      fetchPendingUsers(); // List එක refresh කරන්න
+      fetchPendingUsers(); 
     } catch (err) {
       alert("Approval failed");
     }

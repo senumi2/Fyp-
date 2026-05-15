@@ -13,7 +13,7 @@ function Profile() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  // --- 🔒 Password Reset States (New) ---
+  
   const [showPasswordFields, setShowPasswordFields] = useState(false);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -88,7 +88,7 @@ function Profile() {
     }
   };
 
-  // --- 🔐 Handle Password Reset Logic (New) ---
+  
   const handlePasswordUpdate = async () => {
     if (!passwordData.currentPassword || !passwordData.newPassword) {
       return alert("Please fill both password fields");
@@ -183,7 +183,7 @@ function Profile() {
             />
           </div>
 
-          {/* --- 🔐 Password Section (New UI) --- */}
+          
           <div className="password-reset-section">
             <button 
               className="toggle-pw-btn" 

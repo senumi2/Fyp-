@@ -1,19 +1,17 @@
-/* StaffLogin.css - Fully Professional Theme */
+
 
 .staff-container {
   display: flex;
   justify-content: center;
-  /* Cards ඉහළ සිට ආරම්භ වීමට flex-start භාවිතා කරන ලදී */
   align-items: flex-start; 
   min-height: 100vh;
-  /* මුළු සිස්ටම් එකේම gradient තේමාව */
-  background: linear-gradient(135deg, #28666E 0%, #B4D2B1 50%, #FEDC97 100%);
+  background: linear-gradient(135deg, #28666E 0%, #B4D2B1 50%,#B4D2B1 50%, #fedc977d 100%);
   padding: 40px 20px;
   position: relative;
   overflow: hidden;
 }
 
-/* පසුබිමට එකතු කළ දර්ශනීය වතුර බිංදු හැඩයක් */
+
 .staff-container::before {
   content: "";
   position: absolute;
@@ -33,8 +31,6 @@
   max-width: 1100px;
   width: 100%;
   z-index: 2;
-  
-  /* --- Navbar එක සහ Cards අතර පරතරය මෙතැනින් පාලනය වේ --- */
   margin-top: 100px; 
 }
 
@@ -45,7 +41,7 @@
   padding: 10px;
   width: 100%;
   height: 160px;
-  border-radius: 24px; /* වඩාත් වටකුරු සහ මෘදු පෙනුමක් */
+  border-radius: 24px; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -56,7 +52,7 @@
   position: relative;
 }
 
-/* Unlock වූ කාඩ්පත් සඳහා පමණක් වැඩ කරන Hover Effect එක */
+
 .menu-card:hover:not(.disabled-card) {
   transform: translateY(-12px) scale(1.04);
   background: rgba(255, 255, 255, 0.25);
@@ -81,12 +77,12 @@
   font-family: 'Inter', sans-serif;
   font-size: 1.15rem;
   font-weight: 600;
-  color: #ffffff;
+  color: #141313e3;
   text-shadow: 0 2px 5px rgba(0,0,0,0.15);
   letter-spacing: 0.6px;
 }
 
-/* --- Locked (Disabled) Card Styling --- */
+
 .disabled-card {
   filter: grayscale(100%) blur(2px) !important;
   opacity: 0.4 !important;
@@ -95,13 +91,13 @@
   box-shadow: none !important;
 }
 
-/* Locked Tag එක ලස්සන කිරීම */
+
 .locked-tag {
-  background: #ef4444 !important; /* දීප්තිමත් රතු පැහැය */
+  background: #ef4444 !important; 
   color: white !important;
   padding: 4px 12px !important;
   font-size: 11px !important;
-  border-radius: 20px !important; /* Rounded pill shape */
+  border-radius: 20px !important; 
   font-weight: 700 !important;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -110,7 +106,7 @@
   right: 15px !important;
 }
 
-/* Responsive වෙනස්කම් (Mobile & Tablet) */
+/* Responsive (Mobile & Tablet) */
 @media (max-width: 900px) {
   .card-grid {
       grid-template-columns: repeat(2, 1fr);

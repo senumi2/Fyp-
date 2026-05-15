@@ -40,8 +40,8 @@
     transition: 0.3s;
 }
 
-.btn-predict { background: #007bff; color: white; }
-.btn-predict:hover { background: #0056b3; }
+.btn-predict { background: #37a983; color: white; }
+.btn-predict:hover { background: #00b392; }
 
 .btn-now { background: #6c757d; color: white; }
 .btn-now:hover { background: #5a6268; }

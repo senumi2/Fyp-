@@ -22,7 +22,7 @@
   animation: bubble-float 7s infinite ease-in-out;
 }
 
-/* විවිධ බිංදු වල පිහිටීම් සහ ප්‍රමාණයන් */
+/* Positions and sizes of different drops */
 .drop-v1 { width: 90px; height: 100px; top: 5%; left: 10%; }
 .drop-v2 { width: 40px; height: 45px; top: 60%; left: 5%; animation-delay: 1s; }
 .drop-v3 { width: 130px; height: 140px; bottom: 5%; left: 15%; animation-duration: 10s; opacity: 0.1; }
@@ -49,7 +49,7 @@
   -webkit-backdrop-filter: blur(25px);
   padding: 60px 45px;
   
-  /* මුල් හැඩය */
+  
   border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
   
   box-shadow: inset 10px 10px 20px rgba(255, 255, 255, 0.4), 20px 40px 60px rgba(0, 0, 0, 0.1);
@@ -59,10 +59,10 @@
   text-align: center;
   position: relative;
   z-index: 10;
-  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* සිනිඳු වෙනසක් සඳහා */
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
 }
 
-/* Hover කළ විට හැඩය වෙනස් වන Wobble Effect එක */
+
 .auth-card:hover {
   border-radius: 40% 60% 40% 60% / 60% 40% 60% 40%;
   transform: scale(1.02);
@@ -122,12 +122,12 @@ input:focus { background: rgba(255, 255, 255, 0.95); border-color: #FEDC97; colo
 .register-link { color: #5d5b5bbc; font-weight: 700; text-decoration: underline; cursor: pointer; }
 .register-link:hover { color: #5d5b5b; }
 
-/* Register පිටුව සඳහා Card එක මඳක් පළල් කිරීම */
+
 .register-card {
-  max-width: 600px; /* Register Form එක විශාල නිසා */
+  max-width: 600px; 
 }
 
-/* එක පේළියේ Inputs දෙකක් තැබීමට */
+
 .input-row {
   display: flex;
   gap: 15px;
@@ -137,7 +137,7 @@ input:focus { background: rgba(255, 255, 255, 0.95); border-color: #FEDC97; colo
   flex: 1;
 }
 
-/* Select box එක Input එකට සමාන කිරීම */
+
 .auth-select {
   width: 100%;
   padding: 15px;
@@ -147,18 +147,18 @@ input:focus { background: rgba(255, 255, 255, 0.95); border-color: #FEDC97; colo
   background: rgba(255, 255, 255, 0.292);
   color: #083833;
   outline: none;
-  appearance: none; /* Default arrow අයින් කිරීමට */
+  appearance: none; 
   cursor: pointer;
 }
 
-/* Password eye icon එක නිවැරදිව තැබීමට */
+
 .password-wrapper {
   position: relative;
   width: 100%;
 }
 
 .password-wrapper input {
-  padding-right: 50px; /* Icon එක නිසා අකුරු වැසීම වැලැක්වීමට */
+  padding-right: 50px; 
 }
 
 .eye-icon {

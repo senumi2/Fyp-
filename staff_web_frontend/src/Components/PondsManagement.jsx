@@ -87,7 +87,7 @@ const PondsManagement = () => {
         });
     };
 
-    // Update Maintenance End Date (New)
+    // Update Maintenance End Date 
     const handleUpdateMaintenance = (tankId, logId) => {
         const newEndDate = prompt("Enter End Date (YYYY-MM-DD):");
         if (newEndDate) {

@@ -4,7 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import './AdminPondsManagement.css';
 
 const AdminPondsManagement = () => {
-    // --- State & Logic (නොවෙනස්ව පවතී) ---
+    
     const [tanks, setTanks] = useState([]);
     const [activeTab, setActiveTab] = useState('tank-details');
     const [formData, setFormData] = useState({ type: '', capacity: '', totalPonds: '', location: '' });
@@ -145,8 +145,8 @@ const AdminPondsManagement = () => {
                                                 <td>{tank.capacity}</td>
                                                 <td>{tank.location}</td>
                                                 <td>
-                                                    <button onClick={() => handleEdit(tank)} className="btn-edit">✎</button>
-                                                    <button onClick={() => handleDelete(tank._id)} className="btn-delete">🗑</button>
+                                                    <button onClick={() => handleEdit(tank)} className="btn-edit">Edit</button>
+                                                    <button onClick={() => handleDelete(tank._id)} className="btn-delete">Delete</button>
                                                 </td>
                                             </tr>
                                         ))}
@@ -156,7 +156,7 @@ const AdminPondsManagement = () => {
                         </div>
                     )}
 
-                    {/* Brine Logs Tab (With Scrollers) */}
+                    {/* Brine Logs Tab  */}
                     {activeTab === 'salinity' && (
                         <div className="view-grid-layout fade-in">
                             {filteredTanks.map(tank => (
@@ -177,7 +177,7 @@ const AdminPondsManagement = () => {
                         </div>
                     )}
 
-                    {/* Maintenance Tab (With Scrollers) */}
+                    {/* Maintenance Tab  */}
                     {activeTab === 'maintenance' && (
                         <div className="view-grid-layout fade-in">
                             {filteredTanks.map(tank => (
@@ -206,7 +206,7 @@ const AdminPondsManagement = () => {
                         </div>
                     )}
                     
-                    {/* Analytics Tab (2 per Row) */}
+                    {/* Analytics Tab  */}
                     {activeTab === 'analytics' && (
                         <div className="analytics-grid-layout fade-in">
                             {filteredTanks.map(tank => (

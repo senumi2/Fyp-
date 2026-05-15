@@ -9,23 +9,23 @@ const nodemailer = require("nodemailer");
 connectDB();
 
 // 🔹 Contact Form Email Route
-// (ඔබේ app.js එකේ routes handle කරනවා නම් මෙය එහි ඇතුළත් කළ හැකියි)
+
 app.post("/api/contact", async (req, res) => {
     const { name, email, subject, message } = req.body;
 
-    // 1. Email එක යවන කෙනාගේ විස්තර (Transporter)
+    // 1. Email sender's details (Transporter)
     const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-            user: process.env.EMAIL_USER, // .env එකේ ඇති ඔබේ email එක
-            pass: process.env.EMAIL_PASS, // .env එකේ ඇති app password එක
+            user: process.env.EMAIL_USER, 
+            pass: process.env.EMAIL_PASS, 
         },
     });
 
-    // 2. ලැබිය යුතු Email එකේ අන්තර්ගතය
+    
     const mailOptions = {
         from: email,
-        to: process.env.STAFF_EMAIL, // Staff එකේ email එක
+        to: process.env.STAFF_EMAIL, // staff email
         subject: `Lanka Salt Contact: ${subject}`,
         html: `
             <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee;">

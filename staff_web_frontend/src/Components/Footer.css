@@ -1,5 +1,5 @@
 .footer {
-  background-color: #1a3a3d; /* Darker, more professional teal */
+  background-color: #1a3a3d; 
   color: #e2e8f0;
   padding: 60px 20px 20px;
   font-family: 'Inter', sans-serif;
@@ -140,7 +140,7 @@
   }
 }
 
-/* Link එකක් ලෙස පෙනෙන ලෙස Button එක සකස් කිරීම */
+
 .scroll-link {
   background: none;
   border: none;
@@ -160,4 +160,3 @@
   padding-left: 5px;
 }
 
-/* Footer Title හා අනෙකුත් Styling පවතින පරිදිම තබන්න */

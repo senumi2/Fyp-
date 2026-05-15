@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // useLocation එකතු කළා
+import { useNavigate, useLocation } from "react-router-dom"; 
 import "./OrderTracking.css";
 import { FiPackage, FiTruck, FiCheckCircle, FiClock, FiArrowLeft, FiMapPin } from "react-icons/fi";
 
@@ -9,7 +9,7 @@ function OrderTracking() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   
-  // URL එකේ තියෙන parameters කියවීමට
+  
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const orderIdFromUrl = queryParams.get("orderId");
@@ -28,8 +28,7 @@ function OrderTracking() {
       if (res.ok) {
         setOrders(data);
         
-        // --- 🚀 මෙතන තමයි අලුත් logic එක ---
-        // URL එකේ orderId එකක් තියෙනවා නම්, fetch වුණු orders අතරින් ඒක හොයාගෙන select කරනවා
+        
         if (orderIdFromUrl) {
           const foundOrder = data.find(o => o._id === orderIdFromUrl);
           if (foundOrder) {
@@ -102,7 +101,7 @@ function OrderTracking() {
     <div className="tracking-wrapper">
       <div className="tracking-detail-card">
         <button className="back-link" onClick={() => {
-            // Back click කරද්දී URL එකේ තියෙන orderId එක අයින් කරන එක හොඳයි
+           
             setSelectedOrder(null);
             navigate("/OrderTracking", { replace: true });
         }}>

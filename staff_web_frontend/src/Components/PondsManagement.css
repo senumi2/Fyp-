@@ -1,4 +1,4 @@
-/* PondsManagement.css */
+
 
 :root {
     --teal-dark: #28666E;
@@ -6,7 +6,7 @@
     --sand-yellow: #FEDC97;
     --smoke-white: #F8FAFB;
     
-    /* Navbar එකේ උස මෙතැනින් පාලනය වේ */
+   
     --nav-height: 75px; 
     --sidebar-width: 280px;
 }
@@ -72,7 +72,6 @@
     flex: 1;
     margin-left: var(--sidebar-width); 
     padding: 40px;
-    /* Navbar එකට යට නොවීමට Padding-top එකතු කිරීම */
     padding-top: calc(var(--nav-height) + 20px); 
     width: calc(100% - var(--sidebar-width));
 }
@@ -105,15 +104,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 0;      /* ඉහළ margin එක සම්පූර්ණයෙන් ඉවත් කිරීම */
-    margin-bottom: 5px; /* පහළ ඇති ඉඩත් මඳක් අඩු කිරීම */
+    margin-top: 0;      
+    margin-bottom: 5px; 
 }
 
 .tank-name {
     font-weight: 800;
     font-size: 1.1rem;
     color: var(--teal-dark);
-    margin-top: 0;      /* අකුරට ඉහළින් ඇති ඉඩ ඉවත් කිරීම */
+    margin-top: 0;     
 }
 
 .meter-bar {
@@ -132,7 +131,7 @@
 .location-tag {
     font-size: 0.85rem;
     color: #6a8a8d;
-    margin-top: -5px;   /* නමට මඳක් ලං කිරීමට minus margin එකක් භාවිතා කළ හැක */
+    margin-top: -5px;  
     margin-bottom: 15px; 
     display: block;
 }
@@ -195,7 +194,6 @@
 
 .ponds-chart-grid {
     display: grid;
-    /* එක පේළියකට සමාන ප්‍රමාණයේ කොටස් 3ක් ලබා දීම */
     grid-template-columns: repeat(3, 1fr); 
     gap: 20px;
     width: 100%;
@@ -217,15 +215,15 @@
     font-weight: 700;
 }
 
-/* Screen එක කුඩා වන විට (Responsive) charts ප්‍රමාණය වෙනස් වීම */
+
 @media (max-width: 1200px) {
     .ponds-chart-grid {
-        grid-template-columns: repeat(2, 1fr); /* Tablet වලදී පේළියට 2ක් */
+        grid-template-columns: repeat(2, 1fr); 
     }
 }
 
 @media (max-width: 768px) {
     .ponds-chart-grid {
-        grid-template-columns: 1fr; /* Mobile වලදී පේළියට 1ක් */
+        grid-template-columns: 1fr; 
     }
 }

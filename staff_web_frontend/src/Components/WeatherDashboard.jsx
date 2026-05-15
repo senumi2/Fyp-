@@ -14,7 +14,7 @@ const WeatherDashboard = () => {
         'monthly': '/api/prediction/monthly-average'
     };
 
-    // අනාවැකිය ලබා ගැනීම
+    // Getting the prediction
     const fetchPrediction = async () => {
         setLoading(true);
         try {
@@ -27,7 +27,7 @@ const WeatherDashboard = () => {
         setLoading(false);
     };
 
-    // වර්තමාන දත්ත ලබාගෙන සේව් කිරීම (Manual Fetch)
+    // Fetching and saving current data (Manual Fetch)
     const handleManualFetch = async () => {
         setLoading(true);
         try {
@@ -39,7 +39,7 @@ const WeatherDashboard = () => {
         setLoading(false);
     };
 
-    // Frontend Logic: දත්ත අනුව නිගමනයක් ලබා දීම
+    // Frontend Logic: Providing a conclusion based on data
     const getConclusion = (d) => {
         if (!d) return "";
         let advice = "";

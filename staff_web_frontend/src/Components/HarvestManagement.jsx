@@ -37,7 +37,7 @@ const HarvestManagement = () => {
 
     const handleAddOrUpdate = async (cat) => {
         const data = inputs[cat];
-        if (!data?.type || !data?.quantity) return alert("කරුණාකර සියලුම තොරතුරු ඇතුළත් කරන්න.");
+        if (!data?.type || !data?.quantity) return alert("Please fill all fields.");
 
         try {
             let response;
@@ -54,7 +54,7 @@ const HarvestManagement = () => {
             }
             setHarvestData(response.data);
             setInputs({ ...inputs, [cat]: { type: '', quantity: '' } });
-        } catch (err) { alert(err.response?.data?.message || "දෝෂයක් සිදු විය."); }
+        } catch (err) { alert(err.response?.data?.message || "An error occurred.."); }
     };
 
     const startEdit = (cat, record) => {
@@ -64,7 +64,7 @@ const HarvestManagement = () => {
     };
 
     const handleDelete = async (cat, recordId) => {
-        if (!window.confirm("මෙම දත්තය මකා දැමීමට අවශ්‍යද?")) return;
+        if (!window.confirm("Do you want to delete this data?")) return;
         try {
             const res = await axios.delete(`http://localhost:5000/api/harvest/delete/${cat}/${recordId}`);
             setHarvestData(res.data);
@@ -159,7 +159,7 @@ const HarvestManagement = () => {
                     </div>
                 </header>
 
-                {/* --- Logic For Switching Tabs --- */}
+                {/* ---  Switching Tabs --- */}
                 
                 {activeTab === 'management' && (
                     <div className="fade-in">

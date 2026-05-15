@@ -77,7 +77,6 @@ function Directors() {
                       <h3 className="name">{director.name}</h3>
                       <div className="details-divider"></div>
                       <p className="description-summary">{director.description}</p>
-                      {/* "in" logo has been removed from here */}
                     </div>
                   </div>
                 </div>
@@ -85,7 +84,7 @@ function Directors() {
             </div>
           </div>
 
-          {/* Right Navigation Button with SVG Icon */}
+          
           <button
             className={`modern-nav-btn right ${currentIndex >= directors.length - itemsVisible ? "is-disabled" : ""}`}
             onClick={nextSlide}

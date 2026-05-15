@@ -1,14 +1,14 @@
-/* --- Main Container --- */
+
 .payment-page-container {
     display: flex;
     gap: 30px;
     padding: 40px;
-    background: #f4f1ee; /* Soft background */
+    background: #f4f1ee; 
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
 }
 
-/* --- Left Section: Item Details & Warehouse --- */
+
 .item-details-section {
     flex: 1.5;
     background: rgba(137, 152, 184, 0.292);
@@ -26,7 +26,7 @@
     margin-bottom: 25px;
 }
 
-/* --- Warehouse / Location Selection Grid --- */
+
 .location-selection-area {
     margin-bottom: 35px;
     background: rgba(255, 255, 255, 0.5);
@@ -178,7 +178,7 @@
 /* --- Right Section: Payment Form --- */
 .payment-details-section {
     flex: 1;
-    background: #042b74db; /* Dark theme for contrast */
+    background: #042b74db; 
     border-radius: 35px;
     padding: 40px;
     color: #fff;
@@ -267,25 +267,25 @@
     transform: scale(1.02);
 }
 
-/* Chrome, Safari, Edge, සහ Opera සඳහා ඊතල ඉවත් කිරීම */
+
 .no-spinners::-webkit-outer-spin-button,
 .no-spinners::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox සඳහා ඊතල ඉවත් කිරීම */
+
 .no-spinners {
   -moz-appearance: textfield;
 }
-/* Chrome, Safari, Edge, Opera සඳහා ඊතල සම්පූර්ණයෙන්ම ඉවත් කිරීම */
+
 .qty-input-field::-webkit-outer-spin-button,
 .qty-input-field::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox සඳහා */
+
 .qty-input-field {
   -moz-appearance: textfield;
 }

@@ -4,8 +4,8 @@ const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-      user: process.env.EMAIL_USER, // ඔයාගේ Gmail එක (.env එකේ දාන්න)
-      pass: process.env.EMAIL_PASS, // App Password එක (.env එකේ දාන්න)
+      user: process.env.EMAIL_USER, 
+      pass: process.env.EMAIL_PASS, 
     },
   });
 
@@ -13,7 +13,7 @@ const sendEmail = async (options) => {
     from: `"Salter Hambantota" <${process.env.EMAIL_USER}>`,
     to: options.email,
     subject: options.subject,
-    html: options.html, // අපිට ලස්සන Design එකක් යවන්න පුළුවන් HTML වලින්
+    html: options.html, 
   };
 
   await transporter.sendMail(mailOptions);

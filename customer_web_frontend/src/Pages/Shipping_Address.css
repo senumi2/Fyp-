@@ -1,4 +1,4 @@
-/* --- මුළු පිටුවම වැසෙන සේ පසුබිම් රූපය --- */
+
 .shipping-page-wrapper {
   width: 100%;
   min-height: 100vh;
@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box; /* අමතර padding නිසා පිටුව එළියට පැනීම වැළැක්වීමට */
+  box-sizing: border-box; 
 }
 
 .shipping-overlay {
@@ -19,20 +19,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px; /* ජංගම දුරකථන සඳහා දෙපස පරතරය අඩු කළා */
+  padding: 40px 20px; 
   box-sizing: border-box;
 }
 
-/* --- ප්‍රධාන Glass Card එක --- */
+
 .shipping-card.multi-location {
   background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(5px); /* blur ගතිය මදක් වැඩි කළා පෙනුම වැඩි කිරීමට */
+  backdrop-filter: blur(5px); 
   -webkit-backdrop-filter: blur(15px);
   
   width: 100%;
   max-width: 1100px; 
-  padding: 50px; /* Padding මදක් අඩු කළා සියලුම screen වලට ගැලපීමට */
-  border-radius: 40px; /* මදක් අඩු කළා modern පෙනුම සඳහා */
+  padding: 50px; 
+  border-radius: 40px; 
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
   
@@ -43,7 +43,7 @@
   box-sizing: border-box;
 }
 
-/* --- වම් පස තීරුව (Form Column) --- */
+
 .form-column {
   display: flex;
   flex-direction: column;
@@ -113,7 +113,7 @@
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
-/* District, Province, Postal Code පේළිය */
+
 .input-row-3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr; 
@@ -168,7 +168,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-height: 500px; /* කාඩ් එකේ උසට ගැලපෙන සේ සකස් කළා */
+  max-height: 500px; 
   overflow-y: auto;
   padding-right: 10px;
 }
@@ -192,7 +192,7 @@
 .address-item-card:hover {
   background: rgba(255, 255, 255, 0.8);
   border-color: rgba(0, 0, 0, 0.05);
-  transform: translateX(5px); /* ඇතුළට යාම වෙනුවට එළියට ඒම වඩා ලස්සනයි */
+  transform: translateX(5px); 
 }
 
 .loc-info {
@@ -255,7 +255,7 @@
   .shipping-card.multi-location {
     grid-template-columns: 1fr;
     padding: 35px 25px;
-    max-width: 600px; /* Tablet සඳහා පළල සීමා කළා */
+    max-width: 600px; 
   }
   
   .input-row-3 {

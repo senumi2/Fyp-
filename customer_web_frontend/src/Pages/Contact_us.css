@@ -17,7 +17,7 @@
   border: 1px solid #ccc;
   font-family: Arial, sans-serif;
   background-color: #ffffff;
-  height: fit-content; /* අමතර හිස් ඉඩක් ගැනීම වළක්වයි */
+  height: fit-content;
 }
 
 .contact-header {
@@ -45,12 +45,12 @@
   justify-content: center;
 }
 
-/* දකුණු පැත්තේ ඇති කොටුවල දකුණු border එක අයින් කිරීම */
+
 .contact-box:nth-child(even) {
   border-right: none;
 }
 
-/* යටම පේළියේ කොටු දෙකේ යට border එක අයින් කිරීම */
+
 .contact-box:nth-last-child(-n+2) {
   border-bottom: none;
 }
@@ -116,7 +116,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 15px;
-  box-sizing: border-box; /* Padding නිසා කොටුව පිටතට යාම වළක්වයි */
+  box-sizing: border-box;
 }
 
 .contact-form textarea {

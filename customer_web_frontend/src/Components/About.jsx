@@ -5,7 +5,7 @@ import { FiTarget, FiAward, FiTrendingUp } from "react-icons/fi";
 import { useInView } from "react-intersection-observer";
 
 function About() {
-  // Threshold එක 0.4 දක්වා වැඩි කළා එවිට scroll කරන විට animation එක හොඳින් පෙනේ
+  
   const { ref: storyRef, inView: storyVisible } = useInView({
     triggerOnce: true,
     threshold: 0.4,

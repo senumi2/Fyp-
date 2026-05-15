@@ -9,7 +9,7 @@ router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    // 1. ID එක Valid ද කියා පරීක්ෂා කිරීම
+   
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid product ID format" });
     }
@@ -22,7 +22,7 @@ router.get("/:id", async (req, res) => {
     }
 
     
-    console.log(`✅ Fetched direct data for: ${product.name}`);
+    console.log(` Fetched direct data for: ${product.name}`);
     res.json(product);
 
   } catch (err) {

@@ -7,6 +7,11 @@
     min-height: calc(100vh - 80px);
     background-color: #f8fafc;
 }
+.chart-wrapper {
+    width: 100%;
+    height: 350px; 
+    min-height: 300px;
+}
 
 /* --- Sidebar Styling --- */
 .admin-sidebar {

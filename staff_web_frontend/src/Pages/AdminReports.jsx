@@ -23,7 +23,7 @@ function AdminReports() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // FormData නිවැරදිව සකස් කිරීම
+    
     const data = new FormData();
     data.append("title", form.title);
     if (form.image) data.append("image", form.image);
@@ -39,7 +39,6 @@ function AdminReports() {
         method,
         headers: { 
           'Authorization': `Bearer ${token}` 
-          // සටහන: මෙතන Content-Type දාන්න එපා (FormData නිසා Browser එකම දාගනී)
         },
         body: data
       });
@@ -52,7 +51,7 @@ function AdminReports() {
         setEditingId(null);
         fetchReports();
       } else {
-        // 400 හෝ 401 error එක මොකක්ද කියලා මෙතනින් බලාගන්න පුළුවන්
+       
         alert(`Error: ${result.message || "Something went wrong"}`);
         if (response.status === 401) console.error("Session expired. Please re-login.");
       }

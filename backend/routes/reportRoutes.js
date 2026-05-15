@@ -5,7 +5,7 @@ const path = require("path");
 const reportController = require("../controllers/reportController");
 const auth = require("../middleware/authMiddleware"); 
 
-// Multer Storage Configuration (පවතින පරිදිමයි)
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/"); 
@@ -21,11 +21,11 @@ const upload = multer({ storage: storage });
 
 router.get("/", reportController.getAllReports);
 
-// ✅ POST සහ PUT වලට auth සහ auth.admin යන දෙකම එක් කරන්න
+
 router.post(
   "/", 
   auth, 
-  auth.admin, // මෙන්න මේ පේළිය අනිවාර්යයි
+  auth.admin, 
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "pdf", maxCount: 1 }
@@ -36,7 +36,7 @@ router.post(
 router.put(
   "/:id", 
   auth, 
-  auth.admin, // මෙන්න මේ පේළිය අනිවාර්යයි
+  auth.admin, 
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "pdf", maxCount: 1 }

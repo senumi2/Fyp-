@@ -34,7 +34,7 @@ function App() {
 
   const location = useLocation();
 
-  // Footer එක පෙන්වන්න අවශ්‍ය නැති පිටුවල Paths මෙහි ඇතුළත් කරන්න
+  // Pages that do not need to display the footer
   const excludeFooterPaths = [
     "/login", 
     "/register", 
@@ -51,7 +51,7 @@ function App() {
 
   ];
 
-  // දැනට තිබෙන path එක exclude list එකේ නැතිනම් පමණක් Footer එක පෙන්වන්න
+  
   const shouldShowFooter = !excludeFooterPaths.includes(location.pathname);
 
 
@@ -101,7 +101,7 @@ function App() {
         <Route path="/expensesFinance" element={<ExpensesFinance />} />
         <Route path="/manageOrders" element={<ManageOrders />} />
 
-        {/* --- 🚀 Driver Dashboard Route --- */}
+        {/* ---  Driver Dashboard Route --- */}
         <Route path="/driverDashboard" element={<DriverDashboard />} />
 
         {/* --- Weather Management Route --- */}

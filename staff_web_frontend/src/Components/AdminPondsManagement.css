@@ -1,4 +1,4 @@
-/* --- LAYOUT CONFIG --- */
+
 .ponds-page-container {
     display: flex;
     height: 100vh;
@@ -8,7 +8,7 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* --- ENHANCED MINI SIDEBAR --- */
+
 .ponds-mini-sidebar {
     width: 95px;
     background: linear-gradient(180deg, #004d40 0%, #002d26 100%);
@@ -140,7 +140,7 @@
 
 .ponds-search-bar:focus { border-color: #008080; box-shadow: 0 0 0 4px rgba(0, 128, 128, 0.05); }
 
-/* --- SCROLLABLE CARD SETTINGS --- */
+/* ---  CARD SETTINGS --- */
 .scrollable-card {
     max-height: 400px;
     display: flex;
@@ -234,10 +234,10 @@
 
 .text-highlighted { color: #008080; font-weight: 800; }
 
-/* --- ANALYTICS (2 per Row) --- */
+/* --- ANALYTICS  --- */
 .analytics-grid-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* එක් පේළියකට 2 බැගින් */
+    grid-template-columns: 1fr 1fr; 
     gap: 30px;
 }
 
@@ -272,9 +272,11 @@
     font-size: 18px;
     cursor: pointer;
     margin-right: 10px;
+    width: 80px;
+    height: 30px;
 }
-.btn-edit { color: #008080; }
-.btn-delete { color: #ef4444; }
+.btn-edit { color: #83a5a58d; }
+.btn-delete { color: #ef444474; }
 
 /* Animations */
 .fade-in { animation: fadeIn 0.5s ease-out; }

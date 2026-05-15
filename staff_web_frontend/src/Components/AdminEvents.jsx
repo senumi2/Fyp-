@@ -61,7 +61,7 @@ function AdminEvents() {
           </div>
         </header>
 
-        {/* --- Modern Floating Form --- */}
+        
         <section className="form-section-creative">
           <form onSubmit={handleSubmit} className="modern-glass-card">
             <div className="card-inner-title">Create New Event</div>
@@ -94,7 +94,7 @@ function AdminEvents() {
           </form>
         </section>
 
-        {/* --- Creative Grid --- */}
+        
         <section className="events-display-section">
           <div className="section-divider">
             <span>Current Live Events</span>

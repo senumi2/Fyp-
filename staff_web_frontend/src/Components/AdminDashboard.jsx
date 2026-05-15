@@ -6,6 +6,8 @@ import {
 } from 'recharts';
 import 'jspdf-autotable';
 import './AdminDashboard.css';
+import { useAuth } from '../context/AuthContext'; 
+import { useNavigate } from 'react-router-dom';
 
 // Components Imports
 import AdminInventoryManagement from './AdminInventoryManagement'; 
@@ -23,6 +25,15 @@ import OrderManager from '../Pages/ManageOrders';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('ProductionVsSales');
+    const { isAdmin, isAuthenticated } = useAuth();
+    const navigate = useNavigate();
+
+   
+    useEffect(() => {
+        if (!isAuthenticated || !isAdmin()) {
+            navigate('/login');
+        }
+    }, [isAuthenticated, isAdmin, navigate]);
 
     const renderContent = () => {
         switch (activeTab) {
@@ -42,6 +53,8 @@ const AdminDashboard = () => {
             default: return <ProductionVsSalesView />;
         }
     };
+
+    if (!isAuthenticated || !isAdmin()) return null; 
 
     return (
         <div className="admin-container">
@@ -78,11 +91,11 @@ const ProductionVsSalesView = () => {
     const [rawFinancials, setRawFinancials] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState("All");
     const [loading, setLoading] = useState(true);
+    const { token, logout } = useAuth(); 
 
     const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    
     const processPieData = useCallback((data, monthLabel) => {
         if (!data) return;
         let w = 0, t = 0, m = 0, o = 0;
@@ -110,18 +123,15 @@ const ProductionVsSalesView = () => {
 
     useEffect(() => {
         const fetchAllStats = async () => {
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    console.error("No authorization token found");
-                    setLoading(false);
-                    return;
-                }
-                
-                
                 const config = { 
                     headers: { 
-                        'Authorization': `Bearer ${token.trim()}`,
+                        'Authorization': `Bearer ${token}`, 
                         'Content-Type': 'application/json'
                     } 
                 };
@@ -131,9 +141,9 @@ const ProductionVsSalesView = () => {
                     axios.get("http://localhost:5000/api/analytics/financial-stats?year=2026", config)
                 ]);
 
+
                 const sales = resProd.data.salesStats || [];
                 const harvest = resProd.data.harvestStats || [];
-                
                 
                 const formatted = months.map((m, index) => {
                     const mNum = index + 1;
@@ -155,11 +165,14 @@ const ProductionVsSalesView = () => {
                 setLoading(false);
             } catch (err) {
                 console.error("Dashboard error:", err.response?.data || err.message);
+                if (err.response?.status === 401) {
+                    logout(); 
+                }
                 setLoading(false);
             }
         };
         fetchAllStats();
-    }, [processPieData]);
+    }, [token, processPieData, logout]);
 
     const handleFilterChange = (e) => {
         const selected = e.target.value;

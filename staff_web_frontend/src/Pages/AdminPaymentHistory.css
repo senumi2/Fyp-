@@ -21,7 +21,7 @@
     color: var(--text-main);
 }
 
-/* කලින් තිබූ තද gradient එක ඉවත් කර සරල කළා */
+
 .overlay-gradient {
     display: none; 
 }
@@ -71,7 +71,7 @@
     transform: translateY(-1px);
 }
 
-/* Summary Cards - Minimalist Style */
+/* Summary Cards  */
 .summary-cards-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -115,7 +115,9 @@
     gap: 16px;
     margin-bottom: 24px;
     border: 1px solid var(--border-color);
+    
 }
+
 
 .search-input-main {
     flex: 3;
@@ -129,7 +131,7 @@
 }
 
 .search-input-main:focus {
-    border-color: var(--accent-blue);
+    border-color: #059669;
     background: white;
 }
 
@@ -142,7 +144,7 @@
     color: var(--text-main);
 }
 
-/* Modern Table Styling */
+/*  Table Styling */
 .table-section-creative {
     background: var(--card-bg);
     border-radius: 16px;
@@ -194,7 +196,7 @@
     color: var(--text-main);
 }
 
-/* Status Pills - Rounded & Soft Colors */
+/* Status Pills  */
 .status-pill {
     padding: 4px 12px;
     border-radius: 20px;
@@ -214,7 +216,7 @@
     color: var(--text-muted);
 }
 
-/* Pagination Footer */
+/*  Footer */
 .pagination-footer {
     padding: 16px;
     display: flex;

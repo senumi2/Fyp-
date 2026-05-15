@@ -1,10 +1,10 @@
-/* --- QualityReports.css --- */
+
 
 .quality-page-wrapper {
   background: #ffffff;
-  color: #001F3F; /* Deep Navy Text */
+  color: #001F3F; 
   font-family: 'Plus Jakarta Sans', sans-serif;
-  padding-top: 40px; /* Navbar එක සහ Content එක අතර Gap එක මෙතැනින් පාලනය වේ */
+  padding-top: 40px;
   padding-bottom: 80px;
 }
 
@@ -18,11 +18,10 @@
 .quality-hero {
   text-align: center;
   padding: 60px 40px;
-  border-radius: 30px; /* Hero section එකට curved පෙනුමක් ලබා දී ඇත */
-  /* Soft Navy/Off-white Gradient */
+  border-radius: 30px; 
   background: linear-gradient(135deg, #F1FAEE 0%, #ffffff 100%);
   border: 1px solid rgba(0, 31, 63, 0.05);
-  margin-bottom: 20px; /* පහළ Standards cards සමඟ ඇති පරතරය */
+  margin-bottom: 20px; 
 }
 
 .quality-hero h1 {
@@ -45,7 +44,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 25px;
-  margin-top: 20px; /* Hero section එකට පසුව පරතරය */
+  margin-top: 20px;
 }
 
 .standard-card {
@@ -66,7 +65,7 @@
 
 .std-icon {
   font-size: 2.2rem;
-  color: #0096D6; /* Cyan Blue */
+  color: #0096D6;
   margin-bottom: 15px;
 }
 
@@ -134,7 +133,7 @@
 
 /* Certifications Section */
 .cert-section {
-  background: #001F3F; /* Deep Navy */
+  background: #001F3F; 
   padding: 60px 40px;
   border-radius: 35px;
   color: #F1FAEE;
@@ -183,7 +182,7 @@
 
 .cert-icon {
   font-size: 2.5rem;
-  color: #0096D6; /* Cyan */
+  color: #0096D6;
 }
 
 .view-btn {

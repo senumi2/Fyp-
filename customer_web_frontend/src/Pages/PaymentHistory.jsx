@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./PaymentHistory.css";
 
 function PaymentHistory() {
-  // මුලින්ම හිස් Array එකක් ලෙස තබා ගන්න
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +10,7 @@ function PaymentHistory() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    // Token එක නැතිනම් Fetch කරන්න කලින්ම error එකක් පෙන්වන්න පුළුවන්
+    
     if (!token) {
       setError("Please login to view your payment history.");
       setLoading(false);
@@ -30,11 +30,11 @@ function PaymentHistory() {
         return res.json();
       })
       .then(data => {
-        // Backend එකෙන් එන්නේ Array එකක්ද කියලා පරීක්ෂා කිරීම (CRITICAL)
+       
         if (Array.isArray(data)) {
           setOrders(data);
         } else {
-          setOrders([]); // Array එකක් නෙවෙයි නම් හිස් කරන්න
+          setOrders([]); 
         }
         setLoading(false);
       })

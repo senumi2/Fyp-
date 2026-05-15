@@ -9,7 +9,7 @@ router.post("/contact", async (req, res) => {
     return res.status(400).json({ message: "Please provide all fields" });
   }
 
-  // Email eke design eka (HTML body)
+  
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; border: 1px solid #ddd; padding: 20px;">
       <h2 style="color: #333;">New Inquiry from Saltern Hambanthota</h2>
@@ -24,7 +24,7 @@ router.post("/contact", async (req, res) => {
 
   try {
     await sendEmail({
-      email: "senumihimanadi@gmail.com", // Labana kenage email eka (Admin)
+      email: "senumihimanadi@gmail.com", 
       subject: `Contact Form: ${subject}`,
       html: htmlContent,
     });

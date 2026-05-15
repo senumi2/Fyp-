@@ -4,7 +4,7 @@ import "./AdminPaymentHistory.css";
 
 function AdminPaymentHistory() {
   const { token } = useContext(AuthContext);
-  const [payments, setPayments] = useState([]); // Default empty array
+  const [payments, setPayments] = useState([]); 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +18,6 @@ function AdminPaymentHistory() {
         });
         const data = await res.json();
         
-        // Essential: Check if data is array
         if (Array.isArray(data)) {
             setPayments(data);
         } else {
@@ -32,7 +31,6 @@ function AdminPaymentHistory() {
     if(token) fetchPayments();
   }, [token]);
 
-  // Safe filtering logic
   const filteredPayments = Array.isArray(payments) ? payments.filter((p) => {
     const nameMatch = p.userId?.name?.toLowerCase() || "";
     const idMatch = p._id || "";
@@ -49,9 +47,20 @@ function AdminPaymentHistory() {
   const currentPayments = filteredPayments.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredPayments.length / itemsPerPage) || 1;
 
-  const totalRevenue = Array.isArray(payments) ? payments.reduce((sum, p) => p.status === "Paid" ? sum + p.amount : sum, 0) : 0;
-  const successCount = Array.isArray(payments) ? payments.filter(p => p.status === "Paid").length : 0;
-  const pendingCount = Array.isArray(payments) ? payments.filter(p => p.status === "Pending").length : 0;
+  // --- Summary Card Logic Fix (Safe Version) ---
+  // මුල් functions වලට හානි නොවන පරිදි, දත්ත නිවැරදිව එකතු කිරීමට Number() සහ toLowerCase() භාවිතා කර ඇත.
+  const totalRevenue = Array.isArray(payments) 
+    ? payments.reduce((sum, p) => (p.status && p.status.toLowerCase() === "paid") ? sum + (Number(p.amount) || 0) : sum, 0) 
+    : 0;
+
+  const successCount = Array.isArray(payments) 
+    ? payments.filter(p => p.status && p.status.toLowerCase() === "paid").length 
+    : 0;
+
+  const pendingCount = Array.isArray(payments) 
+    ? payments.filter(p => p.status && p.status.toLowerCase() === "pending").length 
+    : 0;
+  // ----------------------------------------------
 
   const exportToCSV = () => {
     const headers = ["Order ID,Customer,Email,Date,Method,Amount,Status\n"];
@@ -96,7 +105,7 @@ function AdminPaymentHistory() {
         <section className="filter-bar-container modern-glass-card">
           <input 
             type="text" 
-            placeholder="Search by  Order ID..." 
+            placeholder="Search by Order ID..." 
             className="search-input-main"
             onChange={(e) => {setSearchTerm(e.target.value); setCurrentPage(1);}}
           />
@@ -122,7 +131,7 @@ function AdminPaymentHistory() {
             <tbody>
               {currentPayments.map((p) => (
                 <tr key={p._id}>
-                  <td className="id-cell">#{p._id.substring(18)}</td>
+                  <td className="id-cell">#{p._id.substring(p._id.length - 6)}</td>
                   <td>
                     <div className="cust-info">
                       <strong>{p.userId?.name}</strong>

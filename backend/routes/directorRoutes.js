@@ -12,10 +12,10 @@ const {
 } = require("../controllers/directorController");
 
 
-// 🌍 PUBLIC (User + Admin)
+//  PUBLIC (User + Admin)
 router.get("/", getDirectors);
 
-// 🔐 ADMIN ONLY
+//  ADMIN ONLY
 router.post("/", auth, admin, upload.single("image"), createDirector);
 router.put("/:id", auth, admin, upload.single("image"), updateDirector);
 router.delete("/:id", auth, admin, deleteDirector);

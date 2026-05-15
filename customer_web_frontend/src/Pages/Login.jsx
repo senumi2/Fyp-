@@ -34,7 +34,7 @@ function Login() {
 
       <div className="login-box">
         <div className="login-header">
-          {/* Back to Home Arrow */}
+          
           <Link to="/" className="back-home-arrow" title="Back to Home">
             &larr;
           </Link>

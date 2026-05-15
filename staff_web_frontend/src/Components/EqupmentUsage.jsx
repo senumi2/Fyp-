@@ -8,7 +8,7 @@ const EqupmentUsage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // Modal & Form States
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [currentId, setCurrentId] = useState(null);
@@ -22,7 +22,7 @@ const EqupmentUsage = () => {
         statuse: 'Good'
     });
 
-    // 🎯 ගැටලුව විසඳන කොටස: Backend එකේ app.js හි ඇති ලිපිනයට ගැලපීම
+   
     const getTargetRoute = (tab) => {
         if (tab === 'logs') return 'maintenance-repair-logs';
         return tab;
@@ -39,7 +39,7 @@ const EqupmentUsage = () => {
 
             let url = `http://localhost:5000/api/${endpoint}`;
             
-            // Search logic - logs සඳහා search එක backend එකේ නැත්නම් එය පාලනය කිරීම
+           
             if (activeTab !== 'logs' && searchTerm) {
                 url += `?search=${searchTerm}`;
             }
@@ -62,7 +62,7 @@ const EqupmentUsage = () => {
     }, [activeTab, searchTerm]);
 
     const handleDelete = async (id) => {
-        if (window.confirm("මෙම දත්තය මකා දැමීමට ඔබට විශ්වාසද?")) {
+        if (window.confirm("Are you sure you want to delete this data?")) {
             const endpoint = getTargetRoute(activeTab);
             const token = localStorage.getItem('token');
             try {
@@ -71,7 +71,7 @@ const EqupmentUsage = () => {
                 });
                 fetchCurrentData();
             } catch (err) {
-                alert("මකා දැමීම අසාර්ථකයි!");
+                alert("Deletion failed!");
             }
         }
     };
@@ -115,10 +115,10 @@ const EqupmentUsage = () => {
             }
             setIsModalOpen(false);
             fetchCurrentData();
-            alert("සාර්ථකව සුරැකුණා!");
+            alert("Saved successfully!");
         } catch (err) {
             console.error("Submit Error:", err.response?.data);
-            alert("සුරැකීම අසාර්ථකයි! Backend එකෙන් ලැබුණු පණිවිඩය: " + (err.response?.data?.message || "Error"));
+            alert("Save failed! Message received from backend: " + (err.response?.data?.message || "Error"));
         }
     };
 

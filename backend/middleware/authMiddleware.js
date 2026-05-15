@@ -11,7 +11,7 @@ const authMiddleware = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // වැදගත්: Token එක ඇතුළේ role එක හෝ jobRole එක තිබේදැයි බලන්න
+ 
     req.user = {
       id: decoded.id || decoded._id || decoded.userId,
       email: decoded.email,
@@ -25,7 +25,7 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-// productRoutes වල authMiddleware.admin ලෙස භාවිතා කරන්නේ මෙයයි
+
 authMiddleware.admin = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();

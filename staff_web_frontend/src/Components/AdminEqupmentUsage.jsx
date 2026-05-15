@@ -23,7 +23,7 @@ const AdminEqupmentUsage = () => {
             };
 
             let url = `http://localhost:5000/api/${endpoint}`;
-            // Logs ඇතුළු සියලුම Tabs සඳහා search එක වැඩ කිරීමට:
+            
         if (searchTerm) {
           url += `?search=${searchTerm}`;
       }
@@ -82,7 +82,7 @@ const AdminEqupmentUsage = () => {
                     </div>
                     
                     <div className="admin-header-controls">
-                        {/* Enhanced Modern Search Bar */}
+                        
                         <div className="admin-modern-search">
                             <span className="admin-search-icon">🔍</span>
                             <input 

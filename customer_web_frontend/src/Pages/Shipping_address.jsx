@@ -7,7 +7,7 @@ function Shipping_address() {
   const token = localStorage.getItem("token");
   const [warehouses, setWarehouses] = useState([]);
   const [formData, setFormData] = useState({
-    warehouseName: "", // ගබඩාව හඳුනා ගැනීමට නමක් (e.g., Colombo Store)
+    warehouseName: "", 
     fullName: "",
     contactNumber: "",
     address: "",
@@ -16,7 +16,7 @@ function Shipping_address() {
     postalCode: ""
   });
 
-  // 1. සියලුම ගබඩා විස්තර ලබා ගැනීම
+
   const fetchAddresses = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/shipping-address", {
@@ -34,16 +34,16 @@ function Shipping_address() {
   const handleChange = e => {
     const { name, value } = e.target;
   
-    // contactNumber සහ postalCode සඳහා පමණක් අංක පරීක්ෂා කිරීම
+    
     if (name === "contactNumber" || name === "postalCode") {
-      const onlyNums = value.replace(/[^0-9]/g, ''); // අංක නොවන දේවල් ඉවත් කරයි
+      const onlyNums = value.replace(/[^0-9]/g, ''); 
       setFormData({ ...formData, [name]: onlyNums });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
-  // 2. අලුත් ගබඩාවක් එකතු කිරීම
+ 
   const handleSubmit = async e => {
     e.preventDefault();
     const res = await fetch("http://localhost:5000/api/shipping-address", {
@@ -57,11 +57,11 @@ function Shipping_address() {
     if (res.ok) {
       alert("Warehouse Location Saved ✅");
       setFormData({ warehouseName: "", fullName: "", contactNumber: "", address: "", province: "", district: "", postalCode: "" });
-      fetchAddresses(); // ලැයිස්තුව Update කිරීම
+      fetchAddresses(); 
     }
   };
 
-  // 3. ගබඩාවක් ඉවත් කිරීම
+  
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this location?")) {
       await fetch(`http://localhost:5000/api/shipping-address/${id}`, {

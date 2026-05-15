@@ -16,7 +16,7 @@ def predict_weekly():
         for param in parameters:
             values = [d[param] for d in data_list]
             
-            # Model එක පුහුණු කිරීම
+            
             X, y = [], []
             for i in range(len(values) - window_size):
                 X.append(values[i : i + window_size])
@@ -25,7 +25,7 @@ def predict_weekly():
             model = RandomForestRegressor(n_estimators=100, random_state=42)
             model.fit(np.array(X), np.array(y))
 
-            # ඉදිරි දින 7 සඳහා අගයන් පුරෝකථනය කිරීම (Recursive Prediction)
+            
             current_batch = list(values[-window_size:])
             future_forecasts = []
             
@@ -35,7 +35,7 @@ def predict_weekly():
                 current_batch.pop(0)
                 current_batch.append(pred)
 
-            # සතියේ සාමාන්‍ය අගය (Average) ලබා ගැනීම
+            
             weekly_predictions[param] = round(float(np.mean(future_forecasts)), 2)
 
         print(json.dumps(weekly_predictions))

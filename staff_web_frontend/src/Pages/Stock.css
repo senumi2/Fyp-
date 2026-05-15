@@ -1,8 +1,4 @@
-/* --- Color Palette --- 
-   Persian Blue: #1C39BB
-   Teal: #008080
-   Yellow: #FFD700
------------------------ */
+
 
 .stock-module-wrapper { 
     font-family: 'Inter', sans-serif; 
@@ -12,7 +8,7 @@
 
 .stock-layout { display: flex; }
 
-/* Sidebar - Layout changed to Flexbox to push footer down */
+
 .stock-sidebar { 
     width: 260px; 
     background: #0e584c; 
@@ -24,8 +20,8 @@
     z-index: 100;
     box-shadow: 4px 0 10px rgba(0,0,0,0.1);
     display: flex;
-    flex-direction: column; /* Added */
-    justify-content: space-between; /* Added to push footer to bottom */
+    flex-direction: column; 
+    justify-content: space-between; 
 }
 
 .sidebar-header { 
@@ -35,15 +31,15 @@
     margin-bottom: 20px; 
     color: #FFD700; 
     letter-spacing: 1px;
-    display: flex; /* Added for Icon alignment */
+    display: flex; 
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
 
-.header-icon { font-size: 1.4rem; } /* Added */
+.header-icon { font-size: 1.4rem; } 
 
-.sidebar-nav { flex-grow: 1; } /* Added to take available space */
+.sidebar-nav { flex-grow: 1; } 
 
 .sidebar-nav button { 
     width: 100%; 
@@ -280,12 +276,10 @@
 .header-badges { display: flex; gap: 10px; align-items: center; }
 .card-header-flex { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
 
-/* =========================================
-   NEW ADDITIONS (Toggle at Bottom & Icon Fix)
-   ========================================= */
+
 
 .sidebar-footer {
-    padding-bottom: 20px; /* Space from absolute bottom */
+    padding-bottom: 20px; 
 }
 
 .unit-toggle-container {
@@ -316,7 +310,7 @@
     opacity: 0.5;
 }
 
-/* Toggle Switch Core */
+/* Toggle Switch  */
 .switch {
     position: relative;
     display: inline-block;

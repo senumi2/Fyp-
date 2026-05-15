@@ -3,7 +3,7 @@ import { FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaPhoneAlt, FaMapMarker
 import "./Footer.css";
 
 function Footer() {
-  // පිටුවේ අදාළ ස්ථානයට මෘදු ලෙස ගමන් කිරීමේ function එක
+  
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -48,11 +48,10 @@ function Footer() {
           </div>
         </div>
 
-        {/* Right Section - Quick Links (Smooth Scroll Enabled) */}
         <div className="footer-column links">
           <h3 className="footer-title">Quick Links</h3>
           <nav className="footer-nav">
-            {/* මෙහි href="#" දී onClick හරහා function එක call කරන්න */}
+            
             <button className="scroll-link" onClick={() => scrollToSection("events-section")}>Upcoming Events</button>
             <button className="scroll-link" onClick={() => scrollToSection("reports-section")}>Official Reports</button>
             <button className="scroll-link" onClick={() => scrollToSection("board-section")}>Board of Directors</button>

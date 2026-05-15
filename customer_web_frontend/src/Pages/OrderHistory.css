@@ -1,7 +1,7 @@
-/* --- Global Wrapper --- */
+
 .order-history-wrapper {
   padding: 60px 20px;
-  background-color: #F1FAEE; /* Off-white background */
+  background-color: #F1FAEE; 
   min-height: 100vh;
   font-family: 'Inter', 'Poppins', sans-serif;
 }
@@ -13,13 +13,13 @@
   background: #ffffff;
   padding: 40px;
   border-radius: 24px;
-  box-shadow: 0 10px 30px rgba(0, 31, 63, 0.08); /* Navy based shadow */
+  box-shadow: 0 10px 30px rgba(0, 31, 63, 0.08); 
   border: 1px solid rgba(0, 75, 135, 0.1);
 }
 
-/* --- Typography --- */
+
 .order-title {
-  color: #001F3F; /* Deep Navy Blue */
+  color: #001F3F; 
   margin-bottom: 8px;
   font-weight: 800;
   font-size: 2rem;
@@ -27,7 +27,7 @@
 }
 
 .subtitle {
-  color: #004B87; /* Medium Blue */
+  color: #004B87; 
   margin-bottom: 35px;
   font-size: 1rem;
   opacity: 0.8;
@@ -47,8 +47,8 @@ table {
 }
 
 th {
-  background: #002A5C; /* Darker Navy */
-  color: #F1FAEE; /* Off-white text for contrast */
+  background: #002A5C; 
+  color: #F1FAEE; 
   padding: 18px;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -57,7 +57,7 @@ th {
   font-weight: 600;
 }
 
-/* Rounded corners for table header */
+
 th:first-child { border-top-left-radius: 12px; }
 th:last-child { border-top-right-radius: 12px; }
 
@@ -69,14 +69,14 @@ td {
   background: #ffffff;
 }
 
-/* Table Row Hover effect */
+
 tbody tr:hover td {
   background-color: rgba(0, 150, 214, 0.03);
 }
 
 .id-cell { 
   font-weight: 700; 
-  color: #0096D6; /* Cyan for ID highlights */
+  color: #0096D6; 
 }
 
 .price-cell { 
@@ -89,7 +89,7 @@ tbody tr:hover td {
   color: #004B87;
 }
 
-/* --- Status Tags (Refined Colors) --- */
+/* --- Status Tags  --- */
 .order-status-tag {
   padding: 6px 16px;
   border-radius: 8px;
@@ -109,10 +109,10 @@ tbody tr:hover td {
   gap: 10px;
 }
 
-/* Track Button (Cyan Primary) */
+/* Track Button */
 .track-btn {
   padding: 10px 20px;
-  background: #0096D6; /* Cyan */
+  background: #0096D6; 
   color: white;
   border: none;
   border-radius: 10px;
@@ -128,7 +128,7 @@ tbody tr:hover td {
   box-shadow: 0 6px 15px rgba(0, 150, 214, 0.3);
 }
 
-/* Invoice Button (Navy Outline) */
+/* Invoice Button  */
 .inv-btn {
   background-color: transparent;
   color: #002A5C;

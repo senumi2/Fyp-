@@ -24,7 +24,7 @@ function CartIcon() {
         console.error("Cart fetch error:", err);
       }
     } else {
-      // ලොග් වී නැතිනම් පමණක් localStorage බලන්න
+      
       const localCart = JSON.parse(localStorage.getItem("cart")) || [];
       count = localCart.length;
     }
@@ -33,7 +33,7 @@ function CartIcon() {
 
   useEffect(() => {
     updateCartCount();
-    // ඕනෑම තැනක සිට Cart එක update වූ බව දැනුම් දෙන Event එක
+   
     window.addEventListener("cartUpdated", updateCartCount);
     window.addEventListener("storage", updateCartCount);
 
@@ -51,7 +51,7 @@ function CartIcon() {
     <div className="floating-cart-container" onClick={() => navigate("/payment")}>
       <div className="cart-circle">
         <FaShoppingCart className="main-cart-svg" />
-        {/* අංකය පෙන්වන කොටස (Badge) - මෙන්න මේකයි ඔබ ඇසූ කොටස */}
+       
         {cartCount > 0 && (
           <span className="cart-floating-badge">{cartCount}</span>
         )}

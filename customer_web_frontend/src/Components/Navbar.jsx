@@ -15,7 +15,7 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-container">
-        {/* වම් පස ලින්ක්ස් */}
+        {/* left side links */}
         <div className="nav-left">
           <NavLink className="nav-link" to="/">
             Home
@@ -35,7 +35,7 @@ function Navbar() {
           </NavLink>
         </div>
 
-        {/* දකුණු පස බටන්ස් */}
+        {/* right side buttons */}
         <div className="nav-right">
           {!user && (
             <Link to="/login" className="login-btn-navi">

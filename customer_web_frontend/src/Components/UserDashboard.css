@@ -2,7 +2,7 @@
 .dashboard-wrapper {
   width: 100%;
   min-height: 100vh;
-  background-color: #F1FAEE; /* Off-white Background */
+  background-color: #F1FAEE; 
   display: flex;
   justify-content: center;
   align-items: center; 
@@ -25,7 +25,7 @@
 .dashboard-header-simple h2 {
   font-size: 2.6rem;
   font-weight: 800;
-  color: #001F3F; /* Navy Blue */
+  color: #001F3F; 
   margin-bottom: 12px;
 }
 
@@ -35,7 +35,7 @@
   opacity: 0.8;
 }
 
-/* --- Quick Status Counters --- */
+
 .status-overview {
   display: flex;
   justify-content: center;
@@ -184,12 +184,12 @@
   box-shadow: 0 20px 40px rgba(0, 31, 63, 0.1);
 }
 
-/* --- Keep Original Card Borders as requested --- */
+
 .track-highlight { border: 1px solid #f4d35e; }
 .order-history-card-highlight { border: 1px solid #c8e6c9; }
 .quality-card { border: 1px solid #e1bee7; }
 
-/* --- Keep Original Icon Boxes as requested --- */
+
 .icon-box {
   font-size: 1.8rem;
   margin-bottom: 25px;

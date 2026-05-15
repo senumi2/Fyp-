@@ -1,10 +1,10 @@
-/* AdminReports.css - Updated Professional Theme */
+
 
 .admin-reports-wrapper {
   padding: 40px 25px;
   max-width: 1300px;
   margin: 0 auto;
-  background-color: #f4f7f6; /* ලා අළු/කොළ පැහැති පසුබිමක් */
+  background-color: #f4f7f6; 
   min-height: 100vh;
   font-family: 'Inter', system-ui, sans-serif;
 }
@@ -12,13 +12,13 @@
 /* Header Section */
 .reports-header-main {
   margin-bottom: 35px;
-  border-left: 6px solid #00A693; /* Persian Green Accent */
+  border-left: 6px solid #00A693; 
   padding-left: 20px;
 }
 
 .reports-header-main h2 { 
   margin: 0; 
-  color: #28666E; /* Teal Green */
+  color: #28666E; 
   font-size: 2.2rem;
   font-weight: 800; 
   letter-spacing: -0.5px;
@@ -30,7 +30,7 @@
   color: #526b68; 
 }
 
-/* Professional Horizontal Form */
+/*  Horizontal Form */
 .report-form-section {
   background: #e9e5a525;
   padding: 30px;
@@ -56,7 +56,7 @@
 .report-field label {
   font-size: 0.75rem;
   font-weight: 700;
-  color: #28666E; /* Teal Green */
+  color: #28666E; 
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -163,14 +163,14 @@
   transform: scale(1.1);
 }
 
-/* Hover Overlay - Using Yellow */
+
 .view-overlay-text {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(40, 102, 110, 0.85); /* Teal Transparent */
+  background: rgba(40, 102, 110, 0.85); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -180,7 +180,7 @@
 
 .view-overlay-text span {
   color: #28666E;
-  background: #FEDC97; /* Yellow Accent */
+  background: #FEDC97; 
   padding: 10px 25px;
   font-weight: 800;
   font-size: 0.85rem;
@@ -216,7 +216,7 @@
 .ctrl-edit { 
   background: transparent; 
   border: none; 
-  color: #00A693; /* Persian Green */
+  color: #00A693; 
   font-weight: 700; 
   cursor: pointer; 
   transition: 0.3s; 

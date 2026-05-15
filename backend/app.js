@@ -24,7 +24,7 @@ const wageRoutes = require("./routes/wageRoutes");
 const transportRoutes = require("./routes/transportRoutes");
 const maintenanceRepairLogsRoutes = require("./routes/maintenanceRepairLogsRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
-const operationalExpenseRoutes = require("/routes/operationalExpenseRoutes");
+const operationalExpenseRoutes = require("./routes/operationalExpenseRoutes");
 
 const noticeRoutes = require("./routes/noticeRoutes");
 
@@ -60,7 +60,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.urlencoded({ extended: true })); // PayHere එවන්නේ Form data නිසා මේක අනිවාර්යයි
+app.use(express.urlencoded({ extended: true })); 
 app.use("/api/payhere", payhereRoutes);
 
 // ✅ Static folders

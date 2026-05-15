@@ -18,7 +18,7 @@ function Reports() {
       });
   }, []);
 
-  // PDF එක අලුත් Tab එකක විවෘත කිරීමේ function එක
+ 
   const openPdf = (pdfUrl) => {
     if (pdfUrl) {
       window.open(`http://localhost:5000${pdfUrl}`, "_blank", "noopener,noreferrer");
@@ -45,7 +45,7 @@ function Reports() {
                     alt={report.title} 
                     className="report-card-img" 
                   />
-                  {/* Image එක මත Click කළත් PDF එක Open වන ලෙස overlay එකක් එක් කළ හැක (Optional) */}
+                 
                 </div>
                 <div className="report-card-content">
                   <h3>{report.title}</h3>

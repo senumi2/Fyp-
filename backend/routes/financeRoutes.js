@@ -4,7 +4,7 @@ const Wage = require("../models/Wage");
 const Transport = require("../models/Transport");
 const Maintenance = require("../models/MaintenanceRepairLogs");
 
-// Get all wages (Newest first)
+
 router.get("/wages", async (req, res) => {
     try {
         const wages = await Wage.find().sort({ date: -1 });
@@ -12,7 +12,7 @@ router.get("/wages", async (req, res) => {
     } catch (err) { res.status(500).json(err); }
 });
 
-// Add new wage
+
 router.post("/wages", async (req, res) => {
     const newWage = new Wage(req.body);
     try {
@@ -21,7 +21,7 @@ router.post("/wages", async (req, res) => {
     } catch (err) { res.status(500).json(err); }
 });
 
-// Update wage (Date won't change because we don't send 'date' in body)
+
 router.put("/wages/:id", async (req, res) => {
     try {
         const updatedWage = await Wage.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
@@ -29,7 +29,7 @@ router.put("/wages/:id", async (req, res) => {
     } catch (err) { res.status(500).json(err); }
 });
 
-// Delete wage
+
 router.delete("/wages/:id", async (req, res) => {
     try {
         await Wage.findByIdAndDelete(req.params.id);
@@ -37,7 +37,7 @@ router.delete("/wages/:id", async (req, res) => {
     } catch (err) { res.status(500).json(err); }
 });
 
-// --- Transport Routes ---
+
 router.get("/transport", async (req, res) => {
     const data = await Transport.find().sort({ date: -1 });
     res.json(data);
@@ -78,7 +78,7 @@ router.post("/maintenanceRepairLogs", async (req, res) => {
         const savedItem = await newItem.save();
         res.status(200).json(savedItem);
     } catch (err) {
-        console.error("❌ Database Error:", err);
+        console.error(" Database Error:", err);
         res.status(500).json({ message: err.message });
     }
 });

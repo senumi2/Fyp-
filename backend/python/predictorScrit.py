@@ -9,7 +9,7 @@ def predict_all_parameters():
         if not input_data:
             return
 
-        # Node එකෙන් ලැබෙන array of objects
+       
         data_list = json.loads(input_data)
         
         if len(data_list) < 10:
@@ -19,7 +19,7 @@ def predict_all_parameters():
         parameters = ["temperature", "humidity", "windSpeed", "windDirection", "pressure", "cloudCover", "rainfall"]
         predictions = {}
 
-        window_size = 5 # රටාව බැලීමට පහුගිය දත්ත 5ක් ගනී
+        window_size = 5 
 
         for param in parameters:
             values = [d[param] for d in data_list]

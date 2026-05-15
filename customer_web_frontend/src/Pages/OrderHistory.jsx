@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Tracking පිටුවට යෑම සඳහා
+import { useNavigate } from "react-router-dom"; 
 import "./OrderHistory.css";
 
 function OrderHistory() {
@@ -17,7 +17,7 @@ function OrderHistory() {
       return;
     }
 
-    // මෙතනදී අපි පාවිච්චි කරන්නේ ඔයාගේ පවතින "/my-orders" API එකමයි
+  
     fetch("http://localhost:5000/api/orders/my-orders", {
       headers: { 
         "Authorization": `Bearer ${token}`,
@@ -42,9 +42,9 @@ function OrderHistory() {
       });
   }, []);
 
-  // 🚚 Tracking එකට Link කිරීමේ function එක
+ 
   const trackOrder = (orderId) => {
-    // මෙය ඔයාගේ App.js එකේ Tracking route එකට ගැලපෙන ලෙස "/order-tracking" ලෙස යොදන්න
+
     navigate(`/OrderTracking?orderId=${orderId}`);
   };
 

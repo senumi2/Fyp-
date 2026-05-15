@@ -1,8 +1,4 @@
-/* =========================================
-   SALTERN ERP - FULL UPDATED STYLES
-   Colors: Yellow, Persian Green, Teal Green
-   Features: Table Scrolling & Sticky Headers
-   ========================================= */
+
 
    :root {
     --persian-green: #00A693;
@@ -18,7 +14,7 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Reset & Base Styles */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -190,7 +186,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 
 /* UPDATED: Table Scroller Wrapper */
 .table-wrapper {
-    max-height: 450px; /* ඔබට අවශ්‍ය උස මෙහි වෙනස් කරන්න */
+    max-height: 450px; 
     overflow-y: auto;
     overflow-x: auto;
     border: 1px solid #F1F1F1;
@@ -200,7 +196,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 
 table { width: 100%; border-collapse: collapse; }
 
-/* UPDATED: Sticky Header */
+/*  Sticky Header */
 .table-wrapper table thead th {
     position: sticky;
     top: 0;

@@ -10,7 +10,7 @@ function Hero() {
      >
       <div className="hero-overlay"></div>
 
-     {/* Shadow Box With Text */}
+     
       <div className="hero-content">
         <h1 className="hero-title">NATIONAL SALT LIMITED</h1>
         <p className="hero-subtitle">

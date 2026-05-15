@@ -7,8 +7,8 @@ const Order = require("../models/Order");
 router.post("/generate-hash", (req, res) => {
     const { order_id, amount, currency } = req.body;
 
-    const merchant_id = "YOUR_MERCHANT_ID"; // Sandbox ID එක දාන්න
-    const merchant_secret = "YOUR_MERCHANT_SECRET"; // Sandbox Secret එක දාන්න
+    const merchant_id = "YOUR_MERCHANT_ID"; 
+    const merchant_secret = "YOUR_MERCHANT_SECRET"; 
 
     const amountFormatted = parseFloat(amount).toLocaleString('en-us', { minimumFractionDigits: 2 }).replaceAll(',', '');
     const merchant_secret_hash = crypto.createHash("md5").update(merchant_secret).digest("hex").toUpperCase();
@@ -22,7 +22,7 @@ router.post("/generate-hash", (req, res) => {
     res.json({ hash });
 });
 
-// --- 2. Notify URL (PayHere Webhook) ---
+
 router.post("/notify", async (req, res) => {
     const { merchant_id, order_id, payhere_amount, payhere_currency, status_code, md5sig } = req.body;
     const merchant_secret = "YOUR_MERCHANT_SECRET";
@@ -37,7 +37,7 @@ router.post("/notify", async (req, res) => {
     if (local_md5sig === md5sig && status_code === "2") {
         try {
             await Order.findByIdAndUpdate(order_id, { status: "Paid" });
-            console.log(`✅ Order ${order_id} updated to Paid via PayHere.`);
+            console.log(`Order ${order_id} updated to Paid via PayHere.`);
         } catch (err) {
             console.error("Order update error:", err);
         }

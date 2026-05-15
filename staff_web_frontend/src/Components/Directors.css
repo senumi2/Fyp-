@@ -60,13 +60,13 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 40px; /* Space for arrows */
+  padding: 0 40px; 
 }
 
 .modern-window {
   width: 100%;
   overflow: hidden;
-  padding: 25px 0; /* Space for card hover effect */
+  padding: 25px 0; 
 }
 
 .modern-track {
@@ -82,7 +82,7 @@
 
 
 
-/* Modern Creative Card */
+
 .creative-director-card {
   background: var(--card-bg);
   backdrop-filter: blur(12px);

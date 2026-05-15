@@ -20,10 +20,10 @@
     min-height: 100vh;
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: var(--bg-slate);
-    padding-top: 70px; /* Navbar එක සඳහා ඉඩ තැබීම */
+    padding-top: 70px; 
 }
 
-/* Sidebar Fix - Navbar එකට යටවීම වැළැක්වීමට top: 70px භාවිතා කර ඇත */
+
 .usage-sidebar {
     width: 260px;
     background: linear-gradient(180deg, var(--dark-green) 0%, var(--teal-green) 100%);
@@ -105,7 +105,7 @@
     margin-top: 1.5rem; 
 }
 
-/* Search Bar Fix - image_73478c.png හි තිබූ බෝඩර් දෝෂය නිවැරදි කර ඇත */
+
 .modern-search-wrapper {
     background: #ffffff;
     border: 1.5px solid var(--persian-green);
@@ -199,7 +199,7 @@
     color: var(--text-main);
 }
 
-/* Bold text & Tags */
+
 .bold-text { font-weight: 700; color: var(--dark-green); }
 
 .qty-tag { 

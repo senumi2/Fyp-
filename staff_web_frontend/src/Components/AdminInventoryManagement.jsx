@@ -46,7 +46,7 @@ const AdminInventoryManagement = () => {
         return inward - outward;
     };
 
-    // Analysis Report සඳහා දත්ත සකස් කිරීම (Stock.jsx හි logic එකට අනුව)
+  
     const getChartData = (itemName) => {
         const filtered = inventoryData.filter(d => d.itemName === itemName);
         const summary = {};
@@ -173,7 +173,7 @@ const AdminInventoryManagement = () => {
     <YAxis fontSize={11} stroke="#666" />
     <Tooltip contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }} />
     <Legend verticalAlign="top" height={36}/>
-    {/* Persian Green සහ Teal Green වර්ණ භාවිතා කර ඇත */}
+    
     <Line type="monotone" dataKey="inward" stroke="#00A693" strokeWidth={3} dot={{ r: 4 }} name="Inward Stock" />
     <Line type="monotone" dataKey="outward" stroke="#008080" strokeWidth={3} dot={{ r: 4 }} name="Outward Stock" />
 </LineChart>

@@ -20,7 +20,6 @@ const Login = () => {
       const userData = res.data.user;
 
       if (token && userData) {
-        // ✅ අලුත් Tab එකකදී Logout වී තිබීමට අනිවාර්යයෙන්ම sessionStorage භාවිතා කළ යුතුය
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('role', userData.jobRole);
 
@@ -29,7 +28,7 @@ const Login = () => {
         const userRole = userData.jobRole ? userData.jobRole.toLowerCase().trim() : "";
         alert("Login Successful! Welcome " + (userData.fullName || ""));
 
-        // ✅ ගැටළුව 1: Role එක අනුව නිවැරදි Page එකට කෙලින්ම Navigate කිරීම
+        
         if (userRole === 'admin') {
           navigate('/adminDashboard');
         } else if (userRole === 'driver') {
@@ -37,7 +36,7 @@ const Login = () => {
         } else if (userRole === 'customer') {
           navigate('/customerDashboard');
         } else {
-          // වෙනත් ඕනෑම Staff role එකක් නම් Staff Login (Cards පෙන්වන) Page එකට යවයි
+          
           navigate('/staff'); 
         }
       }
@@ -48,7 +47,7 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      {/* Water Drops 12 - කලින් තිබූ පරිදිම */}
+      {/* Water Drops  */}
       <div className="water-drop-bg drop-v1"></div>
       <div className="water-drop-bg drop-v2"></div>
       <div className="water-drop-bg drop-v3"></div>

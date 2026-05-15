@@ -1,9 +1,6 @@
-/* =========================================
-   HARVEST MANAGEMENT - SCOPED CSS (FULL)
-   (Does not affect Main Admin Sidebar)
-   ========================================= */
 
-/* Main Wrapper for the entire component */
+
+
 .harvest-main-wrapper {
     display: flex;
     background-color: #F4F7F6;
@@ -11,10 +8,10 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* --- HARVEST MINI SIDEBAR (Isolated) --- */
+
 .harvest-sidebar-mini {
     width: 70px;
-    background: #006D5B; /* Teal Green */
+    background: #006D5B;
     color: white;
     padding: 30px 0;
     position: fixed;
@@ -94,7 +91,7 @@
     margin: 5px 0;
 }
 
-/* Custom Styled Toggle Switch */
+
 .h-switch {
     position: relative;
     width: 32px;
@@ -136,9 +133,9 @@
     transform: translateX(14px);
 }
 
-/* --- CONTENT AREA (Isolated) --- */
+
 .harvest-content-area {
-    margin-left: 70px; /* Width of the mini sidebar */
+    margin-left: 70px; 
     padding: 40px;
     width: calc(100% - 70px);
 }

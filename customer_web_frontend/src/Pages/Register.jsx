@@ -63,13 +63,13 @@ function Register() {
 
   return (
     <div className="register-container">
-      {/* පාවෙන ජල බින්දු */}
+      
       <div className="bg-drop drop-1"></div>
       <div className="bg-drop drop-2"></div>
 
       <div className="register-box">
         <div className="register-header">
-          {/* Back to Home Arrow */}
+         
           <Link to="/" className="back-home-arrow" title="Back to Home">
             &larr;
           </Link>
