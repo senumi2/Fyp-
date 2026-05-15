@@ -34,14 +34,41 @@ exports.getFinancialStats = async (req, res) => {
             }
         }
 
+        // --- වැරදි දත්ත නිවැරදි කරන සහ මුදල් එකතු කරන ප්‍රධාන ශ්‍රිතය ---
         const aggregateWithFilter = async (Model, sumField) => {
             const pipeline = [];
-            if (Object.keys(matchStage).length > 0) pipeline.push(matchStage);
-            pipeline.push({ $group: { _id: { $month: "$date" }, totalAmount: { $sum: `$${sumField}` } } });
+            
+            if (Object.keys(matchStage).length > 0) {
+                pipeline.push(matchStage);
+            }
+
+            pipeline.push({
+                $group: {
+                    _id: { $month: "$date" },
+                    totalAmount: {
+                        $sum: {
+                            // Logic: අගය null නම්, හෝ සෘණ (negative) නම් 0 ගන්නවා.
+                            // ඕනෙ නම් උපරිම සීමාවක් (Extra Large limit) දාන්නත් පුළුවන්.
+                            $cond: {
+                                if: { 
+                                    $and: [
+                                        { $gt: [`$${sumField}`, 0] },          // 0 ට වඩා වැඩි විය යුතුයි (Minus values හලන්න)
+                                        { $lt: [`$${sumField}`, 100000000] }   // වැරදීමකින් වැටුණු Extra large values (උදා: කෝටි 10 ට වැඩි) හලන්න
+                                    ]
+                                },
+                                then: `$${sumField}`,
+                                else: 0
+                            }
+                        }
+                    }
+                }
+            });
+
             pipeline.push({ $sort: { "_id": 1 } });
             return await Model.aggregate(pipeline);
         };
 
+        // නිවැරදි field names පාස් කිරීම
         const incomeStats = await aggregateWithFilter(Order, "amount");
         const wageStats = await aggregateWithFilter(Wage, "total");
         const transportStats = await aggregateWithFilter(Transport, "total");

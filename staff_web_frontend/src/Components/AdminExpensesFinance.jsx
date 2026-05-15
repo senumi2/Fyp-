@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { 
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell,
     PieChart, Pie
 } from 'recharts';
 import './AdminExpensesFinance.css';
+import { useAuth } from '../context/AuthContext'; // AuthContext එකෙන් logout ලබා ගැනීමට
 
 const AdminExpensesFinance = () => {
   const [activeTab, setActiveTab] = useState('profit');
   const [searchTerm, setSearchTerm] = useState("");
+  const { logout } = useAuth(); // Unauthorized වූ විට logout කිරීමට
   
   // Data States
   const [wages, setWages] = useState([]);
@@ -24,19 +26,14 @@ const AdminExpensesFinance = () => {
 
   const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
-  useEffect(() => {
-    fetchAllData();
-  }, []);
-
-  useEffect(() => {
-    if (activeTab === 'profit') {
-      fetchFinancialStats();
-    }
-  }, [activeTab, selectedYear, selectedMonth]);
+  // Helper to get token from sessionStorage (as per your AuthContext)
+  const getAuthToken = () => sessionStorage.getItem("token");
 
   const fetchAllData = async () => {
+    const token = getAuthToken();
+    if (!token) return;
+
     try {
-      const token = localStorage.getItem("token");
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
       const [resW, resT, resM, resO] = await Promise.all([
@@ -52,30 +49,47 @@ const AdminExpensesFinance = () => {
       setOperationals(resO.data || []);
     } catch (err) {
       console.error("Error fetching admin finance data", err);
+      if (err.response?.status === 401) logout();
     }
   };
 
   const fetchFinancialStats = async () => {
+    const token = getAuthToken();
+    if (!token) return;
+
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
       const res = await axios.get(`http://localhost:5000/api/analytics/financial-stats?year=${selectedYear}&month=${selectedMonth}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setFinData(res.data);
     } catch (err) {
       console.error("Error fetching financial stats:", err);
+      if (err.response?.status === 401) {
+        logout(); // 401 ආ විට කෙලින්ම login පිටුවට යොමු කරයි
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchAllData();
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'profit') {
+      fetchFinancialStats();
+    }
+  }, [activeTab, selectedYear, selectedMonth]);
 
   // Safe Calculations for Summary
   const calculateSummaries = () => {
     const defaultData = { income: 0, w: 0, t: 0, m: 0, o: 0, totalExp: 0, net: 0, pieData: [] };
     if (!finData) return defaultData;
     
-    const sum = (arr) => arr?.reduce((acc, curr) => acc + (parseFloat(curr.total || curr.amount) || 0), 0) || 0;
+    // API එකෙන් එන totalAmount එක භාවිතයට ගැනීම (Backend එකේ එලෙස පවතී)
+    const sum = (arr) => arr?.reduce((acc, curr) => acc + (parseFloat(curr.totalAmount || curr.total || curr.amount || 0)), 0) || 0;
     
     const income = sum(finData.incomeStats);
     const w = sum(finData.wageStats);
@@ -91,7 +105,7 @@ const AdminExpensesFinance = () => {
             { name: 'Transport', value: t },
             { name: 'Maintenance', value: m },
             { name: 'Operational', value: o }
-        ].filter(item => item.value > 0) // Only show items with values
+        ].filter(item => item.value > 0) 
     };
   };
 
@@ -147,14 +161,14 @@ const AdminExpensesFinance = () => {
                     </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '30px' }}>
-                    <div className="card" style={{ minHeight: '450px' }}>
+                <div className="admin-charts-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '30px' }}>
+                    <div className="card" style={{ minHeight: '450px', display: 'block' }}>
                         <h4>Expense Distribution</h4>
-                        <div style={{ width: '100%', height: '350px' }}>
-                            <ResponsiveContainer width="100%" height="100%">
+                        <div style={{ width: '100%', height: '350px', position: 'relative' }}>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                                 <PieChart>
                                     <Pie 
-                                        data={summary.pieData.length > 0 ? summary.pieData : [{name: 'No Data', value: 1}]} 
+                                        data={summary.pieData.length > 0 ? summary.pieData : [{name: 'No Data', value: 0.1}]} 
                                         dataKey="value" 
                                         nameKey="name" 
                                         cx="50%" 
@@ -171,10 +185,10 @@ const AdminExpensesFinance = () => {
                             </ResponsiveContainer>
                         </div>
                     </div>
-                    <div className="card" style={{ minHeight: '450px' }}>
+                    <div className="card" style={{ minHeight: '450px', display: 'block' }}>
                         <h4>Revenue vs Expense</h4>
-                        <div style={{ width: '100%', height: '350px' }}>
-                            <ResponsiveContainer width="100%" height="100%">
+                        <div style={{ width: '100%', height: '350px', position: 'relative' }}>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                                 <BarChart data={[{ name: 'Financials', Income: summary.income, Expense: summary.totalExp }]}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                                     <XAxis dataKey="name" />

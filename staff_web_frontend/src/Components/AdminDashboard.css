@@ -1,5 +1,4 @@
-
-/* --- Base Container --- */
+/* Base Container */
 .admin-container {
     display: flex;
     width: 100%;
@@ -7,13 +6,8 @@
     min-height: calc(100vh - 80px);
     background-color: #f8fafc;
 }
-.chart-wrapper {
-    width: 100%;
-    height: 350px; 
-    min-height: 300px;
-}
 
-/* --- Sidebar Styling --- */
+/* Sidebar (UPDATED FOR SCROLLING) */
 .admin-sidebar {
     width: 280px;
     min-width: 280px;
@@ -26,11 +20,31 @@
     top: 80px; 
     left: 0;
     border-right: 1px solid #94a3b8;
-    z-index: 100; 
+    z-index: 100;
+    
+    /* නව වෙනස්කම්: Sidebar එක ඇතුලතින් පමණක් scroll වීමට */
     overflow-y: auto; 
-    scrollbar-width: thin;
+    box-sizing: border-box;
 }
 
+/* Sidebar එක ඇතුලේ ඇති scrollbar එක වඩාත් ලස්සනට පෙන්වීමට (Optional) */
+.admin-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.admin-sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
 
 .sidebar-header {
     font-size: 1.2rem;
@@ -41,12 +55,15 @@
     background: rgba(0, 0, 0, 0.1); 
     padding: 15px;
     border-radius: 8px;
+    flex-shrink: 0; /* Header එක scroll වෙනකොට හැකිලීම වැළැක්වීමට */
 }
 
+/* Sidebar Navigation (UPDATED) */
 .sidebar-nav {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding-bottom: 20px; /* අවසාන බටන් එක යටින් ඉඩක් තැබීමට */
 }
 
 .sidebar-nav button {
@@ -55,11 +72,11 @@
     color: #1e293b;
     border: none;
     border-radius: 6px;
-    font-size: 0.95rem;
     font-weight: 600;
     text-align: left;
     cursor: pointer;
     transition: 0.2s;
+    flex-shrink: 0; /* බටන් එක ඇතුලත ලේබල් හැකිලීම වැළැක්වීමට */
 }
 
 .sidebar-nav button:hover, .sidebar-nav button.active {
@@ -67,20 +84,20 @@
     color: white;
 }
 
-/* --- Content Area --- */
+/* Main Content */
 .admin-main-content {
     flex: 1;
     margin-left: 280px; 
     padding: 40px;
     background-color: #f8fafc;
-    min-height: calc(100vh - 80px);
 }
 
-/* Title & Grid Layouts */
+/* Analytics Views */
 .view-title { 
     font-size: 1.8rem; 
     font-weight: 700; 
     margin-bottom: 30px; 
+    color: #1e293b;
 }
 
 .admin-charts-grid { 
@@ -89,74 +106,60 @@
     gap: 25px; 
 }
 
-/* Chart Cards */
+/* Chart Card Styling */
 .admin-chart-card { 
     background: white;
     padding: 25px;
     border-radius: 16px; 
-    min-height: 400px; 
+    min-height: 450px; 
     width: 100%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
 }
 
+/* Wrapper for ResponsiveContainer to avoid Width Error */
 .chart-wrapper {
     width: 100%;
-    height: 350px;
-    min-height: 300px;
+    height: 350px; 
+    position: relative;
     margin-top: 15px;
-    display: block;
+    display: block; 
+    min-width: 0;   
+    overflow: hidden;
 }
 
 .chart-header {
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
 }
 
+.chart-label {
+    margin: 0;
+    color: #475569;
+    font-size: 1.1rem;
+}
+
 .month-filter-dropdown {
     padding: 8px 12px;
     border-radius: 6px;
     border: 1px solid #cbd5e1;
-    outline: none;
-}
-
-.viewing-label {
-    margin-top: 15px;
-    font-size: 0.9rem;
-    color: #64748b;
-}
-
-.manage-btn {
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    font-weight: 600;
+    background: white;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-.manage-btn:hover {
-    opacity: 0.9;
-}
-
-/* Placeholder for small charts */
-.graph-box-placeholder {
-    width: 100%;
-    height: 150px;
-    background: #f1f5f9;
+.no-data-placeholder {
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
     color: #94a3b8;
-    margin-bottom: 10px;
+    font-style: italic;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
 }
 
 .loading-text {
@@ -166,29 +169,19 @@
     margin-top: 50px;
 }
 
-/* --- Responsive Design --- */
+/* Responsive */
 @media (max-width: 1024px) {
-    .admin-sidebar { 
-        width: 220px; 
-        min-width: 220px; 
-    }
-    .admin-main-content { 
-        margin-left: 220px; 
-    }
+    .admin-sidebar { width: 220px; min-width: 220px; }
+    .admin-main-content { margin-left: 220px; }
 }
 
 @media (max-width: 768px) {
-    .admin-container { 
-        flex-direction: column; 
-        margin-top: 80px; 
-    }
-    .admin-sidebar { 
-        position: static; 
-        width: 100%; 
-        height: auto; 
-    }
-    .admin-main-content { 
-        margin-left: 0; 
-        padding: 20px; 
-    }
+    /* ජංගම දුරකථන වලදී මුළු පිටුවම scroll වන බැවින් මෙහිදී scrollbar එක ඉවත් කෙරේ */
+    .admin-sidebar { position: static; width: 100%; height: auto; overflow-y: visible; }
+    .admin-main-content { margin-left: 0; padding: 20px; }
+    .admin-charts-grid { grid-template-columns: 1fr; }
+}
+
+.AnalyticsDashboardWrapper{
+    margin-top: -80px;
 }

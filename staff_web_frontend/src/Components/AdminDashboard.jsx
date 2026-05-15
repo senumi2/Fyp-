@@ -4,10 +4,10 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
     PieChart, Pie, Cell 
 } from 'recharts';
-import 'jspdf-autotable';
 import './AdminDashboard.css';
 import { useAuth } from '../context/AuthContext'; 
 import { useNavigate } from 'react-router-dom';
+import AnalyticsDashboard from './AnalyticsDashboard';
 
 // Components Imports
 import AdminInventoryManagement from './AdminInventoryManagement'; 
@@ -28,7 +28,6 @@ const AdminDashboard = () => {
     const { isAdmin, isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
-   
     useEffect(() => {
         if (!isAuthenticated || !isAdmin()) {
             navigate('/login');
@@ -93,148 +92,44 @@ const ProductionVsSalesView = () => {
     const [loading, setLoading] = useState(true);
     const { token, logout } = useAuth(); 
 
-    const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"];
+    const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     const processPieData = useCallback((data, monthLabel) => {
         if (!data) return;
         let w = 0, t = 0, m = 0, o = 0;
 
+        // Controller එකේ totalAmount field එක භාවිතා කර ඇත
         if (monthLabel === "All") {
-            w = (data.wageStats || []).reduce((a, b) => a + (Number(b.total) || 0), 0);
-            t = (data.transportStats || []).reduce((a, b) => a + (Number(b.total) || 0), 0);
-            m = (data.maintenanceStats || []).reduce((a, b) => a + (Number(b.cost) || 0), 0);
-            o = (data.operationalStats || []).reduce((a, b) => a + (Number(b.amount) || 0), 0);
+            w = (data.wageStats || []).reduce((a, b) => a + (Number(b.totalAmount) || 0), 0);
+            t = (data.transportStats || []).reduce((a, b) => a + (Number(b.totalAmount) || 0), 0);
+            m = (data.maintenanceStats || []).reduce((a, b) => a + (Number(b.totalAmount) || 0), 0);
+            o = (data.operationalStats || []).reduce((a, b) => a + (Number(b.totalAmount) || 0), 0);
         } else {
             const mIdx = months.indexOf(monthLabel) + 1;
-            w = data.wageStats?.find(s => Number(s._id) === mIdx)?.total || 0;
-            t = data.transportStats?.find(s => Number(s._id) === mIdx)?.total || 0;
-            m = data.maintenanceStats?.find(s => Number(s._id) === mIdx)?.cost || 0;
-            o = data.operationalStats?.find(s => Number(s._id) === mIdx)?.amount || 0;
+            w = data.wageStats?.find(s => Number(s._id) === mIdx)?.totalAmount || 0;
+            t = data.transportStats?.find(s => Number(s._id) === mIdx)?.totalAmount || 0;
+            m = data.maintenanceStats?.find(s => Number(s._id) === mIdx)?.totalAmount || 0;
+            o = data.operationalStats?.find(s => Number(s._id) === mIdx)?.totalAmount || 0;
         }
 
-        setExpensePieData([
+        const pieArray = [
             { name: "Wages", value: Number(w) },
             { name: "Transport", value: Number(t) },
             { name: "Maintenance", value: Number(m) },
             { name: "Operational", value: Number(o) }
-        ]);
+        ].filter(item => item.value > 0);
+
+        setExpensePieData(pieArray);
     }, [months]);
 
-    useEffect(() => {
-        const fetchAllStats = async () => {
-            if (!token) {
-                setLoading(false);
-                return;
-            }
 
-            try {
-                const config = { 
-                    headers: { 
-                        'Authorization': `Bearer ${token}`, 
-                        'Content-Type': 'application/json'
-                    } 
-                };
-
-                const [resProd, resFin] = await Promise.all([
-                    axios.get("http://localhost:5000/api/analytics/production-vs-sales?year=2026", config),
-                    axios.get("http://localhost:5000/api/analytics/financial-stats?year=2026", config)
-                ]);
-
-
-                const sales = resProd.data.salesStats || [];
-                const harvest = resProd.data.harvestStats || [];
-                
-                const formatted = months.map((m, index) => {
-                    const mNum = index + 1;
-                    const hEntry = harvest.find(h => Number(h._id) === mNum);
-                    const sEntry = sales.find(s => Number(s._id) === mNum);
-
-                    return {
-                        name: m,
-                        Harvest: hEntry ? Number(hEntry.totalHarvest) : 0,
-                        Sales: sEntry ? Number(sEntry.totalQuantity) : 0
-                    };
-                });
-
-                setOriginalChartData(formatted);
-                setDisplayChartData(formatted); 
-                setRawFinancials({ ...resFin.data, salesStats: sales });
-                processPieData(resFin.data, "All");
-                
-                setLoading(false);
-            } catch (err) {
-                console.error("Dashboard error:", err.response?.data || err.message);
-                if (err.response?.status === 401) {
-                    logout(); 
-                }
-                setLoading(false);
-            }
-        };
-        fetchAllStats();
-    }, [token, processPieData, logout]);
-
-    const handleFilterChange = (e) => {
-        const selected = e.target.value;
-        setSelectedMonth(selected);
-        
-        if (selected === "All") {
-            setDisplayChartData(originalChartData);
-        } else {
-            const filtered = originalChartData.filter(item => item.name === selected);
-            setDisplayChartData(filtered);
-        }
-
-        processPieData(rawFinancials, selected);
-    };
-
-    if (loading) return <div className="admin-main-content"><p className="loading-text">Loading Analytics...</p></div>;
 
     return (
-        <div className="admin-view-content">
-            <h2 className="view-title">Production & Operational Analytics</h2>
-            
-            <div className="admin-charts-grid">
-                <div className="admin-chart-card">
-                    <div className="chart-header">
-                        <h4 className="chart-label" style={{ margin: 0 }}>Harvest vs Sales (kg)</h4>
-                        <select className="month-filter-dropdown" value={selectedMonth} onChange={handleFilterChange}>
-                            <option value="All">Annual (All Months)</option>
-                            {months.map(m => <option key={m} value={m}>{m}</option>)}
-                        </select>
-                    </div>
-                    <div className="chart-wrapper">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={displayChartData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Line type="monotone" dataKey="Harvest" stroke="#3b82f6" strokeWidth={3} name="Harvest (kg)" dot={{ r: 4 }} />
-                                <Line type="monotone" dataKey="Sales" stroke="#10b981" strokeWidth={3} name="Sales (kg)" dot={{ r: 4 }} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                    <p className="viewing-label">Showing: <strong>{selectedMonth === "All" ? "Full Year 2026" : selectedMonth}</strong></p>
-                </div>
+        <div className='AnalyticsDashboardWrapper'>
 
-                <div className="admin-chart-card">
-                    <h4 className="chart-label">Operational Cost Distribution</h4>
-                    <div className="chart-wrapper" style={{ height: '300px' }}>
-                        <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                                <Pie data={expensePieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                                    {expensePieData.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
-                                </Pie>
-                                <Tooltip formatter={(value) => `LKR ${Number(value).toLocaleString()}`} />
-                                <Legend />
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </div>
-                    <p className="viewing-label">Cost Breakdown for: <strong>{selectedMonth === "All" ? "Annual" : selectedMonth}</strong></p>
-                </div>
-            </div>
+            <AnalyticsDashboard /> 
+           
         </div>
     );
 };

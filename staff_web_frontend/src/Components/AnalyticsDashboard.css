@@ -1,0 +1,52 @@
+.dashboard-container {
+    padding: 10px;
+    background-color: #f4f7f6;
+    border-radius: 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .dashboard-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 50px;
+  }
+  
+  .chart-card {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 600px;
+  }
+  
+  .chart-card h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #555;
+    text-align: center;
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  /* Responsive adjustments for mobile */
+  @media (max-width: 500px) {
+    .charts-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .chart-card {
+      padding: 10px;
+    }
+  }
